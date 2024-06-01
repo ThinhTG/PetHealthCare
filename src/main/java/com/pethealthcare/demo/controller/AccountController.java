@@ -1,11 +1,9 @@
 package com.pethealthcare.demo.controller;
 
-import com.pethealthcare.demo.model.Account;
-import com.pethealthcare.demo.model.ResponseObject;
-import com.pethealthcare.demo.responsitory.AccountResponsitory;
+import com.pethealthcare.demo.model.User;
+import com.pethealthcare.demo.responsitory.UserRepository;
+import com.pethealthcare.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,12 +12,19 @@ import java.util.List;
 @RequestMapping(path = "/Account")
 public class AccountController {
     @Autowired
-   private AccountResponsitory responsitory;
+    UserService userService;
 
-@GetMapping("/all")
-List<Account> getAll() {
-    return responsitory.findAll();
-}
+    @GetMapping("/all")
+    List<User> all() {
+        return userService.getAllUser();
+    }
+
+
+
+
+
+
+
 
 
 
