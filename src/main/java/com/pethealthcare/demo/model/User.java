@@ -3,30 +3,29 @@ package com.pethealthcare.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
-@Getter
-@Setter
+@Table(name = "[User]")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Table(name = "[User]")
-public class User  {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UserID")
-    private int Userid ;
-    @Column(name = "Name", columnDefinition = "nvarchar(50)")
-    private String Name;
-    @Column(name = "Email", columnDefinition = "nvarchar(50)")
-    private String Email;
-    @Column(name = "Password",columnDefinition = "nvarchar(50)")
-    private String Password;
-    @Column(name = "Phone", columnDefinition = "nvarchar(50)")
-    private String Phone;
-    @Column(name = "Address",columnDefinition = "nvarchar(50)")
-    private String Address;
-    @Column(name = "Role",columnDefinition = "nvarchar(50)")
-    private String Role;
-    @Column(name = "Status",columnDefinition = "nvarchar(50)")
-    private String Status;
+    private int userID;
+    @Column(columnDefinition = "nvarchar(50)", nullable = false)
+    private String name;
+    @Column(columnDefinition = "nvarchar(50)", nullable = false, unique = true)
+    private String email;
+    @Column(columnDefinition = "nvarchar(70)", nullable = false)
+    private String password;
+    @Column(columnDefinition = "decimal(10,0)", nullable = false)
+    private BigDecimal phone;
+    @Column(columnDefinition = "nvarchar(50)")
+    private String address;
+    @Column(columnDefinition = "nvarchar(50)", nullable = false)
+    private String role;
+    @Column(columnDefinition = "nvarchar(50)", nullable = false)
+    private String status;
 }
