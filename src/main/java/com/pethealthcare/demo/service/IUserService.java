@@ -1,10 +1,15 @@
 package com.pethealthcare.demo.service;
 
+import com.pethealthcare.demo.dto.request.UserCreateRequest;
+import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.model.User;
 
-import javax.security.auth.login.AccountException;
-import java.util.Optional;
+import java.util.List;
 
 public interface IUserService {
-    public User login(String username, String password)throws AccountException;
+    public User createUser(UserCreateRequest request);
+
+    public List<User> getAllUsers();
+
+    public User updateUser(int userid, UserUpdateRequest request);
 }
