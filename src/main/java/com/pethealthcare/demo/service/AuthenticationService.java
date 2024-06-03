@@ -1,27 +1,72 @@
 package com.pethealthcare.demo.service;
 
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.pethealthcare.demo.dto.request.AuthenticationRequest;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.responsitory.UserRepository;
+import lombok.experimental.NonFinal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 @Service
 public class AuthenticationService {
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
     @Autowired
     private UserRepository userRepository;
 
-    public boolean authenticate(AuthenticationRequest request) {
+    @NonFinal
+    protected static final String SIGNER_KEY =
+            "YCPMfHyXx2SN0KfJAHr+Q/HUzRMqKAfo82VxQyS/ZM4J1Y87R8ffCmkjoXSeNXow";
+
+    public String authenticate(AuthenticationRequest request) {
         boolean exists = userRepository.existsByEmail(request.getEmail());
         if (exists) {
             User user = userRepository.findByEmail(request.getEmail());
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            return passwordEncoder.matches(request.getPassword(), user.getPassword());
+            boolean match = passwordEncoder.matches(request.getPassword(), user.getPassword());
+            if (match) {
+                var token = generateToken(request.getEmail());
+                return token;
+            }
         }
-        return false;
+        return null;
+    }
+
+    private String generateToken(String email) {
+        User user = userRepository.findByEmail(email);
+
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(email)
+                .claim("Role", user.getRole())
+                .issuer("http://pethealthcare.com")
+                .issueTime(new Date())
+                .expirationTime(new Date(
+                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                ))
+                .build();
+
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+
+        JWSObject jwsObject = new JWSObject(header, payload);
+
+        try {
+            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+            return jwsObject.serialize();
+        } catch (JOSEException e) {
+            log.error("Cannot create JWT object", e);
+            throw new RuntimeException(e);
+        }
     }
 }

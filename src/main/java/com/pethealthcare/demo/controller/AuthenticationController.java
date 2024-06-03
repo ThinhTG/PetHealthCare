@@ -16,10 +16,10 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     ResponseEntity<ResponseObject> login(@RequestBody AuthenticationRequest request) {
-        boolean auth = authenticationService.authenticate(request);
-        if (auth) {
+        String auth = authenticationService.authenticate(request);
+        if (auth != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Login successfully")
+                    new ResponseObject("ok", "Login successfully", auth)
             );
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
