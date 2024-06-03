@@ -10,6 +10,7 @@ import lombok.experimental.NonFinal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,8 @@ public class AuthenticationService {
     private UserRepository userRepository;
 
     @NonFinal
-    protected static final String SIGNER_KEY =
-            "YCPMfHyXx2SN0KfJAHr+Q/HUzRMqKAfo82VxQyS/ZM4J1Y87R8ffCmkjoXSeNXow";
+    @Value("${signerKey}")
+    protected String SIGNER_KEY;
 
     public String authenticate(AuthenticationRequest request) {
         boolean exists = userRepository.existsByEmail(request.getEmail());
