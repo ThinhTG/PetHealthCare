@@ -38,8 +38,8 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updateUser(@PathVariable int userid, @RequestBody UserUpdateRequest request) {
-        User updateUser = userService.updateUser(userid, request);
+    ResponseEntity<ResponseObject> updateUser(@PathVariable int id, @RequestBody UserUpdateRequest request) {
+        User updateUser = userService.updateUser(id, request);
         if (updateUser != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "User updated successfully", updateUser)

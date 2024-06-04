@@ -50,6 +50,36 @@ public class UserService implements IUserService {
 
     @Override
     public User updateUser(int userid, UserUpdateRequest request) {
-        return null;
+        // Find user by id
+        Optional<User> optionalUser = userRepository.findById(userid);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // Update fields
+            if (request.getName() != null && !request.getName().equals(user.getName())) {
+                user.setName(request.getName());
+            }
+            if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())) {
+                user.setEmail(request.getEmail());
+            }
+            if (request.getPassword() != null && !request.getPassword().equals(user.getPassword())) {
+                // Encode password as JWT
+                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+            }
+            if(request.getPhone() != null && !request.getPhone().equals(user.getPhone())) {
+                user.setPhone(request.getPhone());
+            }
+            if(request.getAddress() != null && !request.getAddress().equals(user.getAddress())) {
+                user.setAddress(request.getAddress());
+            }
+
+            // Save updated user
+            userRepository.save(user);
+            return user;
+        } else {
+            return null;
+        }
     }
+
 }
