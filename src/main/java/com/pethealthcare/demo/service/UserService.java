@@ -35,7 +35,7 @@ public class UserService implements IUserService {
             User newUser = userMapper.toUser(request);
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-            newUser.setRole("Customer");
+            newUser.setRole("Admin");
             newUser.setStatus("Active");
 
             return UserRepository.save(newUser);
@@ -56,13 +56,13 @@ public class UserService implements IUserService {
             User user = optionalUser.get();
 
             // Update fields
-            if (request.getName() != null && !request.getName().equals(user.getName())) {
+            if (request.getName() != null && !request.getName().equals(user.getName()) && !request.getName().isEmpty()) {
                 user.setName(request.getName());
             }
-            if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())) {
+            if (request.getEmail() != null && !request.getEmail().equals(user.getEmail()) && !request.getEmail().isEmpty()) {
                 user.setEmail(request.getEmail());
             }
-            if (request.getPassword() != null && !request.getPassword().equals(user.getPassword())) {
+            if (request.getPassword() != null && !request.getPassword().equals(user.getPassword()) && !request.getPassword().isEmpty()) {
                 // Encode password as JWT
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
                 user.setPassword(passwordEncoder.encode(request.getPassword()));

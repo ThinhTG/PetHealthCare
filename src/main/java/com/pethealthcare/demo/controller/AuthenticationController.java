@@ -15,7 +15,7 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
 
-    @CrossOrigin(origins = "http://localhost:3001")
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     ResponseEntity<ResponseObject> login(@RequestBody AuthenticationRequest request) {
         String auth = authenticationService.authenticate(request);
@@ -25,7 +25,7 @@ public class AuthenticationController {
             );
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    new ResponseObject("unauthorized", "Email or Password is incorrect")
+                    new ResponseObject("400", "Email or Password is incorrect")
             );
         }
     }
