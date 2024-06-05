@@ -12,4 +12,6 @@ public interface IUserService {
     public List<User> getAllUsers();
 
     public User updateUser(int userid, UserUpdateRequest request);
+
+   public User getAccountById(int id);
 }

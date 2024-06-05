@@ -50,4 +50,12 @@ public class UserController {
             );
         }
     }
+
+    @GetMapping("/getaccount/{id}")
+    User getUser(@PathVariable int id) {
+    return userService.getAccountById(id);
+    }
+
+
+
 }

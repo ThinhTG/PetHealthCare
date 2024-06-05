@@ -82,4 +82,9 @@ public class UserService implements IUserService {
         }
     }
 
+    @Override
+    public User getAccountById(int id) {
+        return UserRepository.findUserByUserID(id);
+    }
+
 }
