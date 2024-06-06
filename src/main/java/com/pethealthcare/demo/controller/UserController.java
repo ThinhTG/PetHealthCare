@@ -1,16 +1,16 @@
 package com.pethealthcare.demo.controller;
 
+import com.pethealthcare.demo.dto.request.OtpRequest;
+import com.pethealthcare.demo.dto.request.ResetPasswordRequest;
 import com.pethealthcare.demo.dto.request.UserCreateRequest;
-import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.model.User;
+import com.pethealthcare.demo.service.EmailService;
 import com.pethealthcare.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/account")
@@ -18,9 +18,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
-    ResponseEntity<ResponseObject> createUser(@RequestBody UserCreateRequest request) {
-        User createdUser = userService.createUser(request);
+    @Autowired
+    private EmailService emailService;
+
+    @PostMapping("/register")
+    ResponseEntity<ResponseObject> register(@RequestBody UserCreateRequest request) {
+        User createdUser = userService.register(request);
         if (createdUser != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Account created successfully", createdUser)
@@ -32,22 +35,19 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getAll")
-    List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @PutMapping("/forgot-password")
+    ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        return new ResponseEntity<>(userService.forgotPassword(email), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updateUser(@PathVariable int userid, @RequestBody UserUpdateRequest request) {
-        User updateUser = userService.updateUser(userid, request);
-        if (updateUser != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "User updated successfully", updateUser)
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "User not found", "")
-            );
-        }
+    @PutMapping("/verify-otp")
+    ResponseEntity<String> verifyOtp(@RequestBody OtpRequest request) {
+        return new ResponseEntity<>(userService.checkOtp(request.getEmail(), request.getOtp()), HttpStatus.OK);
     }
+
+    @PutMapping("/reset-pasword")
+    ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
+        return new ResponseEntity<>(userService.resetPassword(request.getEmail(), request.getPassword()), HttpStatus.OK);
+    }
+
 }
