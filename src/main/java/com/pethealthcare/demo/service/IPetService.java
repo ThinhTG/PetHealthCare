@@ -1,5 +1,9 @@
 package com.pethealthcare.demo.service;
 
-public interface IPetService {
+import com.pethealthcare.demo.model.Pet;
 
+import java.util.List;
+
+public interface IPetService {
+    List<Pet> getPetsByUserID(int userID);
 }

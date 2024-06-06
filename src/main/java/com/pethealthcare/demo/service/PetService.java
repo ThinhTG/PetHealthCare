@@ -73,4 +73,8 @@ public class PetService {
             return null;
         }
     }
+
+    public List<Pet> getPetsByUserID(int userID) {
+        return petRepository.findPetsByUserID(userID);
+    }
 }
