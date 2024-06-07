@@ -38,7 +38,7 @@ public class UserService implements IUserService {
             User newUser = userMapper.toUser(request);
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-            newUser.setRole("Admin");
+            newUser.setRole("Customer");
             newUser.setStatus("Active");
 
             return UserRepository.save(newUser);
