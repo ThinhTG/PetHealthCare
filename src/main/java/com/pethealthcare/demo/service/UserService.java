@@ -25,8 +25,11 @@ public class UserService implements IUserService {
     private UserRepository UserRepository;
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
-    private UserRepository userRepository;
+    private EmailService emailService;
+    @Autowired
+    private OtpService otpService;
 
     @Override
     public User createUser(UserCreateRequest request) {
@@ -51,7 +54,7 @@ public class UserService implements IUserService {
     @Override
     public User updateUser(int userid, UserUpdateRequest request) {
         // Find user by id
-        Optional<User> optionalUser = userRepository.findById(userid);
+        Optional<User> optionalUser = UserRepository.findById(userid);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
@@ -75,11 +78,53 @@ public class UserService implements IUserService {
             }
 
             // Save updated user
-            userRepository.save(user);
+            UserRepository.save(user);
             return user;
         } else {
             return null;
         }
+    }
+
+
+
+    public User register(UserCreateRequest request) {
+        boolean exist = UserRepository.existsByEmail(request.getEmail());
+        if (!exist) {
+            User newUser = userMapper.toUser(request);
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+            newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+            newUser.setRole("Customer");
+            newUser.setStatus("Active");
+            return UserRepository.save(newUser);
+        }
+        return null;
+    }
+
+    public String forgotPassword(String email) {
+        User user = UserRepository.findByEmail(email);
+        if (user != null) {
+            String otp = otpService.generateOtp(email);
+            emailService.sendOtpMessage(email, "Reset Password", "Your otp is: " + otp);
+            return "Please check your email address to get OTP";
+        }
+        return "Invalid Email Address";
+    }
+
+    public String checkOtp(String email, String otp) {
+        boolean validOtp = otpService.validateOtp(email, otp);
+        if (validOtp) {
+            otpService.clearOtp(email);
+            return "Enter your new password";
+        }
+        return "Invalid OTP";
+    }
+
+    public String resetPassword(String email, String password) {
+        User user = UserRepository.findByEmail(email);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(password));
+        UserRepository.save(user);
+        return "Reset password successfully";
     }
 
     @Override
