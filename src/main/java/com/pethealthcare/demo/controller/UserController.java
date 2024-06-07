@@ -1,16 +1,16 @@
 package com.pethealthcare.demo.controller;
 
+import com.pethealthcare.demo.dto.request.OtpRequest;
+import com.pethealthcare.demo.dto.request.ResetPasswordRequest;
 import com.pethealthcare.demo.dto.request.UserCreateRequest;
-import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.model.User;
+import com.pethealthcare.demo.service.EmailService;
 import com.pethealthcare.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/account")
@@ -32,6 +32,9 @@ public class UserController {
         }
     }
 
+    @PutMapping("/forgot-password")
+    ResponseEntity<String> forgotPassword(@RequestBody String email) {
+        return new ResponseEntity<>(userService.forgotPassword(email), HttpStatus.OK);
     @GetMapping("/getAll")
     List<User> getAllUsers() {
         return userService.getAllUsers();
