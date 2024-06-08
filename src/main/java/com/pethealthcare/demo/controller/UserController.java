@@ -1,9 +1,6 @@
 package com.pethealthcare.demo.controller;
 
-import com.pethealthcare.demo.dto.request.OtpRequest;
-import com.pethealthcare.demo.dto.request.ResetPasswordRequest;
-import com.pethealthcare.demo.dto.request.UserCreateRequest;
-import com.pethealthcare.demo.dto.request.UserUpdateRequest;
+import com.pethealthcare.demo.dto.request.*;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.service.EmailService;
@@ -36,8 +33,8 @@ public class UserController {
     }
 
     @PutMapping("/forgot-password")
-    ResponseEntity<String> forgotPassword(@RequestBody String email) {
-        return new ResponseEntity<>(userService.forgotPassword(email), HttpStatus.OK);
+    ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        return new ResponseEntity<>(userService.forgotPassword(request.getEmail()), HttpStatus.OK);
     }
     @PutMapping("/verify-otp")
     ResponseEntity<String> verifyOtp(@RequestBody OtpRequest request) {
