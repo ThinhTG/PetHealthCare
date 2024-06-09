@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PetCreateRequest {
-    private int userID;
     private String petname;
     private int petage;
     private String petgender;

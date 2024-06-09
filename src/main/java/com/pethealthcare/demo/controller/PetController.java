@@ -27,9 +27,9 @@ public class PetController {
         return petService.getAllPet();
     }
 
-    @PostMapping("/create")
-    ResponseEntity<ResponseObject> createPet(@RequestBody PetCreateRequest request) {
-        Pet createdPet = petService.createPet(request);
+    @PostMapping("/create/{id}")
+    ResponseEntity<ResponseObject> createPet(@PathVariable int id,@RequestBody PetCreateRequest request) {
+        Pet createdPet = petService.createPet(id,request);
         if (createdPet != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Pet added successfully", createdPet)
@@ -59,6 +59,20 @@ public class PetController {
     @GetMapping("/getAll/{userID}")
     List<Pet> getPetsByUserID(@PathVariable int userID) {
         return petService.getPetsByUserID(userID);
+    }
+
+    @DeleteMapping("/deletePet/{id}")
+    ResponseEntity<ResponseObject> deletePet(@PathVariable int id) {
+        boolean exists = petService.findPetByID(id);
+        if(exists){
+            petService.deletePetByID(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Delete pet Successfully", "")
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("failed", "Pet not found", "")
+        );
     }
 
 

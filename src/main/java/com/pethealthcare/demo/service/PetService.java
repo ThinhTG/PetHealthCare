@@ -28,11 +28,11 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    public Pet createPet(PetCreateRequest request) {
+    public Pet createPet(int id,PetCreateRequest request) {
         boolean exist = petRepository.existsByPetname(request.getPetname());
         if (!exist) {
             Pet newPet = petMapper.toPet(request);
-            newPet.setUserID(request.getUserID());
+            newPet.setUserID(id);
             newPet.setPetname(request.getPetname());
             newPet.setPetage(request.getPetage());
             newPet.setPetgender(request.getPetgender());
@@ -76,5 +76,13 @@ public class PetService {
 
     public List<Pet> getPetsByUserID(int userID) {
         return petRepository.findPetsByUserID(userID);
+    }
+
+    public boolean findPetByID(int id) {
+        return petRepository.existsByPetid(id);
+    }
+
+    public void deletePetByID(int id){
+        petRepository.deleteById(id);
     }
 }
