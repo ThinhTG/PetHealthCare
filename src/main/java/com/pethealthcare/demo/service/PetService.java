@@ -43,9 +43,9 @@ public class PetService {
         return null;
     }
 
-    public Pet updatePet(int id, PetUpdateRequest request) {
+    public Pet updatePet(int userID,int petid, PetUpdateRequest request) {
         // Find user by id
-        Optional<Pet> optionalPet = petRepository.findById(id);
+        Optional<Pet> optionalPet = petRepository.findById(petid);
         if (optionalPet.isPresent()) {
             Pet pet = optionalPet.get();
 

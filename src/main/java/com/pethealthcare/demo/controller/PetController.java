@@ -41,9 +41,9 @@ public class PetController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updatePet(@PathVariable int id, @RequestBody PetUpdateRequest request) {
-        Pet updatePet = petService.updatePet(id, request);
+    @PutMapping("/update/{userid}/{petid}")
+    ResponseEntity<ResponseObject> updatePet(@PathVariable int userid,@PathVariable int petid, @RequestBody PetUpdateRequest request) {
+        Pet updatePet = petService.updatePet(userid,petid, request);
         if (updatePet != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "User updated successfully", updatePet)
