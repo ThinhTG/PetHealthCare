@@ -85,21 +85,6 @@ public class UserService implements IUserService {
         }
     }
 
-
-
-    public User register(UserCreateRequest request) {
-        boolean exist = UserRepository.existsByEmail(request.getEmail());
-        if (!exist) {
-            User newUser = userMapper.toUser(request);
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-            newUser.setRole("Customer");
-            newUser.setStatus("Active");
-            return UserRepository.save(newUser);
-        }
-        return null;
-    }
-
     public String forgotPassword(String email) {
         User user = UserRepository.findByEmail(email);
         if (user != null) {
@@ -131,5 +116,6 @@ public class UserService implements IUserService {
     public User getAccountById(int id) {
         return UserRepository.findUserByUserID(id);
     }
+
 
 }
