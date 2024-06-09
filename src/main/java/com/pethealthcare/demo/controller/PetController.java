@@ -9,6 +9,7 @@ import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.service.PetService;
+import com.pethealthcare.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ import java.util.List;
 public class PetController {
     @Autowired
     PetService petService;
+    @Autowired
+    UserService userService;
 
     @GetMapping("/getAll")
     List<Pet> getAllPet() {
@@ -61,19 +64,27 @@ public class PetController {
         return petService.getPetsByUserID(userID);
     }
 
-    @DeleteMapping("/deletePet/{id}")
-    ResponseEntity<ResponseObject> deletePet(@PathVariable int id) {
-        boolean exists = petService.findPetByID(id);
-        if(exists){
-            petService.deletePetByID(id);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Delete pet Successfully", "")
+    @DeleteMapping("/deletePet/{userid}/{petid}")
+    ResponseEntity<ResponseObject> deletePet(@PathVariable int userid,@PathVariable int petid) {
+        User existsUser = userService.getAccountById(userid);
+        if (existsUser != null) {
+            boolean existsPet = petService.findPetByID(petid);
+            if (existsPet) {
+                petService.deletePetByID(petid);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "Delete pet Successfully", "")
+                );
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Pet not found", "")
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("failed", "Pet not found", "")
+                new ResponseObject("failed", "User not found", "")
         );
     }
+
+
 
 
 
