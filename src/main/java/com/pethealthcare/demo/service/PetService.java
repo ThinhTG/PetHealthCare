@@ -56,7 +56,7 @@ public class PetService {
             if (request.getPetgender() != null && !request.getPetgender().equals(pet.getPetgender()) && !request.getPetgender().isEmpty()) {
                 pet.setPetgender(request.getPetgender());
             }
-            if(request.getPetage() > 0  && request.getPetage() ==(pet.getPetage())) {
+            if(request.getPetage() > 0  && request.getPetage() !=(pet.getPetage())) {
                 pet.setPetage(request.getPetage());
             }
             if(request.getPettype() != null && !request.getPettype().equals(pet.getPettype()) && !request.getPettype().isEmpty()) {
