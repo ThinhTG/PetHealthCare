@@ -33,11 +33,11 @@ public class PetService {
         if (!exist) {
             Pet newPet = petMapper.toPet(request);
             newPet.setUserID(id);
-            newPet.setPetname(request.getPetname());
-            newPet.setPetage(request.getPetage());
-            newPet.setPetgender(request.getPetgender());
-            newPet.setPettype(request.getPettype());
-            newPet.setVaccination(request.getVaccination());
+//            newPet.setPetname(request.getPetname());
+//            newPet.setPetage(request.getPetage());
+//            newPet.setPetgender(request.getPetgender());
+//            newPet.setPettype(request.getPettype());
+//            newPet.setVaccination(request.getVaccination());
             return petRepository.save(newPet);
         }
         return null;
