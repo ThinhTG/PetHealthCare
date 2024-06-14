@@ -49,5 +49,10 @@ public class ServiceService {
             serviceRepository.deleteById(serviceId);
         }
     }
+
+    public Services getServiceById(int  serviceID) {
+
+        return serviceRepository.findByServiceID(serviceID);
+    }
 }
 
