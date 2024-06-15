@@ -117,5 +117,15 @@ public class UserService implements IUserService {
         return UserRepository.findUserByUserID(id);
     }
 
+    // Thêm phương thức để lấy tất cả người dùng có vai trò "Veterinarian"
+    public List<User> getAllUsersByRole(String role) {
+        return UserRepository.findAllByRole(role);
+    }
+
+    public List<User> getAllVeterinarians() {
+        return getAllUsersByRole("Veterinarian");
+    }
+
+
 
 }
