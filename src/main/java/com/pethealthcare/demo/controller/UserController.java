@@ -69,6 +69,12 @@ public class UserController {
     return userService.getAccountById(id);
     }
 
+    @GetMapping("/getVeterinarian")
+    List<User> getVeterinarian (){
+        return userService.getAllVeterinarians();
+    }
+
+
 
 
 }
