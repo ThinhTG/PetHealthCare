@@ -5,15 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "[Serivce]")
+@Table(name = "Serivce")
 public class Services {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int serviceID;
+    private int serviceId;
 
     @Column(columnDefinition = "nvarchar(50)", nullable = false)
     private String name;
@@ -23,4 +25,10 @@ public class Services {
 
     @Column(columnDefinition = "text", nullable = false)
     private String description;
+
+    @Column(columnDefinition = "nvarchar(255)")
+    private String imageUrl;
+
+    @OneToMany(mappedBy = "services", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookingDetail> bookingDetails;
 }

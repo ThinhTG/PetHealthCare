@@ -7,27 +7,38 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "[Pet]")
+@Table(name = "Pet")
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int petid;
-    @Column(name = "UserID", columnDefinition = "nvarchar(50)")
-    private int userID;
+    private int petId;
+
     @Column(name = "Name",columnDefinition = "nvarchar(50)")
-    private String petname;
+    private String petName;
+
     @Column(name = "Age")
-    private int petage;
+    private int petAge;
+
     @Column(name = "Gender",columnDefinition = "nvarchar(50)")
-    private String petgender;
+    private String petGender;
+
     @Column(name = "Type",columnDefinition = "nvarchar(50)")
-    private String pettype;
+    private String petType;
+
     @Column(name = "Vaccination",columnDefinition = "nvarchar(50)")
     private String vaccination;
 
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookingDetail> bookingDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 }

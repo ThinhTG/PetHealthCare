@@ -8,11 +8,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingDetailCreateRequest {
-//    private int bookingId;
     private int petId;
     private int veterinarianId;
     private int serviceId;
     private boolean needCage;
     private Date date;
-    private int slot;
+    private int slotId;
 }

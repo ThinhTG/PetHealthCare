@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.dto.request;
 
+import com.pethealthcare.demo.model.User;
 import lombok.*;
 
 import java.util.Date;
