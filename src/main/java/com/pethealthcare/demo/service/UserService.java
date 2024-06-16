@@ -4,36 +4,29 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.request.UserCreateRequest;
 import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.mapper.UserMapper;
-import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.model.User;
-import com.pethealthcare.demo.model.User;
-import com.pethealthcare.demo.responsitory.UserRepository;
 import com.pethealthcare.demo.responsitory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.AccountException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements IUserService {
+public class UserService {
     @Autowired
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private EmailService emailService;
     @Autowired
     private OtpService otpService;
 
-    @Override
     public User createUser(UserCreateRequest request) {
-        boolean exist = UserRepository.existsByEmail(request.getEmail());
+        boolean exist = userRepository.existsByEmail(request.getEmail());
         if (!exist) {
             User newUser = userMapper.toUser(request);
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -41,20 +34,18 @@ public class UserService implements IUserService {
             newUser.setRole("Customer");
             newUser.setStatus("Active");
 
-            return UserRepository.save(newUser);
+            return userRepository.save(newUser);
         }
         return null;
     }
 
-    @Override
     public List<User> getAllUsers() {
-        return UserRepository.findAll();
+        return userRepository.findAll();
     }
 
-    @Override
     public User updateUser(int userid, UserUpdateRequest request) {
         // Find user by id
-        Optional<User> optionalUser = UserRepository.findById(userid);
+        Optional<User> optionalUser = userRepository.findById(userid);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
@@ -78,7 +69,7 @@ public class UserService implements IUserService {
             }
 
             // Save updated user
-            UserRepository.save(user);
+            userRepository.save(user);
             return user;
         } else {
             return null;
@@ -86,7 +77,7 @@ public class UserService implements IUserService {
     }
 
     public String forgotPassword(String email) {
-        User user = UserRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
         if (user != null) {
             String otp = otpService.generateOtp(email);
             emailService.sendOtpMessage(email, "Reset Password", "Your otp is: " + otp);
@@ -105,16 +96,15 @@ public class UserService implements IUserService {
     }
 
     public String resetPassword(String email, String password) {
-        User user = UserRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(password));
-        UserRepository.save(user);
+        userRepository.save(user);
         return "Reset password successfully";
     }
 
-    @Override
     public User getAccountById(int id) {
-        return UserRepository.findUserByUserID(id);
+        return userRepository.findUserByUserId(id);
     }
 
     // Thêm phương thức để lấy tất cả người dùng có vai trò "Veterinarian"
@@ -125,6 +115,7 @@ public class UserService implements IUserService {
     public List<User> getAllVeterinarians() {
         return getAllUsersByRole("Veterinarian");
     }
+
 
 
 

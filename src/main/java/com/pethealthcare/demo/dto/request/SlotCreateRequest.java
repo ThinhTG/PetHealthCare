@@ -1,17 +1,15 @@
 package com.pethealthcare.demo.dto.request;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Time;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PetUpdateRequest {
-    private String petName;
-    private int petAge;
-    private String petGender;
-    private String petType;
-    private String vaccination;
+public class SlotCreateRequest {
+    private Time startTime;
+    private Time endTime;
 }

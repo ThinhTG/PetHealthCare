@@ -19,28 +19,29 @@ public class BookingDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookingDetailId;
 
-//    @Column
-//    private int bookingId;
-
-    @Column
-    private int petId;
-
-    @Column(name = "UserID")
-    private int veterinarianId;
-
-    @Column
-    private int serviceId;
-
     @Column(columnDefinition = "bit")
     private boolean needCage;
 
     @Column(columnDefinition = "date")
     private Date date;
 
-    @Column
-    private int slot;
-
     @ManyToOne
     @JoinColumn(name = "bookingId")
     private Booking booking;
+
+    @ManyToOne
+    @JoinColumn(name = "petId")
+    private Pet pet;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "serviceId")
+    private Services services;
+
+    @ManyToOne
+    @JoinColumn(name = "slotId")
+    private Slot slot;
 }

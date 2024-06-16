@@ -1,4 +1,3 @@
-
 package com.pethealthcare.demo.model;
 
 import jakarta.persistence.*;
@@ -7,32 +6,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
+@Table(name = "ServiceSlot")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Booking")
-public class Booking {
+public class ServiceSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int bookingId;
+    private int serviceSlotId;
 
     @Column
     private Date date;
 
     @Column
-    private String status;
-
-    @Column
-    private double totalPrice;
-
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookingDetail> bookingDetails;
+    private boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "userId")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "slotId")
+    private Slot slot;
 }
