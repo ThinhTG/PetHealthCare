@@ -30,17 +30,23 @@ public class BookingService {
     @Autowired
     private ServiceSlotService serviceSlotService;
 
+
     @Transactional
     public void createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
         newBooking.setDate(new Date());
+
+        User user = new User();
+        user.setUserId(request.getCustomerId());
+
+        newBooking.setUser(user);
         newBooking = bookingRepository.save(newBooking);
 
         for (BookingDetailCreateRequest request1 : request.getBookingDetails()) {
             BookingDetail bookingDetail = bookingDetailMapper.toBookingDetail(request1);
             bookingDetail.setBooking(newBooking);
 
-            User user = new User();
+
             user.setUserId(request1.getVeterinarianId());
             bookingDetail.setUser(user);
 
