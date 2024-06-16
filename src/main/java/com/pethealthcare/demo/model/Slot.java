@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -19,10 +20,10 @@ public class Slot {
     private int slotId;
 
     @Column
-    private Time startTime;
+    private LocalTime startTime;
 
     @Column
-    private Time endTime;
+    private LocalTime endTime;
 
     @OneToMany(mappedBy = "slot", cascade = CascadeType.ALL)
     private List<ServiceSlot> serviceSlots;

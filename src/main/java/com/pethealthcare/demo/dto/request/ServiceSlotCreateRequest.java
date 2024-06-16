@@ -13,5 +13,4 @@ public class ServiceSlotCreateRequest {
     private int userId;
     private int slotId;
     private Date date;
-    private boolean status;
 }
