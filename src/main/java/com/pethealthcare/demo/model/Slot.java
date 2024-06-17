@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,9 +25,11 @@ public class Slot {
     @Column
     private Time endTime;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "slot", cascade = CascadeType.ALL)
     private List<ServiceSlot> serviceSlots;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "slot", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;
 }
