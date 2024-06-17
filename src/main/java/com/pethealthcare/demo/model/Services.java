@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class Services {
     @Column(columnDefinition = "nvarchar(255)")
     private String imageUrl;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;
 }
