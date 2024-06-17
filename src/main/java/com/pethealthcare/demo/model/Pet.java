@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public class Pet {
     @Column(name = "Vaccination",columnDefinition = "nvarchar(50)")
     private String vaccination;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;
 
