@@ -2,15 +2,11 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.PetUpdateRequest;
-import com.pethealthcare.demo.dto.request.UserCreateRequest;
-import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.mapper.PetMapper;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.responsitory.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,15 +25,12 @@ public class PetService {
     }
 
     public Pet createPet(int id,PetCreateRequest request) {
-        boolean exist = petRepository.existsByPetname(request.getPetname());
+        boolean exist = petRepository.existsByPetName(request.getPetName());
         if (!exist) {
             Pet newPet = petMapper.toPet(request);
-            newPet.setUserID(id);
-//            newPet.setPetname(request.getPetname());
-//            newPet.setPetage(request.getPetage());
-//            newPet.setPetgender(request.getPetgender());
-//            newPet.setPettype(request.getPettype());
-//            newPet.setVaccination(request.getVaccination());
+            User user = new User();
+            user.setUserId(id);
+            newPet.setUser(user);
             return petRepository.save(newPet);
         }
         return null;
@@ -50,23 +43,22 @@ public class PetService {
             Pet pet = optionalPet.get();
 
             // Update fields
-            if (request.getPetname() != null && !request.getPetname().equals(pet.getPetname()) && !request.getPetname().isEmpty()) {
-                pet.setPetname(request.getPetname());
+            if (request.getPetName() != null && !request.getPetName().equals(pet.getPetName()) && !request.getPetName().isEmpty()) {
+                pet.setPetName(request.getPetName());
             }
-            if (request.getPetgender() != null && !request.getPetgender().equals(pet.getPetgender()) && !request.getPetgender().isEmpty()) {
-                pet.setPetgender(request.getPetgender());
+            if (request.getPetGender() != null && !request.getPetGender().equals(pet.getPetGender()) && !request.getPetGender().isEmpty()) {
+                pet.setPetGender(request.getPetGender());
             }
-            if(request.getPetage() > 0  && request.getPetage() !=(pet.getPetage())) {
-                pet.setPetage(request.getPetage());
+            if (request.getPetAge() > 0 && request.getPetAge() != (pet.getPetAge())) {
+                pet.setPetAge(request.getPetAge());
             }
-            if(request.getPettype() != null && !request.getPettype().equals(pet.getPettype()) && !request.getPettype().isEmpty()) {
-                pet.setPettype(request.getPettype());
+            if (request.getPetType() != null && !request.getPetType().equals(pet.getPetType()) && !request.getPetType().isEmpty()) {
+                pet.setPetType(request.getPetType());
             }
             if(request.getVaccination() != null && !request.getVaccination().equals(pet.getVaccination()) && !request.getVaccination().isEmpty()) {
                 pet.setVaccination(request.getVaccination());
             }
 
-            // Save updated user
             petRepository.save(pet);
             return pet;
     } else {
@@ -74,15 +66,17 @@ public class PetService {
         }
     }
 
-    public List<Pet> getPetsByUserID(int userID) {
-        return petRepository.findPetsByUserID(userID);
+    public List<Pet> getPetsByUserID(int userId) {
+        User user = new User();
+        user.setUserId(userId);
+        return petRepository.findPetsByUser(user);
     }
 
     public boolean findPetByID(int id) {
-        return petRepository.existsByPetid(id);
+        return petRepository.existsByPetId(id);
     }
 
     public void deletePetByID(int id){
-        petRepository.deleteById(id);
+        petRepository.deleteByPetId(id);
     }
 }

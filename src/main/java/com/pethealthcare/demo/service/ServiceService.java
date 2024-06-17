@@ -35,12 +35,21 @@ public class ServiceService {
         Optional<Services> updateService = serviceRepository.findById(serviceId);
         if (updateService.isPresent()) {
             Services service = updateService.get();
-            service = serviceMapper.toService(request);
+//            service = serviceMapper.toService(request);
+            if(!service.getName().equals(request.getName())) {
+                service.setName(request.getName());
+            }
+            if(!service.getDescription().equals(request.getDescription())) {
+                service.setDescription(request.getDescription());
+            }
+            if(service.getPrice() != request.getPrice()) {
+                service.setPrice(request.getPrice());
+            }
             return serviceRepository.save(service);
         }
 
-        Services services = serviceMapper.toService(request);
-        return serviceRepository.save(services);
+//        Services services = serviceMapper.toService(request);
+        return null;
     }
 
     public void deleteService(int serviceId) {
@@ -48,6 +57,11 @@ public class ServiceService {
         if (exists) {
             serviceRepository.deleteById(serviceId);
         }
+    }
+
+    public Services getServiceById(int  serviceID) {
+
+        return serviceRepository.findByServiceId(serviceID);
     }
 }
 

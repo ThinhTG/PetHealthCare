@@ -9,10 +9,11 @@ import java.util.List;
 
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Integer> {
-    boolean existsByPetname(String petname);
-    boolean existsByPetid(int petid);
-   List<Pet> findPetsByUserID(int userID);
+    boolean existsByPetName(String petName);
 
+    boolean existsByPetId(int petId);
 
-    void deleteById(int petid);
+    List<Pet> findPetsByUser(User user);
+
+    void deleteByPetId(int petId);
 }
