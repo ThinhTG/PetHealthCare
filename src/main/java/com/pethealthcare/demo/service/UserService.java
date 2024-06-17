@@ -117,6 +117,19 @@ public class UserService {
     }
 
 
-
-
+    public User updateUserRole(int userID, String newrole) {
+        // Find user by id
+        Optional<User> optionalUser = userRepository.findById(userID);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if(newrole != null && !newrole.isEmpty()) {
+                user.setRole(newrole);
+            }
+            // Save updated user
+            userRepository.save(user);
+            return user;
+        } else {
+            return null;
+        }
+    }
 }

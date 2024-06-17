@@ -74,6 +74,21 @@ public class UserController {
         return userService.getAllVeterinarians();
     }
 
+    @PutMapping("/manageRole")
+    ResponseEntity<ResponseObject> updateUserRole(@RequestBody UserRoleUpdateRequest request) {
+        User updateUser = userService.updateUserRole(request.getUserID(), request.getNewrole());
+        if (updateUser != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "User updated successfully", updateUser)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "User not found", "")
+            );
+        }
+    }
+
+
 
 
 

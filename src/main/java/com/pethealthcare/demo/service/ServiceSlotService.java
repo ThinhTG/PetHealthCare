@@ -31,6 +31,7 @@ public class ServiceSlotService {
 
     public List<ServiceSlot> getSlotAvailable(GetSlotAvailableRequest request) {
         User user = userRepository.findUserByUserId(request.getUserId());
+
         return serviceSlotRepository.findByUserAndDateAndStatus(user,
                 request.getDate(), false);
     }
