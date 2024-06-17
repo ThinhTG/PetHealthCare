@@ -109,7 +109,7 @@ public class UserService {
 
     // Thêm phương thức để lấy tất cả người dùng có vai trò "Veterinarian"
     public List<User> getAllUsersByRole(String role) {
-        return UserRepository.findAllByRole(role);
+        return userRepository.findAllByRole(role);
     }
 
     public List<User> getAllVeterinarians() {

@@ -50,7 +50,11 @@ public class AuthenticationService {
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(email)
-                .claim("User", user)
+                .claim("UserId", user.getUserId())
+                .claim("Name", user.getName())
+                .claim("Email", user.getEmail())
+                .claim("Phone", user.getPhone())
+                .claim("Role", user.getRole())
                 .issuer("http://pethealthcare.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(

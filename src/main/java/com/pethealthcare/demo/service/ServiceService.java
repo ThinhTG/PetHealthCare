@@ -61,7 +61,7 @@ public class ServiceService {
 
     public Services getServiceById(int  serviceID) {
 
-        return serviceRepository.findByServiceID(serviceID);
+        return serviceRepository.findByServiceId(serviceID);
     }
 }
 
