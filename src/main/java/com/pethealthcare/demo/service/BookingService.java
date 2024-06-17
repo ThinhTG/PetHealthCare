@@ -5,8 +5,7 @@ import com.pethealthcare.demo.dto.request.BookingDetailCreateRequest;
 import com.pethealthcare.demo.mapper.BookingDetailMapper;
 import com.pethealthcare.demo.mapper.BookingMapper;
 import com.pethealthcare.demo.model.*;
-import com.pethealthcare.demo.responsitory.BookingDetailRepository;
-import com.pethealthcare.demo.responsitory.BookingRepository;
+import com.pethealthcare.demo.responsitory.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,14 +29,22 @@ public class BookingService {
     @Autowired
     private ServiceSlotService serviceSlotService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PetRepository petRepository;
+
+    @Autowired
+    private ServiceRepository serviceRepository;
+
 
     @Transactional
     public void createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
         newBooking.setDate(new Date());
 
-        User user = new User();
-        user.setUserId(request.getCustomerId());
+        User user = userRepository.findUserByUserId(request.getCustomerId());
 
         newBooking.setUser(user);
         newBooking = bookingRepository.save(newBooking);
@@ -47,15 +54,13 @@ public class BookingService {
             bookingDetail.setBooking(newBooking);
 
 
-            user.setUserId(request1.getVeterinarianId());
+            user = userRepository.findUserByUserId(request1.getVeterinarianId());
             bookingDetail.setUser(user);
 
-            Pet pet = new Pet();
-            pet.setPetId(request1.getPetId());
+            Pet pet = petRepository.findPetByPetId(request1.getPetId());
             bookingDetail.setPet(pet);
 
-            Services services = new Services();
-            services.setServiceId(request1.getServiceId());
+            Services services = serviceRepository.findByServiceId(request1.getServiceId());
             bookingDetail.setServices(services);
 
             serviceSlotService.bookedSlot(request1.getVeterinarianId(), request1.getDate(), request1.getSlotId());

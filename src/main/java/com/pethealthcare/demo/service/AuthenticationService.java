@@ -7,6 +7,7 @@ import com.pethealthcare.demo.dto.request.AuthenticationRequest;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.responsitory.UserRepository;
 import lombok.experimental.NonFinal;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +46,18 @@ public class AuthenticationService {
 
     private String generateToken(String email) {
         User user = userRepository.findByEmail(email);
+        JSONObject userJson = new JSONObject();
+        userJson.put("userID", user.getUserId());
+        userJson.put("name", user.getName());
+        userJson.put("email", user.getEmail());
+        userJson.put("phone", user.getPhone());
+        userJson.put("role", user.getRole());
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(email)
-                .claim("UserId", user.getUserId())
-                .claim("Name", user.getName())
-                .claim("Email", user.getEmail())
-                .claim("Phone", user.getPhone())
-                .claim("Role", user.getRole())
+                .claim("User", userJson)
                 .issuer("http://pethealthcare.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(

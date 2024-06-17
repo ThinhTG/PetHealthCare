@@ -35,7 +35,6 @@ public class ServiceService {
         Optional<Services> updateService = serviceRepository.findById(serviceId);
         if (updateService.isPresent()) {
             Services service = updateService.get();
-//            service = serviceMapper.toService(request);
             if(!service.getName().equals(request.getName())) {
                 service.setName(request.getName());
             }
