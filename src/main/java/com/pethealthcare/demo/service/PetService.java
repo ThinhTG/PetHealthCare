@@ -6,6 +6,7 @@ import com.pethealthcare.demo.mapper.PetMapper;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.responsitory.PetRepository;
+import com.pethealthcare.demo.responsitory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ public class PetService {
     @Autowired
     private PetMapper petMapper;
 
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Pet> getAllPet() {
         return petRepository.findAll();
@@ -28,8 +31,7 @@ public class PetService {
         boolean exist = petRepository.existsByPetName(request.getPetName());
         if (!exist) {
             Pet newPet = petMapper.toPet(request);
-            User user = new User();
-            user.setUserId(id);
+            User user = userRepository.findUserByUserId(id);
             newPet.setUser(user);
             return petRepository.save(newPet);
         }

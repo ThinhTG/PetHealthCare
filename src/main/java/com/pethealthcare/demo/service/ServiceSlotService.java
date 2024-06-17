@@ -7,6 +7,8 @@ import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.model.Slot;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.responsitory.ServiceSlotRepository;
+import com.pethealthcare.demo.responsitory.SlotRepository;
+import com.pethealthcare.demo.responsitory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +23,22 @@ public class ServiceSlotService {
     @Autowired
     private ServiceSlotMapper serviceSlotMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private SlotRepository slotRepository;
+
     public List<ServiceSlot> getSlotAvailable(GetSlotAvailableRequest request) {
-        User user = new User();
-        user.setUserId(request.getUserId());
+        User user = userRepository.findUserByUserId(request.getUserId());
         return serviceSlotRepository.findByUserAndDateAndStatus(user,
                 request.getDate(), false);
     }
 
     public String addServiceSlot(ServiceSlotCreateRequest request) {
-        User user = new User();
-        user.setUserId(request.getUserId());
+        User user = userRepository.findUserByUserId(request.getUserId());
 
-        Slot slot = new Slot();
-        slot.setSlotId(request.getSlotId());
+        Slot slot = slotRepository.findSlotBySlotId(request.getSlotId());
         boolean existed = serviceSlotRepository.existsByUserAndSlotAndDate(user,
                 slot, request.getDate());
         if (!existed) {
