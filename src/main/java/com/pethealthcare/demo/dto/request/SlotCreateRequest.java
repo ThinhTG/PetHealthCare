@@ -5,12 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
-import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class SlotCreateRequest {
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private Time startTime;
+    private Time endTime;
 }
