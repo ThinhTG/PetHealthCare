@@ -38,6 +38,9 @@ public class BookingService {
     @Autowired
     private ServiceRepository serviceRepository;
 
+    @Autowired
+    private SlotRepository slotRepository;
+
 
     @Transactional
     public void createBooking(BookingCreateRequest request) {
@@ -62,6 +65,9 @@ public class BookingService {
 
             Services services = serviceRepository.findByServiceId(request1.getServiceId());
             bookingDetail.setServices(services);
+
+            Slot slot  = slotRepository.findSlotBySlotId(request1.getSlotId());
+            bookingDetail.setSlot(slot);
 
             serviceSlotService.bookedSlot(request1.getVeterinarianId(), request1.getDate(), request1.getSlotId());
             bookingDetailRepository.save(bookingDetail);
