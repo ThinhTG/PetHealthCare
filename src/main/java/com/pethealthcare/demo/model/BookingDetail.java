@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class BookingDetail {
     private Pet pet;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "userId")
     private User user;
 
