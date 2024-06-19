@@ -80,4 +80,10 @@ public class BookingService {
         
     }
 
+    public List<Booking> getBookingsByUserID(int userId) {
+        User user = new User();
+        user.setUserId(userId);
+        return bookingRepository.getBookingByUser(user);
+    }
+
 }
