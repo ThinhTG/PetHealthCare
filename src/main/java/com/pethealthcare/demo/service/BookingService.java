@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class BookingService {
     @Autowired
-    private BookingRepository bookingRepository;
+    private  BookingRepository bookingRepository;
 
     @Autowired
     private BookingDetailRepository bookingDetailRepository;
@@ -40,6 +41,10 @@ public class BookingService {
 
     @Autowired
     private SlotRepository slotRepository;
+
+    public  List<Booking> getAllBooking() {
+        return bookingRepository.findAll();
+    }
 
 
     @Transactional
