@@ -30,10 +30,11 @@ public class PetService {
     }
 
     public Pet createPet(int id,PetCreateRequest request) {
-        boolean exist = petRepository.existsByPetName(request.getPetName());
+        User user = userRepository.findUserByUserId(id);
+
+        boolean exist = petRepository.existsByUserAndPetName(user, request.getPetName());
         if (!exist) {
             Pet newPet = petMapper.toPet(request);
-            User user = userRepository.findUserByUserId(id);
             newPet.setUser(user);
             return petRepository.save(newPet);
         }
@@ -78,6 +79,10 @@ public class PetService {
 
     public boolean findPetByID(int id) {
         return petRepository.existsByPetId(id);
+    }
+
+    public Pet findPetByPetID(int id) {
+        return petRepository.findPetByPetId(id);
     }
 
     @Transactional

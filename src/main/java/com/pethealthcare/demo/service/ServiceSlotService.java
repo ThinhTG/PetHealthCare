@@ -40,6 +40,9 @@ public class ServiceSlotService {
         User user = userRepository.findUserByUserId(request.getUserId());
 
         Slot slot = slotRepository.findSlotBySlotId(request.getSlotId());
+        if (slot == null) {
+            return "Slot is not existed";
+        }
         boolean existed = serviceSlotRepository.existsByUserAndSlotAndDate(user,
                 slot, request.getDate());
         if (!existed) {

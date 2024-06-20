@@ -10,4 +10,5 @@ import org.mapstruct.Mapping;
 public interface PetMapper {
     @Mapping(target = "bookingDetails", ignore = true)
     Pet toPet(PetCreateRequest request);
+
 }
