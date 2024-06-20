@@ -36,31 +36,30 @@ public class ServiceSlotService {
                 request.getDate(), false);
     }
 
-    public String addServiceSlot(ServiceSlotCreateRequest request) {
-        User user = userRepository.findUserByUserId(request.getUserId());
+    public String addServiceSlots(List<ServiceSlotCreateRequest> requests) {
+        for (ServiceSlotCreateRequest request : requests) {
+            User user = userRepository.findUserByUserId(request.getUserId());
+            Slot slot = slotRepository.findSlotBySlotId(request.getSlotId());
 
-        Slot slot = slotRepository.findSlotBySlotId(request.getSlotId());
-        if (slot == null) {
-            return "Slot is not existed";
-        }
-        boolean existed = serviceSlotRepository.existsByUserAndSlotAndDate(user,
-                slot, request.getDate());
-        if (!existed) {
-            ServiceSlot serviceSlot = serviceSlotMapper.toServiceSlot(request);
+            if (slot == null) {
+                return "Slot with ID " + request.getSlotId() + " is not existed";
+            }
 
-            serviceSlot.setStatus(false);
-
-            serviceSlot.setUser(user);
-
-            serviceSlot.setSlot(slot);
-
-            serviceSlotRepository.save(serviceSlot);
-
-            return "Insert Service Slot Successfully";
+            boolean existed = serviceSlotRepository.existsByUserAndSlotAndDate(user, slot, request.getDate());
+            if (!existed) {
+                ServiceSlot serviceSlot = serviceSlotMapper.toServiceSlot(request);
+                serviceSlot.setStatus(false);
+                serviceSlot.setUser(user);
+                serviceSlot.setSlot(slot);
+                serviceSlotRepository.save(serviceSlot);
+            } else {
+                return "ServiceSlot with user " + request.getUserId() + " and slot " + request.getSlotId() + " is already existed";
+            }
         }
 
-        return "ServiceSlot is existed";
+        return "Insert Service Slots Successfully";
     }
+
 
     public void bookedSlot(int userId, Date date, int slotId) {
         User user = new User();
