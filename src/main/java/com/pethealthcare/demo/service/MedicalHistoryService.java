@@ -53,10 +53,11 @@ public class MedicalHistoryService  {
         return medicalHistoryRepository.findMedicalHistoryByMedicalHistoryId(id);
     }
 
-    public List<MedicalHistory> getMedicalHistoriesByPetId(int medicalHistoryId){
+    public List<MedicalHistory> getMedicalHistoriesByPetId(int petId){
         MedicalHistory medicalHistory = new MedicalHistory();
-        medicalHistory.setMedicalHistoryId(medicalHistoryId);
-        return medicalHistoryRepository.findMedicalHistoriesByPet(medicalHistory);
+        Pet pet = new Pet();
+        pet.setPetId(petId);
+        return medicalHistoryRepository.findMedicalHistoriesByPet(pet);
     }
 
     public MedicalHistory updateMedicalHistory(int medicalHistoryId, MedicalHistoryUpdateRequest request) {
