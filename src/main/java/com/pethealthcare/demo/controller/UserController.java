@@ -74,9 +74,9 @@ public class UserController {
         return userService.getAllVeterinarians();
     }
 
-    @PutMapping("/manageRole")
-    ResponseEntity<ResponseObject> updateUserRole(@RequestBody UserRoleUpdateRequest request) {
-        User updateUser = userService.updateUserRole(request.getUserID(), request.getNewrole());
+    @PutMapping("/manageRole/{userID}")
+    ResponseEntity<ResponseObject> updateUserRole(@PathVariable int userID,@RequestBody UserRoleUpdateRequest request) {
+        User updateUser = userService.updateUserRole(userID, request.getNewrole());
         if (updateUser != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "User updated successfully", updateUser)

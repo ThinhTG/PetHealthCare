@@ -40,6 +40,10 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MedicalHistory> medicalHistories;
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;

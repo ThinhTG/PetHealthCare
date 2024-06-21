@@ -81,6 +81,10 @@ public class PetService {
         return petRepository.existsByPetId(id);
     }
 
+    public Pet findPetByPetID(int id) {
+        return petRepository.findPetByPetId(id);
+    }
+
     @Transactional
     public void deletePetByID(int id){
         petRepository.deletePetByPetId(id);
