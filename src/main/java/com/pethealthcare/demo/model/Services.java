@@ -18,27 +18,6 @@ public class Services {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int serviceId;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Column(columnDefinition = "nvarchar(50)", nullable = false)
     private String name;
 
