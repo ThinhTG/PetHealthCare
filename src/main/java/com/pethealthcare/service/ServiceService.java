@@ -1,9 +1,9 @@
 package com.pethealthcare.service;
 
+import com.pethealthcare.responsitory.ServiceRepository;
 import com.pethealthcare.dto.request.ServiceCreateRequest;
 import com.pethealthcare.mapper.ServiceMapper;
 import com.pethealthcare.model.Services;
-import com.pethealthcare.responsitory.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

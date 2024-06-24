@@ -1,10 +1,10 @@
 package com.pethealthcare.controller;
 
-import com.pethealthcare.demo.dto.request.*;
+import com.pethealthcare.dto.request.*;
+import com.pethealthcare.service.UserService;
 import com.pethealthcare.dto.request.*;
 import com.pethealthcare.model.ResponseObject;
 import com.pethealthcare.model.User;
-import com.pethealthcare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

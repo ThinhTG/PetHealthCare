@@ -1,8 +1,8 @@
 package com.pethealthcare.service;
 
-import com.pethealthcare.dto.request.GetSlotAvailableRequest;
 import com.pethealthcare.dto.request.ServiceSlotCreateRequest;
 import com.pethealthcare.mapper.ServiceSlotMapper;
+import com.pethealthcare.dto.request.GetSlotAvailableRequest;
 import com.pethealthcare.model.ServiceSlot;
 import com.pethealthcare.model.Slot;
 import com.pethealthcare.model.User;

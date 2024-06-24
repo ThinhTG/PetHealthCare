@@ -1,7 +1,7 @@
-package com.pethealthcare.demo.mapper;
+package com.pethealthcare.mapper;
 
-import com.pethealthcare.demo.dto.request.BookingCreateRequest;
-import com.pethealthcare.demo.model.Booking;
+import com.pethealthcare.dto.request.BookingCreateRequest;
+import com.pethealthcare.model.Booking;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
