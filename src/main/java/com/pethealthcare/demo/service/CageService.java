@@ -34,4 +34,11 @@ public class CageService {
         return cages;
     }
 
+
+    public List<Cage> getALlEmptyCage(){
+        List<Cage> cages = cageRepository.findAll();
+
+
+        return cages;
+    }
 }

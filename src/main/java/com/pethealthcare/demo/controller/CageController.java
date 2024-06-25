@@ -44,5 +44,15 @@ public class CageController {
 
     }
 
+    @GetMapping("/empty")
+    ResponseEntity<ResponseObject> getAllEmptyCage(){
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Cage create successfully", cageService.getALlEmptyCage()));
+
+    }
+
+
+
 
 }
