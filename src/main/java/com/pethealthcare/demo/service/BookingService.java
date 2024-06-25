@@ -44,6 +44,7 @@ public class BookingService {
 
     public  List<Booking> getAllBooking() {
         return bookingRepository.findAll();
+
     }
 
 
@@ -59,6 +60,7 @@ public class BookingService {
 
         for (BookingDetailCreateRequest request1 : request.getBookingDetails()) {
             BookingDetail bookingDetail = bookingDetailMapper.toBookingDetail(request1);
+            bookingDetail.setDate(request1.getDate());
             bookingDetail.setBooking(newBooking);
 
 
@@ -85,5 +87,7 @@ public class BookingService {
         user.setUserId(userId);
         return bookingRepository.getBookingByUser(user);
     }
+
+
 
 }
