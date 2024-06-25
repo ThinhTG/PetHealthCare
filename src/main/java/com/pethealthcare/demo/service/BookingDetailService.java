@@ -16,4 +16,8 @@ public class BookingDetailService {
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
     }
+
+    public List<BookingDetail> getBookingDetailByNeedCage() {
+        return bookingDetailRepository.findBookingDetailByNeedCage(true);
+    }
 }

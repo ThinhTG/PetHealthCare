@@ -26,4 +26,8 @@ public class BookingDetailController {
         return bookingDetailService.getAllBookingDetail();
     }
 
+    @GetMapping("/getByNeedCage")
+    List<BookingDetail> getBookingDetailByNeedCage() {
+        return bookingDetailService.getBookingDetailByNeedCage();
+    }
 }
