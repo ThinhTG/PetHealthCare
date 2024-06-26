@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -31,9 +32,10 @@ public class BookingDetailController {
     List<BookingDetail> getBookingDetailByNeedCage() {
         return bookingDetailService.getBookingDetailByNeedCage();
     }
+
     @GetMapping("/getByDate")
-    List<BookingDetail> getBookingDetailByDate(@RequestParam BookingDetailByDateRequest request) {
-        return bookingDetailService.getBookingDetailByDate(request.getDate());
+    List<BookingDetail> getBookingDetailByDate(@RequestParam Date date) {
+        return bookingDetailService.getBookingDetailByDate(date);
     }
 
 }

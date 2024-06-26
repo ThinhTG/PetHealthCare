@@ -14,7 +14,9 @@ import java.util.List;
 @Repository
 public interface BookingDetailRepository extends JpaRepository<BookingDetail, Integer> {
 
-    @Query("SELECT b FROM BookingDetail b WHERE b.date >= :date")
+    @Query("SELECT b FROM BookingDetail b WHERE b.date = :date")
     List<BookingDetail> findBookingDetailsFromDate(@Param("date") Date date);
     List<BookingDetail> findBookingDetailByNeedCage(boolean needCage);
+
+
 }
