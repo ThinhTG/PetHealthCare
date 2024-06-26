@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.controller;
 
 
+import com.pethealthcare.demo.dto.request.BookingDetailByDateRequest;
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -30,4 +32,10 @@ public class BookingDetailController {
     List<BookingDetail> getBookingDetailByNeedCage() {
         return bookingDetailService.getBookingDetailByNeedCage();
     }
+
+    @GetMapping("/getByDate")
+    List<BookingDetail> getBookingDetailByDate(@RequestParam Date date) {
+        return bookingDetailService.getBookingDetailByDate(date);
+    }
+
 }
