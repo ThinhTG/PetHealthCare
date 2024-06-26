@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.controller;
 
 
+import com.pethealthcare.demo.dto.request.BookingDetailByDateRequest;
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
@@ -30,4 +31,9 @@ public class BookingDetailController {
     List<BookingDetail> getBookingDetailByNeedCage() {
         return bookingDetailService.getBookingDetailByNeedCage();
     }
+    @GetMapping("/getByDate")
+    List<BookingDetail> getBookingDetailByDate(@RequestParam BookingDetailByDateRequest request) {
+        return bookingDetailService.getBookingDetailByDate(request.getDate());
+    }
+
 }
