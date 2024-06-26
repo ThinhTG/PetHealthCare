@@ -49,7 +49,7 @@ public class CageController {
     @PostMapping("/checkin")
     ResponseEntity<ResponseObject> checking(@RequestBody CheckingCageRequest checkingCage){
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Cage create successfully", cageService.checkinCage(checkingCage.getCageId(), checkingCage.getPetId())));
+                new ResponseObject("ok", "Cage create successfully", cageService.checkinCage(checkingCage.getCageId(), checkingCage.getBookingDetailId())));
     }
 
 
@@ -60,10 +60,10 @@ public class CageController {
     }
 
     @GetMapping("/getHasPetByType")
-    ResponseEntity<ResponseObject> getHasPetByType(@RequestParam CageType type) {
+    ResponseEntity<ResponseObject> getHasPetByType() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Cages with pets of type " + type.name(),
-                        cageService.getCageHasPetByType(type)));
+                new ResponseObject("ok", "Cages with pets of type " ,
+                        cageService.getCageHasPetByType()));
     }
 
 }

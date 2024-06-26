@@ -80,8 +80,8 @@ public class CageService {
         return availableCages;
     }
 
-    public List<Cage> getCageHasPetByType(CageType type) {
-        List<Cage> cages = cageRepository.findCageByCageType(type);
+    public List<Cage> getCageHasPetByType() {
+        List<Cage> cages = cageRepository.findAll();
         List<Cage> availableCages = new ArrayList<>();
         for (Cage cage : cages) {
             if (cage.getPet() != null) {
