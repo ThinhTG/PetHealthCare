@@ -1,8 +1,12 @@
 package com.pethealthcare.demo.controller;
 
-import com.pethealthcare.demo.dto.request.CageUpdateRequest;
+
+import com.pethealthcare.demo.dto.request.CageCreateRequest;
+import com.pethealthcare.demo.dto.request.CheckingCageRequest;
+import com.pethealthcare.demo.dto.request.CheckoutCageRequest;
 import com.pethealthcare.demo.dto.request.ForgotPasswordRequest;
 import com.pethealthcare.demo.model.Cage;
+import com.pethealthcare.demo.model.CageType;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.service.CageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +22,14 @@ public class CageController {
     private CageService cageService;
 
     @PostMapping("/create")
-    ResponseEntity<ResponseObject> createCage() {
-        Cage cage = cageService.createCage();
+    ResponseEntity<ResponseObject> createCage(@RequestBody CageCreateRequest request) {
+        Cage cage = cageService.createCage(request.getType());
         if (cage == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("ok", "Cage create failed", cage));
         }
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Cage create successfully", cage));
-    }
-
-    @PutMapping("/update")
-    ResponseEntity<ResponseObject> updateCage(@RequestBody CageUpdateRequest cageUpdateRequest){
-        Cage updateCage = cageService.updateCage(cageUpdateRequest.getCageId(), cageUpdateRequest.isStatus());
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("oke", "Update successfully", updateCage)
-        );
     }
 
     @GetMapping("/getall")
@@ -53,6 +49,32 @@ public class CageController {
     }
 
 
+
+    @GetMapping("/getAvailableByType")
+    ResponseEntity<ResponseObject> getAvailableByType(@RequestParam CageType type){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Cage create successfully", cageService.getCageAvailableByType(type)));
+    }
+
+    @PostMapping("/checkin")
+    ResponseEntity<ResponseObject> checking(@RequestBody CheckingCageRequest checkingCage){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Cage create successfully", cageService.checkinCage(checkingCage.getCageId(), checkingCage.getBookingDetailId())));
+    }
+
+
+    @PostMapping("/checkout")
+    ResponseEntity<ResponseObject> checkout(@RequestBody CheckoutCageRequest checkoutCage){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Cage create successfully", cageService.checkoutCage(checkoutCage.getCageId())));
+    }
+
+    @GetMapping("/getHasPetByType")
+    ResponseEntity<ResponseObject> getHasPetByType() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Cages with pets of type " ,
+                        cageService.getCageHasPetByType()));
+    }
 
 
 }

@@ -48,7 +48,6 @@ public class BookingService {
     }
 
 
-    @Transactional
     public void createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
         newBooking.setDate(new Date());
@@ -88,6 +87,12 @@ public class BookingService {
         return bookingRepository.getBookingByUser(user);
     }
 
+
+    public Booking updateStatusBooking(int bookingId, String status) {
+        Booking booking = bookingRepository.findBookingByBookingId(bookingId);
+        booking.setStatus(status);
+        return bookingRepository.save(booking);
+    }
 
 
 }

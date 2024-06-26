@@ -34,6 +34,10 @@ public class Booking {
     private List<BookingDetail> bookingDetails;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payment;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;

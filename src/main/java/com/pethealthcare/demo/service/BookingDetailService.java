@@ -8,7 +8,9 @@ import com.pethealthcare.demo.responsitory.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,7 @@ public class BookingDetailService {
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
     }
+
 
     public  List<BookingDetail> getAllBookingDetailNeedCage() {
         List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
@@ -57,5 +60,12 @@ public class BookingDetailService {
         Booking booking = new Booking();
         booking.setBookingId(bookingId);
         return bookingDetailRepository.getBookingDetailsByBooking(booking);
+      
+    public List<BookingDetail> getBookingDetailByDate(Date date) {
+        return bookingDetailRepository.findBookingDetailsFromDate(date);
+    }
+
+    public List<BookingDetail> getBookingDetailByNeedCage() {
+        return bookingDetailRepository.findBookingDetailByNeedCage(true);
     }
 }

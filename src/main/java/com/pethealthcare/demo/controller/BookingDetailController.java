@@ -1,7 +1,9 @@
 package com.pethealthcare.demo.controller;
 
 
+
 import com.pethealthcare.demo.dto.request.BookingDetailNeedCageUpdate;
+import com.pethealthcare.demo.dto.request.BookingDetailByDateRequest;
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.UserRoleUpdateRequest;
 import com.pethealthcare.demo.model.Booking;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -57,14 +60,20 @@ public class BookingDetailController {
         return  ResponseEntity.ok(bookingDetailRepository.findBookingDetailByBookingDetailId(id));
     }
 
+
     @GetMapping("/getAllByBookingId/{BookingId}")
     ResponseEntity<List<BookingDetail>>  getBookingByBookingID(@PathVariable int BookingId) {
         return  ResponseEntity.ok(bookingDetailService.getBookingDetailByBookingId(BookingId));
     }
+  
+    @GetMapping("/getByNeedCage")
+    List<BookingDetail> getBookingDetailByNeedCage() {
+        return bookingDetailService.getBookingDetailByNeedCage();
+    }
 
-
-
-
-
+    @GetMapping("/getByDate")
+    List<BookingDetail> getBookingDetailByDate(@RequestParam Date date) {
+        return bookingDetailService.getBookingDetailByDate(date);
+    }
 
 }
