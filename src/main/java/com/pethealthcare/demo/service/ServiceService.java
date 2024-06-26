@@ -26,6 +26,7 @@ public class ServiceService {
         boolean exists = serviceRepository.existsByName(request.getName());
         if (!exists) {
             Services service = serviceMapper.toService(request);
+            service.setImageUrl(request.getImageUrl());
             return serviceRepository.save(service);
         }
         return null;

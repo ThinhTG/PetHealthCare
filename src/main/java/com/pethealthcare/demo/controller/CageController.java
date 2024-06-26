@@ -40,6 +40,16 @@ public class CageController {
 
     }
 
+    @GetMapping("/empty")
+    ResponseEntity<ResponseObject> getAllEmptyCage(){
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Cage create successfully", cageService.getALlEmptyCage()));
+
+    }
+
+
+
     @GetMapping("/getAvailableByType")
     ResponseEntity<ResponseObject> getAvailableByType(@RequestParam CageType type){
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -65,5 +75,6 @@ public class CageController {
                 new ResponseObject("ok", "Cages with pets of type " ,
                         cageService.getCageHasPetByType()));
     }
+
 
 }

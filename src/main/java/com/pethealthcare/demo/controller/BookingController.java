@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class BookingController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<ResponseObject> addBooking(@RequestBody BookingCreateRequest request) {
+    ResponseEntity<ResponseObject> addBooking(@RequestBody BookingCreateRequest request) throws ParseException {
         bookingService.createBooking(request);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "booking created successfully")
