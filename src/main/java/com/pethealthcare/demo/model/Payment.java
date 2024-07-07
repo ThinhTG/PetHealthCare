@@ -14,20 +14,22 @@ import java.time.LocalDateTime;
 @Entity
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int paymentId;
+    private int transactionNo;
 
     @Column
-    private String paymentMethod;
+    private int amount;
 
     @Column
-    private LocalDateTime paymentDate;
+    private String bankCode;
 
     @Column
-    private double deposit;
+    private String bankTranNo;
 
     @Column
-    private double total;
+    private String CardType;
+
+    @Column
+    private LocalDateTime payDate;
 
     @ManyToOne
     @JoinColumn(name = "bookingId")
