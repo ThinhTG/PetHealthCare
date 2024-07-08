@@ -60,10 +60,10 @@ public class BookingDetailService {
         Booking booking = new Booking();
         booking.setBookingId(bookingId);
         return bookingDetailRepository.getBookingDetailsByBooking(booking);
-      
-    public List<BookingDetail> getBookingDetailByDate(Date date) {
-        return bookingDetailRepository.findBookingDetailsFromDate(date);
     }
+        public List<BookingDetail> getBookingDetailByDate (Date date){
+            return bookingDetailRepository.findBookingDetailsFromDate(date);
+        }
 
     public List<BookingDetail> getBookingDetailByNeedCage() {
         return bookingDetailRepository.findBookingDetailByNeedCage(true);

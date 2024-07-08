@@ -63,7 +63,7 @@ public class BookingDetailController {
 
     @GetMapping("/getAllByBookingId/{BookingId}")
     ResponseEntity<List<BookingDetail>>  getBookingByBookingID(@PathVariable int BookingId) {
-        return  ResponseEntity.ok(bookingDetailService.getBookingDetailByBookingId(BookingId));
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByBookingId(BookingId));
     }
   
     @GetMapping("/getByNeedCage")
