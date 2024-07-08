@@ -28,7 +28,7 @@ public class PaymentService {
     private PaymentRepository paymentRepository;
 
     @Autowired
-    private PaymentMapper paymentMapper;
+    private BookingService bookingService;
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -125,6 +125,7 @@ public class PaymentService {
         payment.setCardType(cardType);
         payment.setPayDate(payDate);
         payment.setBooking(bookingRepository.findBookingByBookingId(bookingId));
+        bookingService.updateStatusBooking(bookingId, "PAID");
         return paymentRepository.save(payment);
     }
 }
