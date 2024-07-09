@@ -19,4 +19,12 @@ public class Cage {
 
     @Column
     private boolean status;
+
+    @OneToOne
+    @JoinColumn(name = "petId")
+    private Pet pet;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private CageType cageType;
 }
