@@ -26,10 +26,10 @@ public class BookingController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<ResponseObject> addBooking(@RequestBody BookingCreateRequest request) throws ParseException {
-        bookingService.createBooking(request);
+    ResponseEntity<ResponseObject> addBooking(@RequestBody BookingCreateRequest request) {
+        Booking booking = bookingService.createBooking(request);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "booking created successfully")
+                new ResponseObject("ok", "booking created successfully", booking)
         );
     }
 
