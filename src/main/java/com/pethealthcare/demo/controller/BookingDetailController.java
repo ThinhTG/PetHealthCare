@@ -30,4 +30,9 @@ public class BookingDetailController {
     List<BookingDetail> getBookingDetailByNeedCage() {
         return bookingDetailService.getBookingDetailByNeedCage();
     }
+
+    @GetMapping("/getByUser")
+    List<BookingDetail> getBookingDetailByUser(@RequestParam int userId) {
+        return bookingDetailService.getBookingDetailByUser(userId);
+    }
 }
