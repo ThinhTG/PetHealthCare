@@ -47,7 +47,7 @@ public class BookingService {
     }
 
 
-    public void createBooking(BookingCreateRequest request) {
+    public Booking createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
         newBooking.setDate(new Date());
 
@@ -76,7 +76,7 @@ public class BookingService {
             serviceSlotService.bookedSlot(request1.getVeterinarianId(), request1.getDate(), request1.getSlotId());
             bookingDetailRepository.save(bookingDetail);
         }
-        
+        return newBooking;
     }
 
     public List<Booking> getBookingsByUserID(int userId) {
