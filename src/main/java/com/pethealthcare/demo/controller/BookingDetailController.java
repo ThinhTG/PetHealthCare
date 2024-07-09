@@ -1,19 +1,10 @@
 package com.pethealthcare.demo.controller;
 
-
-
-import com.pethealthcare.demo.dto.request.BookingDetailNeedCageUpdate;
-import com.pethealthcare.demo.dto.request.BookingDetailByDateRequest;
-import com.pethealthcare.demo.dto.request.PetCreateRequest;
-import com.pethealthcare.demo.dto.request.UserRoleUpdateRequest;
-import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.ResponseObject;
-import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.responsitory.BookingDetailRepository;
 import com.pethealthcare.demo.responsitory.BookingRepository;
 import com.pethealthcare.demo.service.BookingDetailService;
-import com.pethealthcare.demo.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +19,6 @@ public class BookingDetailController {
     @Autowired
     private BookingDetailService bookingDetailService;
 
-    @Autowired
-    private BookingRepository bookingRepository;
     @Autowired
     private BookingDetailRepository bookingDetailRepository;
 
@@ -65,7 +54,7 @@ public class BookingDetailController {
     ResponseEntity<List<BookingDetail>>  getBookingByBookingID(@PathVariable int BookingId) {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailByBookingId(BookingId));
     }
-  
+
     @GetMapping("/getByNeedCage")
     List<BookingDetail> getBookingDetailByNeedCage() {
         return bookingDetailService.getBookingDetailByNeedCage();
@@ -76,4 +65,9 @@ public class BookingDetailController {
         return bookingDetailService.getBookingDetailByDate(date);
     }
 
+
+    @GetMapping("/getByUser/{userId}")
+    List<BookingDetail> getBookingDetailByUser(@RequestParam int userId) {
+        return bookingDetailService.getBookingDetailByUser(userId);
+    }
 }
