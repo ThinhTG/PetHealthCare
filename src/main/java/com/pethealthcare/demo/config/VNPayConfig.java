@@ -30,24 +30,55 @@ public class VNPayConfig {
     @Value("${ORDER_TYPE}")
     private String orderType;
 
+//    public Map<String, String> getVNPayConfig() {
+//        Map<String, String> vnpParamsMap = new HashMap<>();
+//        vnpParamsMap.put("vnp_Version", this.vnp_Version);
+//        vnpParamsMap.put("vnp_Command", this.vnp_Command);
+//        vnpParamsMap.put("vnp_TmnCode", this.vnp_TmnCode);
+//        vnpParamsMap.put("vnp_CurrCode", "VND");
+//        vnpParamsMap.put("vnp_TxnRef",  PaymentService.getRandomNumber(8));
+//        vnpParamsMap.put("vnp_OrderInfo", "");
+//        vnpParamsMap.put("vnp_OrderType", this.orderType);
+//        vnpParamsMap.put("vnp_Locale", "vn");
+//        vnpParamsMap.put("vnp_ReturnUrl", this.vnp_ReturnUrl);
+//        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+//        String vnpCreateDate = formatter.format(calendar.getTime());
+//        vnpParamsMap.put("vnp_CreateDate", vnpCreateDate);
+//        calendar.add(Calendar.MINUTE, 15);
+//        String vnp_ExpireDate = formatter.format(calendar.getTime());
+//        vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
+//        return vnpParamsMap;
+//    }
+
     public Map<String, String> getVNPayConfig() {
         Map<String, String> vnpParamsMap = new HashMap<>();
         vnpParamsMap.put("vnp_Version", this.vnp_Version);
         vnpParamsMap.put("vnp_Command", this.vnp_Command);
         vnpParamsMap.put("vnp_TmnCode", this.vnp_TmnCode);
         vnpParamsMap.put("vnp_CurrCode", "VND");
-        vnpParamsMap.put("vnp_TxnRef",  PaymentService.getRandomNumber(8));
+        vnpParamsMap.put("vnp_TxnRef", PaymentService.getRandomNumber(8));
         vnpParamsMap.put("vnp_OrderInfo", "");
         vnpParamsMap.put("vnp_OrderType", this.orderType);
         vnpParamsMap.put("vnp_Locale", "vn");
         vnpParamsMap.put("vnp_ReturnUrl", this.vnp_ReturnUrl);
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+
+        TimeZone timeZone = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
+        Calendar calendar = Calendar.getInstance(timeZone);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(timeZone);
+
         String vnpCreateDate = formatter.format(calendar.getTime());
         vnpParamsMap.put("vnp_CreateDate", vnpCreateDate);
+
         calendar.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(calendar.getTime());
         vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
+
+        System.out.println("vnp_CreateDate: " + vnpCreateDate);
+        System.out.println("vnp_ExpireDate: " + vnp_ExpireDate);
+
         return vnpParamsMap;
     }
+
 }
