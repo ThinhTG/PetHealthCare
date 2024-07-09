@@ -18,14 +18,14 @@ public class MedicalHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int medicalHistoryId;
 
-    @Column
-    private String VeterinaryName;
+    @Column (name = "VeterinaryName",columnDefinition = "nvarchar(50)")
+    private String veterinaryName;
 
-    @Column
-    private String TreatmentResult;
+    @Column (name = "TreatmentResult",columnDefinition = "nvarchar(50)")
+    private String treatmentResult;
 
-    @Column
-    private Date DateMedical;
+    @Column (name = "DateMedical", columnDefinition = "date")
+    private Date dateMedical;
 
     @ManyToOne
     @JsonIgnore

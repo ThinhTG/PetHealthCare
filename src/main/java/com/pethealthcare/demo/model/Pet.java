@@ -44,6 +44,10 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MedicalHistory> medicalHistories;
 
+    @JsonIgnore
+    @OneToOne (mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cage cage;
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
