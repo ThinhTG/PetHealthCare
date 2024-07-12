@@ -76,4 +76,11 @@ public class BookingDetailController {
         return bookingDetailService.getBookingDetailByDate(date);
     }
 
+    @GetMapping("/getAllBookingDetail_ByUserId")
+    List<BookingDetail> getBookingDetailByUserid(@RequestParam int userId) {
+        return bookingDetailService.getBookingDetailByUser(userId);
+    }
+
+
+
 }
