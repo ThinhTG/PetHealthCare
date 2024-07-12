@@ -1,9 +1,6 @@
 package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.config.VNPayConfig;
-import com.pethealthcare.demo.dto.request.PaymentCreateRequest;
-import com.pethealthcare.demo.mapper.PaymentMapper;
-import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.Payment;
 import com.pethealthcare.demo.responsitory.BookingRepository;
 import com.pethealthcare.demo.responsitory.PaymentRepository;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -97,7 +93,7 @@ public class PaymentService {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
         int bookingId = Integer.parseInt(request.getParameter("bookingId"));
-        Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
+        Map<String, String> vnpParamsMap = vnPayConfig.getPayConfig();
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
         vnpParamsMap.put("vnp_OrderInfo", "" + bookingId);
         if (bankCode != null && !bankCode.isEmpty()) {
@@ -113,7 +109,7 @@ public class PaymentService {
     }
 
     public Payment createPayment(int transactionNo, int amount, String bankCode,
-                                 String bankTranNo, String cardType, String vnpPayDate, String orderInfo) {
+                                 String bankTranNo, String cardType, String vnpPayDate, String orderInfo, int txnRef) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime payDate = LocalDateTime.parse(vnpPayDate, formatter);
         int bookingId = Integer.parseInt(orderInfo);
@@ -124,6 +120,7 @@ public class PaymentService {
         payment.setBankTranNo(bankTranNo);
         payment.setCardType(cardType);
         payment.setPayDate(payDate);
+        payment.setTxnRef(txnRef);
         payment.setBooking(bookingRepository.findBookingByBookingId(bookingId));
         bookingService.updateStatusBooking(bookingId, "PAID");
         return paymentRepository.save(payment);

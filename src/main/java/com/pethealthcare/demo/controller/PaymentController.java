@@ -33,10 +33,11 @@ public class PaymentController {
         String bankTranNo = request.getParameter("vnp_BankTranNo");
         String payDate = request.getParameter("vnp_PayDate");
         String orderInfo = request.getParameter("vnp_OrderInfo");
+        int txnRef = Integer.parseInt(request.getParameter("vnp_TxnRef"));
 
         if (status.equals("00")) {
             Payment payment = paymentService.createPayment(paymentId, amount, bankCode,
-                    bankTranNo, cardType, payDate, orderInfo);
+                    bankTranNo, cardType, payDate, orderInfo, txnRef);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Success", payment)
             );

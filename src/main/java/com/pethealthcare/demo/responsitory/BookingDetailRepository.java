@@ -19,7 +19,7 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     List<BookingDetail> findBookingDetailsFromDate(@Param("date") Date date);
     List<BookingDetail> findBookingDetailByNeedCage(boolean needCage);
     List<BookingDetail> findBookingDetailByUser(User user);
-       BookingDetail findBookingDetailByBookingDetailId(int id);
+    BookingDetail findBookingDetailByBookingDetailId(int id);
     List<BookingDetail> getBookingDetailsByBooking(Booking booking);
 
 
