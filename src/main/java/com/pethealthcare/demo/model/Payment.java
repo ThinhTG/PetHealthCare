@@ -31,6 +31,9 @@ public class Payment {
     @Column
     private LocalDateTime payDate;
 
+    @Column
+    private int txnRef;
+
     @ManyToOne
     @JoinColumn(name = "bookingId")
     private Booking booking;

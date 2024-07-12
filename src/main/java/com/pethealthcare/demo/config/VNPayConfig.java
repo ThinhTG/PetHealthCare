@@ -25,15 +25,13 @@ public class VNPayConfig {
     private String secretKey;
     @Value("${VERSION}")
     private String vnp_Version;
-    @Value("${COMMAND}")
-    private String vnp_Command;
     @Value("${ORDER_TYPE}")
     private String orderType;
 
-    public Map<String, String> getVNPayConfig() {
+    public Map<String, String> getPayConfig() {
         Map<String, String> vnpParamsMap = new HashMap<>();
         vnpParamsMap.put("vnp_Version", this.vnp_Version);
-        vnpParamsMap.put("vnp_Command", this.vnp_Command);
+        vnpParamsMap.put("vnp_Command", "pay");
         vnpParamsMap.put("vnp_TmnCode", this.vnp_TmnCode);
         vnpParamsMap.put("vnp_CurrCode", "VND");
         vnpParamsMap.put("vnp_TxnRef", PaymentService.getRandomNumber(8));
@@ -54,10 +52,9 @@ public class VNPayConfig {
         String vnp_ExpireDate = formatter.format(calendar.getTime());
         vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        System.out.println("vnp_CreateDate: " + vnpCreateDate);
-        System.out.println("vnp_ExpireDate: " + vnp_ExpireDate);
-
         return vnpParamsMap;
     }
+
+
 
 }
