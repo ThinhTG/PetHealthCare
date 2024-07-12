@@ -23,10 +23,6 @@ public class BookingDetailService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private BookingRepository bookingRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
