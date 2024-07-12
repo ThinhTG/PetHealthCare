@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sql-server
+    container_name: pethealthcare-app
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "12345678"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    container_name: pethealthcare-db
