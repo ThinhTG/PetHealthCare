@@ -66,8 +66,11 @@ public class BookingDetailController {
     }
 
 
-    @GetMapping("/getByUser/{userId}")
-    List<BookingDetail> getBookingDetailByUser(@RequestParam int userId) {
+    @GetMapping("/getAllBookingDetail_ByUserId")
+    List<BookingDetail> getBookingDetailByUserid(@RequestParam int userId) {
         return bookingDetailService.getBookingDetailByUser(userId);
     }
+
+
+
 }

@@ -21,6 +21,6 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     List<BookingDetail> findBookingDetailByUser(User user);
        BookingDetail findBookingDetailByBookingDetailId(int id);
     List<BookingDetail> getBookingDetailsByBooking(Booking booking);
-
+    List<BookingDetail> getBookingDetailByuser(User user);
 
 }

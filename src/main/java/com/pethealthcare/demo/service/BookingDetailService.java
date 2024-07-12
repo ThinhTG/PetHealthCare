@@ -6,6 +6,7 @@ import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.responsitory.BookingDetailRepository;
 import com.pethealthcare.demo.responsitory.UserRepository;
 import com.pethealthcare.demo.responsitory.BookingRepository;
+import com.pethealthcare.demo.responsitory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,17 +25,19 @@ public class BookingDetailService {
     private UserRepository userRepository;
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
     }
 
 
-    public  List<BookingDetail> getAllBookingDetailNeedCage() {
+    public List<BookingDetail> getAllBookingDetailNeedCage() {
         List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
         List<BookingDetail> bookingDetailsNeedCage = new ArrayList<BookingDetail>();
         for (BookingDetail bookingDetail : bookingDetails) {
-            if(bookingDetail.isNeedCage()){
+            if (bookingDetail.isNeedCage()) {
                 bookingDetailsNeedCage.add(bookingDetail);
             }
 
@@ -47,10 +50,10 @@ public class BookingDetailService {
         Optional<BookingDetail> optionalBookingDetail = bookingDetailRepository.findById(bookingDetailId);
         if (optionalBookingDetail.isPresent()) {
             BookingDetail bookingDetail = optionalBookingDetail.get();
-            if(!bookingDetail.isNeedCage()) {
+            if (!bookingDetail.isNeedCage()) {
                 bookingDetail.setNeedCage(true);
                 // Save updated user
-            }else{
+            } else {
                 bookingDetail.setNeedCage(false);
             }
             bookingDetailRepository.save(bookingDetail);
@@ -65,9 +68,10 @@ public class BookingDetailService {
         booking.setBookingId(bookingId);
         return bookingDetailRepository.getBookingDetailsByBooking(booking);
     }
-        public List<BookingDetail> getBookingDetailByDate (Date date){
-            return bookingDetailRepository.findBookingDetailsFromDate(date);
-        }
+
+    public List<BookingDetail> getBookingDetailByDate(Date date) {
+        return bookingDetailRepository.findBookingDetailsFromDate(date);
+    }
 
     public List<BookingDetail> getBookingDetailByNeedCage() {
         return bookingDetailRepository.findBookingDetailByNeedCage(true);
@@ -75,6 +79,8 @@ public class BookingDetailService {
 
     public List<BookingDetail> getBookingDetailByUser(int userId) {
         User user = userRepository.findUserByUserId(userId);
-        return bookingDetailRepository.findBookingDetailByUser(user);
+        return bookingDetailRepository.getBookingDetailByuser(user);
+
+
     }
 }
