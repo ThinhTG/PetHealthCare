@@ -46,4 +46,9 @@ public class BookingDetail {
     @ManyToOne
     @JoinColumn(name = "slotId")
     private Slot slot;
+
+    @OneToOne
+    @JoinColumn(name = "feedbackId")
+    private Feedback feedback;
+
 }

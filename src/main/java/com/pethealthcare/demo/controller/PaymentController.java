@@ -6,10 +6,9 @@ import com.pethealthcare.demo.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/payment")
@@ -23,4 +22,19 @@ public class PaymentController {
                 new ResponseObject("ok", "Payment create successfully", paymentService.createPayment(request))
         );
     }
+
+    @GetMapping("/revenue")
+    ResponseEntity<ResponseObject> getRevenue() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Get revenue successfully", paymentService.getRevenue())
+        );
+    }
+    @GetMapping("/revenueInPeriod")
+    ResponseEntity<ResponseObject> getRevenueInPeriod(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Get revenue successfully", paymentService.getRevenueInPeriod(startDate, endDate))
+        );
+    }
+
+
 }
