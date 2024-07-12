@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "feedback")
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,7 @@ public class Feedback {
     private int rating;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "feedBack", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "feedback", cascade = CascadeType.ALL, orphanRemoval = true)
     private BookingDetail bookingDetail;
 
 
