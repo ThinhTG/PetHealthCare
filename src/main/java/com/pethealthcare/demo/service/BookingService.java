@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.service;
 
+import com.pethealthcare.demo.dto.request.BookingCancelRequest;
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingDetailCreateRequest;
 import com.pethealthcare.demo.mapper.BookingDetailMapper;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 public class BookingService {
     @Autowired
-    private  BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
 
     @Autowired
     private BookingDetailRepository bookingDetailRepository;
@@ -31,6 +32,9 @@ public class BookingService {
     private ServiceSlotService serviceSlotService;
 
     @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -42,7 +46,7 @@ public class BookingService {
     @Autowired
     private SlotRepository slotRepository;
 
-    public  List<Booking> getAllBooking() {
+    public List<Booking> getAllBooking() {
         return bookingRepository.findAll();
 
     }
@@ -72,13 +76,15 @@ public class BookingService {
             Services services = serviceRepository.findByServiceId(request1.getServiceId());
             bookingDetail.setServices(services);
 
-            Slot slot  = slotRepository.findSlotBySlotId(request1.getSlotId());
+            Slot slot = slotRepository.findSlotBySlotId(request1.getSlotId());
             bookingDetail.setSlot(slot);
 
             serviceSlotService.bookedSlot(request1.getVeterinarianId(), request1.getDate(), request1.getSlotId());
             bookingDetailRepository.save(bookingDetail);
         }
+
         return newBooking;
+
     }
 
     public List<Booking>  getBookingsByUserID(int userId) {
@@ -87,6 +93,13 @@ public class BookingService {
         return bookingRepository.getBookingByUser(user);
     }
 
+
+    public void deleteBooking(int bookingId, BookingCancelRequest request) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+        booking.setStatus("CANCELLED");
+        paymentService.returnDeposit(bookingId, request);
+
+    }
 
     public Booking updateStatusBooking(int bookingId, String status) {
         Booking booking = bookingRepository.findBookingByBookingId(bookingId);

@@ -10,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.time.LocalDateTime;
+
+
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
@@ -22,6 +26,22 @@ public class PaymentController {
                 new ResponseObject("ok", "Success", paymentService.createVnPayPayment(request))
         );
     }
+
+
+    @GetMapping("/revenue")
+    ResponseEntity<ResponseObject> getRevenue() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Get revenue successfully", paymentService.getRevenue())
+        );
+    }
+    @GetMapping("/revenueInPeriod")
+    ResponseEntity<ResponseObject> getRevenueInPeriod(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Get revenue successfully", paymentService.getRevenueInPeriod(startDate, endDate))
+        );
+    }
+
+
 
     @GetMapping("/vn-pay-callback")
     public ResponseEntity<ResponseObject> payCallbackHandler(HttpServletRequest request) {
@@ -46,4 +66,5 @@ public class PaymentController {
             );
         }
     }
+
 }

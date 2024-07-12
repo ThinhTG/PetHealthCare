@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.controller;
 
+import com.pethealthcare.demo.dto.request.BookingCancelRequest;
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
 import com.pethealthcare.demo.model.Booking;
@@ -38,10 +39,22 @@ public class BookingController {
         return bookingService.getBookingsByUserID(userID);
     }
 
+
+    @PostMapping("/delete/{bookingID}")
+ResponseEntity<ResponseObject> deleteBooking(@PathVariable int bookingID, BookingCancelRequest request) {
+        bookingService.deleteBooking(bookingID, request);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "booking deleted successfully")
+        );
+    }
+
+
+
     @PutMapping("/update/status/{bookingId}")
     ResponseEntity<ResponseObject> updateBooking(@PathVariable int bookingId, @RequestBody BookingStatusUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "booking updated successfully", bookingService.updateStatusBooking(bookingId, request.getStatus()))
         );
     }
+
 }
