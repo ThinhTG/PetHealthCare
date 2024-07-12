@@ -28,18 +28,18 @@ public class PaymentController {
     }
 
 
-    @GetMapping("/revenue")
-    ResponseEntity<ResponseObject> getRevenue() {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Get revenue successfully", paymentService.getRevenue())
-        );
-    }
-    @GetMapping("/revenueInPeriod")
-    ResponseEntity<ResponseObject> getRevenueInPeriod(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate) {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Get revenue successfully", paymentService.getRevenueInPeriod(startDate, endDate))
-        );
-    }
+//    @GetMapping("/revenue")
+//    ResponseEntity<ResponseObject> getRevenue() {
+//        return ResponseEntity.status(HttpStatus.OK).body(
+//                new ResponseObject("ok", "Get revenue successfully", paymentService.getRevenue())
+//        );
+//    }
+//    @GetMapping("/revenueInPeriod")
+//    ResponseEntity<ResponseObject> getRevenueInPeriod(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate) {
+//        return ResponseEntity.status(HttpStatus.OK).body(
+//                new ResponseObject("ok", "Get revenue successfully", paymentService.getRevenueInPeriod(startDate, endDate))
+//        );
+//    }
 
 
 

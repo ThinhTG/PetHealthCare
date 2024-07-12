@@ -40,14 +40,13 @@ public class BookingController {
     }
 
 
-    @PostMapping("/delete/{bookingID}")
-ResponseEntity<ResponseObject> deleteBooking(@PathVariable int bookingID, BookingCancelRequest request) {
-        bookingService.deleteBooking(bookingID, request);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "booking deleted successfully")
-        );
-    }
-
+//    @PostMapping("/delete/{bookingID}")
+//    ResponseEntity<ResponseObject> deleteBooking(@PathVariable int bookingID, BookingCancelRequest request) {
+//        bookingService.deleteBooking(bookingID, request);
+//        return ResponseEntity.status(HttpStatus.OK).body(
+//                new ResponseObject("ok", "booking deleted successfully")
+//        );
+//    }
 
 
     @PutMapping("/update/status/{bookingId}")

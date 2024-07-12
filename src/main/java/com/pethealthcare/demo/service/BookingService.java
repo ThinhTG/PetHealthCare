@@ -32,9 +32,6 @@ public class BookingService {
     private ServiceSlotService serviceSlotService;
 
     @Autowired
-    private PaymentService paymentService;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -94,12 +91,12 @@ public class BookingService {
     }
 
 
-    public void deleteBooking(int bookingId, BookingCancelRequest request) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new IllegalArgumentException("Booking not found"));
-        booking.setStatus("CANCELLED");
-        paymentService.returnDeposit(bookingId, request);
-
-    }
+//    public void deleteBooking(int bookingId, BookingCancelRequest request) {
+//        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+//        booking.setStatus("CANCELLED");
+//        paymentService.returnDeposit(bookingId, request);
+//
+//    }
 
     public Booking updateStatusBooking(int bookingId, String status) {
         Booking booking = bookingRepository.findBookingByBookingId(bookingId);
