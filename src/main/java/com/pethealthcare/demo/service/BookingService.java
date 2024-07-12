@@ -48,11 +48,11 @@ public class BookingService {
 
     public List<Booking> getAllBooking() {
         return bookingRepository.findAll();
+
     }
 
 
-    @Transactional
-    public void createBooking(BookingCreateRequest request) {
+    public Booking createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
         newBooking.setDate(new Date());
 
@@ -63,6 +63,7 @@ public class BookingService {
 
         for (BookingDetailCreateRequest request1 : request.getBookingDetails()) {
             BookingDetail bookingDetail = bookingDetailMapper.toBookingDetail(request1);
+            bookingDetail.setDate(request1.getDate());
             bookingDetail.setBooking(newBooking);
 
 
@@ -82,13 +83,16 @@ public class BookingService {
             bookingDetailRepository.save(bookingDetail);
         }
 
+        return newBooking;
+
     }
 
-    public List<Booking> getBookingsByUserID(int userId) {
+    public List<Booking>  getBookingsByUserID(int userId) {
         User user = new User();
         user.setUserId(userId);
         return bookingRepository.getBookingByUser(user);
     }
+
 
     public void deleteBooking(int bookingId, BookingCancelRequest request) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new IllegalArgumentException("Booking not found"));
@@ -96,4 +100,12 @@ public class BookingService {
         paymentService.returnDeposit(bookingId, request);
 
     }
+
+    public Booking updateStatusBooking(int bookingId, String status) {
+        Booking booking = bookingRepository.findBookingByBookingId(bookingId);
+        booking.setStatus(status);
+        return bookingRepository.save(booking);
+    }
+
+
 }

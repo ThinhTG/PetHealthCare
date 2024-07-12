@@ -60,6 +60,14 @@ public class CageService {
         return cages;
     }
 
+
+    public List<Cage> getALlEmptyCage(){
+        List<Cage> cages = cageRepository.findAll();
+
+
+        return cages;
+    }
+
     public Cage checkoutCage(int Cageid) {
         Cage cage = cageRepository.findById(Cageid);
 

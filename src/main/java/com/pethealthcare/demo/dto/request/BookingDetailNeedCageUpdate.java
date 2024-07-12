@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceCreateRequest {
-    private String name;
-    private double price;
-    private String description;
-    private String imageUrl;
+public class BookingDetailNeedCageUpdate {
+    private int BookingDetailId;
+
 }

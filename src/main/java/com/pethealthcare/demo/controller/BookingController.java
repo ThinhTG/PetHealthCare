@@ -2,6 +2,7 @@ package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.BookingCancelRequest;
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
+import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.ResponseObject;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -26,9 +28,9 @@ public class BookingController {
 
     @PostMapping("/add")
     ResponseEntity<ResponseObject> addBooking(@RequestBody BookingCreateRequest request) {
-        bookingService.createBooking(request);
+        Booking booking = bookingService.createBooking(request);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "booking created successfully")
+                new ResponseObject("ok", "booking created successfully", booking)
         );
     }
 
@@ -36,6 +38,7 @@ public class BookingController {
     List<Booking> getBookingByUserID(@PathVariable int userID) {
         return bookingService.getBookingsByUserID(userID);
     }
+
 
     @PostMapping("/delete/{bookingID}")
 ResponseEntity<ResponseObject> deleteBooking(@PathVariable int bookingID, BookingCancelRequest request) {
@@ -45,5 +48,13 @@ ResponseEntity<ResponseObject> deleteBooking(@PathVariable int bookingID, Bookin
         );
     }
 
+
+
+    @PutMapping("/update/status/{bookingId}")
+    ResponseEntity<ResponseObject> updateBooking(@PathVariable int bookingId, @RequestBody BookingStatusUpdateRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "booking updated successfully", bookingService.updateStatusBooking(bookingId, request.getStatus()))
+        );
+    }
 
 }
