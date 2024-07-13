@@ -9,7 +9,7 @@ import java.util.TimeZone;
 public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
 	}
 
 }
