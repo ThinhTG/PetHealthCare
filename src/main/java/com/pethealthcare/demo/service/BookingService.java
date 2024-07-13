@@ -11,6 +11,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +54,10 @@ public class BookingService {
 
     public Booking createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
-        newBooking.setDate(new Date());
+        Date date = new Date();
+        Instant instant = date.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        newBooking.setDate(localDate);
 
         User user = userRepository.findUserByUserId(request.getCustomerId());
 
@@ -103,6 +109,30 @@ public class BookingService {
         booking.setStatus(status);
         return bookingRepository.save(booking);
     }
+
+    public double getRevenueByDate(LocalDate date) {
+        LocalDate startOfDay = date;
+        LocalDate endOfDay = date.plusDays(1);
+        return calculateRevenue(startOfDay, endOfDay);
+    }
+
+    public double getRevenueByMonth(int year, int month) {
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1);
+        return calculateRevenue(startOfMonth, endOfMonth);
+    }
+
+    public double getRevenueByYear(int year) {
+        LocalDate startOfYear = LocalDate.of(year, 1, 1);
+        LocalDate endOfYear = LocalDate.of(year, 12, 31);
+        return calculateRevenue(startOfYear, endOfYear);
+    }
+
+    private double calculateRevenue(LocalDate startDate, LocalDate endDate) {
+        List<Booking> bookings = bookingRepository.findByDateBetween(startDate, endDate);
+        return bookings.stream().mapToDouble(Booking::getTotalPrice).sum();
+    }
+
 
 
 }

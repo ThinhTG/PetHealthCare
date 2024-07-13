@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Booking {
     private int bookingId;
 
     @Column
-    private Date date;
+    private LocalDate date;
 
     @Column
     private String status;
