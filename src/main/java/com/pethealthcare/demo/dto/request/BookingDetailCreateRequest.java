@@ -2,6 +2,7 @@ package com.pethealthcare.demo.dto.request;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -12,6 +13,6 @@ public class BookingDetailCreateRequest {
     private int veterinarianId;
     private int serviceId;
     private boolean needCage;
-    private Date date;
+    private LocalDate date;
     private int slotId;
 }

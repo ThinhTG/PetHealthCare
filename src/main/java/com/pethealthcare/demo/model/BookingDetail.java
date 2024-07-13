@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -24,7 +24,7 @@ public class BookingDetail {
     private boolean needCage;
 
     @Column(columnDefinition = "date")
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "bookingId")

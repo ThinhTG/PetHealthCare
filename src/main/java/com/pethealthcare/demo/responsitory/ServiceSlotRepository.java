@@ -6,6 +6,7 @@ import com.pethealthcare.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface ServiceSlotRepository extends JpaRepository<ServiceSlot, Intege
 
     boolean existsByUserAndSlotAndDate(User user, Slot slot, Date date);
 
-    ServiceSlot findByUserAndDateAndSlot(User user, Date date, Slot slot);
+    ServiceSlot findByUserAndDateAndSlot(User user, LocalDate date, Slot slot);
 }
