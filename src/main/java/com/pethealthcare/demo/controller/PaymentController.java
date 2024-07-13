@@ -42,30 +42,15 @@ public class PaymentController {
 //    }
 
 
-
-    @GetMapping("/vn-pay-callback")
-    public ResponseEntity<ResponseObject> payCallbackHandler(HttpServletRequest request) {
-        String status = request.getParameter("vnp_ResponseCode");
-        int amount = Integer.parseInt(request.getParameter("vnp_Amount"));
-        String bankCode = request.getParameter("vnp_BankCode");
-        int paymentId = Integer.parseInt(request.getParameter("vnp_TransactionNo"));
-        String cardType = request.getParameter("vnp_CardType");
-        String bankTranNo = request.getParameter("vnp_BankTranNo");
-        String payDate = request.getParameter("vnp_PayDate");
-        String orderInfo = request.getParameter("vnp_OrderInfo");
-        int txnRef = Integer.parseInt(request.getParameter("vnp_TxnRef"));
-
-        if (status.equals("00")) {
-            Payment payment = paymentService.createPayment(paymentId, amount, bankCode,
-                    bankTranNo, cardType, payDate, orderInfo, txnRef);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Success", payment)
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("Bad Request", "Failed", null)
-            );
-        }
+    @GetMapping("/create-payment")
+    public ResponseEntity<ResponseObject> payCallbackHandler(@RequestParam int transactionNo, @RequestParam int amount,
+                                                             @RequestParam String bankCode, @RequestParam String bankTranNo,
+                                                             @RequestParam String cardType, @RequestParam String vnpPayDate,
+                                                             @RequestParam String orderInfo, @RequestParam int txnRef) {
+        Payment payment = paymentService.createPayment(transactionNo, amount, bankCode, bankTranNo,
+                cardType, vnpPayDate, orderInfo, txnRef);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Success", payment)
+        );
     }
-
 }
