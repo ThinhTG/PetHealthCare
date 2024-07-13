@@ -42,7 +42,7 @@ public class PaymentController {
 //    }
 
 
-    @GetMapping("/create-payment")
+    @PostMapping("/save-payment")
     public ResponseEntity<ResponseObject> payCallbackHandler(@RequestParam int transactionNo, @RequestParam int amount,
                                                              @RequestParam String bankCode, @RequestParam String bankTranNo,
                                                              @RequestParam String cardType, @RequestParam String vnpPayDate,

@@ -12,6 +12,7 @@ import com.pethealthcare.demo.responsitory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class ServiceSlotService {
     }
 
 
-    public void bookedSlot(int userId, Date date, int slotId) {
+    public void bookedSlot(int userId, LocalDate date, int slotId) {
         User user = new User();
         user.setUserId(userId);
         Slot slot = new Slot();
