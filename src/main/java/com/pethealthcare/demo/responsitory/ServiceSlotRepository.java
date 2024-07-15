@@ -12,9 +12,9 @@ import java.util.List;
 
 @Repository
 public interface ServiceSlotRepository extends JpaRepository<ServiceSlot, Integer> {
-    List<ServiceSlot> findByUserAndDateAndStatus(User user, Date date, boolean status);
+    List<ServiceSlot> findByUserAndDateAndStatus(User user, LocalDate date, boolean status);
 
-    boolean existsByUserAndSlotAndDate(User user, Slot slot, Date date);
+    boolean existsByUserAndSlotAndDate(User user, Slot slot, LocalDate date);
 
-    ServiceSlot findByUserAndDateAndSlot(User user, LocalDate date, Slot slot);
+    ServiceSlot findServiceSlotByUserAndDateAndSlot (User user, LocalDate date, Slot slot);
 }
