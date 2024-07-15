@@ -22,8 +22,9 @@ public class ServiceSlotController {
         return new ResponseEntity<>(serviceSlotService.addServiceSlots(request), HttpStatus.CREATED);
     }
 
-    @GetMapping("/slot-available")
+    @PostMapping ("/slot-available")
     List<ServiceSlot> getSlotAvailable(@RequestBody GetSlotAvailableRequest request) {
         return serviceSlotService.getSlotAvailable(request);
     }
+
 }
