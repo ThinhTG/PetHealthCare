@@ -1,12 +1,10 @@
 package com.pethealthcare.demo.controller;
 
-import com.pethealthcare.demo.dto.request.BookingCancelRequest;
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
 import com.pethealthcare.demo.dto.request.RevenueResponse;
 import com.pethealthcare.demo.model.Booking;
-import com.pethealthcare.demo.model.Pet;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.dto.response.ResponseObject;
 import com.pethealthcare.demo.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 
