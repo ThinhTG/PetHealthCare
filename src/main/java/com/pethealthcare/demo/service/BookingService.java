@@ -57,7 +57,7 @@ public class BookingService {
         Date date = new Date();
         Instant instant = date.toInstant();
         LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
-        newBooking.setDate(localDate);
+        newBooking.setDate(date);
 
         User user = userRepository.findUserByUserId(request.getCustomerId());
 

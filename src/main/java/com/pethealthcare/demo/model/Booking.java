@@ -22,7 +22,7 @@ public class Booking {
     private int bookingId;
 
     @Column
-    private LocalDate date;
+    private Date date;
 
     @Column
     private String status;

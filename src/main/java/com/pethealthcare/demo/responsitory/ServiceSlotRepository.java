@@ -16,5 +16,5 @@ public interface ServiceSlotRepository extends JpaRepository<ServiceSlot, Intege
 
     boolean existsByUserAndSlotAndDate(User user, Slot slot, Date date);
 
-    ServiceSlot findByUserAndDateAndSlot(User user, LocalDate date, Slot slot);
+    ServiceSlot findByUserAndDateAndSlot(User user, Date date, Slot slot);
 }

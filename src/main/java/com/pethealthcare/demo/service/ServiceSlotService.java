@@ -62,7 +62,7 @@ public class ServiceSlotService {
     }
 
 
-    public void bookedSlot(int userId, LocalDate date, int slotId) {
+    public void bookedSlot(int userId, Date date, int slotId) {
         User user = new User();
         user.setUserId(userId);
         Slot slot = new Slot();
