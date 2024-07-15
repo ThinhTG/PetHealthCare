@@ -18,4 +18,12 @@ public class SlotService {
         slotRepository.save(slot);
         return "Slot added successfully";
     }
+
+    public String updateSlot(int id, SlotCreateRequest request) {
+        Slot slot = slotRepository.findById(id).orElseThrow(() -> new RuntimeException("Slot not found"));
+        slot.setStartTime(request.getStartTime());
+        slot.setEndTime(request.getEndTime());
+        slotRepository.save(slot);
+        return "Slot updated successfully";
+    }
 }
