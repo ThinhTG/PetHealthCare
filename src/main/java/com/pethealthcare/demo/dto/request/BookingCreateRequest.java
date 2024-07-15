@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BookingCreateRequest {
     private int customerId;
+    private Date date;
     private String status;
     private double totalPrice;
     private List<BookingDetailCreateRequest>  bookingDetails;
