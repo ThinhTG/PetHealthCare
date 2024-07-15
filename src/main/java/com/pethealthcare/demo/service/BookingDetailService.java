@@ -82,25 +82,31 @@ public class BookingDetailService {
                 .findMostUsedServiceByMonthAndYear(month, year);
         Map<Integer, Integer> serviceIdCount = new HashMap<>();
         for (BookingDetail bookingDetail : bookingDetails) {
-            int serviceId = bookingDetail.getBookingDetailId();
-            if (serviceIdCount.containsKey(serviceId)) {
-                serviceIdCount.put(serviceId, serviceIdCount.get(serviceId) + 1);
-            } else {
-                serviceIdCount.put(serviceId, 1);
-            }
+            int serviceId = bookingDetail.getServices().getServiceId();
+            serviceIdCount.put(serviceId, serviceIdCount.getOrDefault(serviceId, 0) + 1);
         }
 
-        int mostFrequentServiceId = 0;
         int maxCount = 0;
-
-        for (Map.Entry<Integer, Integer> entry : serviceIdCount.entrySet()) {
-            if (entry.getValue() > maxCount) {
-                maxCount = entry.getValue();
-                mostFrequentServiceId = entry.getKey();
+        for (int count : serviceIdCount.values()) {
+            if (count > maxCount) {
+                maxCount = count;
             }
         }
 
-        Services service = serviceRepository.findServicesByServiceId(mostFrequentServiceId);
-        return new MostUsedServiceResponse(maxCount, service);
+        List<Services> mostFrequentServices = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : serviceIdCount.entrySet()) {
+            if (entry.getValue() == maxCount) {
+                Services service = serviceRepository.findServicesByServiceId(entry.getKey());
+                if (service != null) {
+                    mostFrequentServices.add(service);
+                }
+            }
+        }
+
+        if (mostFrequentServices.isEmpty()) {
+            throw new RuntimeException("No services found");
+        }
+
+        return new MostUsedServiceResponse(maxCount, mostFrequentServices);
     }
 }
