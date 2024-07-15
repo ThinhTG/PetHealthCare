@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Table(name = "BookingDetail")
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class BookingDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,8 @@ public class BookingDetail {
     @Column(columnDefinition = "date")
     private LocalDate date;
 
+    @JsonIgnore
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "bookingId")
     private Booking booking;
@@ -34,8 +35,9 @@ public class BookingDetail {
     @JoinColumn(name = "petId")
     private Pet pet;
 
-    @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
@@ -50,5 +52,4 @@ public class BookingDetail {
     @OneToOne
     @JoinColumn(name = "feedbackId")
     private Feedback feedback;
-
 }

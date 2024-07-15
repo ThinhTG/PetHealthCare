@@ -1,10 +1,8 @@
 package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.FeedbackRequest;
-import com.pethealthcare.demo.dto.request.MedicalHistoryCreateRequest;
 import com.pethealthcare.demo.model.Feedback;
-import com.pethealthcare.demo.model.MedicalHistory;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.dto.response.ResponseObject;
 import com.pethealthcare.demo.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,3 @@
-
 package com.pethealthcare.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -6,9 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,16 +30,18 @@ public class Booking {
     private double totalPrice;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payment> payment;
 
     @JsonIgnore
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
-
 }
