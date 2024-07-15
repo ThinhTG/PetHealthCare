@@ -5,6 +5,9 @@ import com.pethealthcare.demo.model.Slot;
 import com.pethealthcare.demo.responsitory.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
+
+import java.util.List;
 
 @Service
 public class SlotService {
@@ -25,5 +28,9 @@ public class SlotService {
         slot.setEndTime(request.getEndTime());
         slotRepository.save(slot);
         return "Slot updated successfully";
+    }
+
+    public List<Slot> getAllSlots() {
+        return slotRepository.findAll();
     }
 }
