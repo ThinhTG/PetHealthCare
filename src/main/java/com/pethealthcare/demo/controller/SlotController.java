@@ -5,10 +5,7 @@ import com.pethealthcare.demo.service.SlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/slot")
@@ -19,6 +16,11 @@ public class SlotController {
     @PostMapping("/add")
     ResponseEntity<String> addSlot(@RequestBody SlotCreateRequest request) {
         return new ResponseEntity<>(slotService.addSlot(request), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    ResponseEntity<String> updateSlot(@PathVariable int id, @RequestBody SlotCreateRequest request) {
+        return new ResponseEntity<>(slotService.updateSlot(id, request), HttpStatus.OK);
     }
 
 }
