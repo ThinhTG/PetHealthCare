@@ -10,9 +10,11 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 
+
 import java.time.LocalDateTime;
 
 import java.util.Date;
+
 import java.util.List;
 
 @Entity
@@ -49,4 +51,11 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
+
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Refund refund;
+}
+
 }

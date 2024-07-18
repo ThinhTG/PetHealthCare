@@ -1,11 +1,21 @@
 package com.pethealthcare.demo.controller;
 
+
+import com.pethealthcare.demo.model.Booking;
+
 import com.pethealthcare.demo.dto.response.MostUsedServiceResponse;
+
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.dto.response.ResponseObject;
 import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.responsitory.BookingDetailRepository;
+
+import com.pethealthcare.demo.responsitory.BookingRepository;
+import com.pethealthcare.demo.responsitory.PaymentRepository;
+
 import com.pethealthcare.demo.service.BookingDetailService;
+import com.pethealthcare.demo.service.PaymentService;
+import com.pethealthcare.demo.service.RefundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +33,21 @@ public class BookingDetailController {
     @Autowired
     private BookingDetailRepository bookingDetailRepository;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
+    private RefundService refundService;
+
     @GetMapping("/getAll")
     ResponseEntity<List<BookingDetail>> getAllBookingDetail() {
         return ResponseEntity.ok(bookingDetailService.getAllBookingDetail());
     }
 
     @GetMapping("/getAllBookingDetailNeedCage")
-    List<BookingDetail> getAllBookingDetailByNeedCage(){return bookingDetailService.getAllBookingDetailNeedCage();}
+    List<BookingDetail> getAllBookingDetailByNeedCage() {
+        return bookingDetailService.getAllBookingDetailNeedCage();
+    }
 
     @PutMapping("/needCage/{bookingDetailId}")
     ResponseEntity<ResponseObject> updateNeedcage(@PathVariable int bookingDetailId) {
@@ -46,13 +64,13 @@ public class BookingDetailController {
     }
 
     @GetMapping("/getAllById/{id}")
-  ResponseEntity<BookingDetail>  getBookingByUserID(@PathVariable int id) {
-        return  ResponseEntity.ok(bookingDetailRepository.findBookingDetailByBookingDetailId(id));
+    ResponseEntity<BookingDetail> getBookingByUserID(@PathVariable int id) {
+        return ResponseEntity.ok(bookingDetailRepository.findBookingDetailByBookingDetailId(id));
     }
 
 
     @GetMapping("/getAllByBookingId/{BookingId}")
-    ResponseEntity<List<BookingDetail>>  getBookingByBookingID(@PathVariable int BookingId) {
+    ResponseEntity<List<BookingDetail>> getBookingByBookingID(@PathVariable int BookingId) {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailByBookingId(BookingId));
     }
 
@@ -72,8 +90,31 @@ public class BookingDetailController {
         return bookingDetailService.getBookingDetailByUser(userId);
     }
 
+
+    @GetMapping("/cancelBookingDetail/{bookingID}/{bookingDetailID}")
+    ResponseEntity<ResponseObject> cancelBooking(@PathVariable int bookingID, @PathVariable int bookingDetailID) {
+        Booking booking = bookingRepository.findBookingByBookingId(bookingID);
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
+        if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("failed", "booking is already cancelled or completed", "")
+            );
+        } else if (booking.getStatus().equalsIgnoreCase("PAID")) {
+            bookingDetailService.deleteBookingDetail(bookingDetailID);
+            refundService.returnDepositCacnelBookingDetail(bookingID, bookingDetailID);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "booking deleted successfully", refundService.returnDepositCacnelBookingDetail(bookingID, bookingDetailID))
+            );
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject("failed", "booking status is not valid for cancellation", "")
+        );
+    }
+
+
     @GetMapping("/getMostUsedServiceByMonth")
     ResponseEntity<MostUsedServiceResponse>  getMostUsedServiceByMonth(@RequestParam int month, @RequestParam int year) {
         return ResponseEntity.ok(bookingDetailService.mostUsedService(month, year));
     }
+
 }

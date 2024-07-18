@@ -26,8 +26,14 @@ public class BookingDetail {
     @Column(columnDefinition = "date")
     private Date date;
 
+
+    @Column
+    private String status;
+
+
     @JsonIgnore
     @ToString.Exclude
+
     @ManyToOne
     @JoinColumn(name = "bookingId")
     private Booking booking;

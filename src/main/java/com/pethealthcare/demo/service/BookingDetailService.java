@@ -3,13 +3,24 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.response.MostUsedServiceResponse;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
+
+import com.pethealthcare.demo.model.Payment;
+
 import com.pethealthcare.demo.model.Services;
+
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.responsitory.*;
 import com.pethealthcare.demo.responsitory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.awt.print.Book;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import java.util.*;
 
@@ -22,6 +33,9 @@ public class BookingDetailService {
     private UserRepository userRepository;
     @Autowired
     private ServiceRepository serviceRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
@@ -108,5 +122,24 @@ public class BookingDetailService {
         }
 
         return new MostUsedServiceResponse(maxCount, mostFrequentServices);
+    }
+
+    public void deleteBookingDetail(int bookingDetailId) {
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
+        bookingDetail.setStatus("CANCELLED");
+        bookingDetailRepository.save(bookingDetail);
+
+        // Get all BookingDetail instances associated with the Booking
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(bookingDetail.getBooking());
+
+        // Check if all BookingDetail instances are cancelled
+        boolean allCancelled = bookingDetails.stream().allMatch(detail -> detail.getStatus().equalsIgnoreCase("CANCELLED"));
+
+        // If all BookingDetail instances are cancelled, set the status of the Booking to "CANCELLED"
+        if (allCancelled) {
+            Booking booking = bookingDetail.getBooking();
+            booking.setStatus("CANCELLED");
+            bookingRepository.save(booking);
+        }
     }
 }
