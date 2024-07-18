@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,10 +18,17 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
 
     @Query("SELECT b FROM BookingDetail b WHERE b.date = :date")
     List<BookingDetail> findBookingDetailsFromDate(@Param("date") Date date);
+
     List<BookingDetail> findBookingDetailByNeedCage(boolean needCage);
+
     List<BookingDetail> findBookingDetailByUser(User user);
+
     BookingDetail findBookingDetailByBookingDetailId(int id);
+
     List<BookingDetail> getBookingDetailsByBooking(Booking booking);
+
     List<BookingDetail> getBookingDetailByuser(User user);
 
+    @Query("SELECT b FROM BookingDetail b WHERE MONTH(b.date) = :month AND YEAR(b.date) = :year")
+    List<BookingDetail> findMostUsedServiceByMonthAndYear(@Param("month") int month, @Param("year") int year);
 }

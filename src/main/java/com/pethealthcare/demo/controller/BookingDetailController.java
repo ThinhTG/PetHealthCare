@@ -1,9 +1,10 @@
 package com.pethealthcare.demo.controller;
 
+import com.pethealthcare.demo.dto.response.MostUsedServiceResponse;
 import com.pethealthcare.demo.model.BookingDetail;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.dto.response.ResponseObject;
+import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.responsitory.BookingDetailRepository;
-import com.pethealthcare.demo.responsitory.BookingRepository;
 import com.pethealthcare.demo.service.BookingDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,8 @@ public class BookingDetailController {
         return bookingDetailService.getBookingDetailByUser(userId);
     }
 
-
-
+    @GetMapping("/getMostUsedServiceByMonth")
+    ResponseEntity<MostUsedServiceResponse>  getMostUsedServiceByMonth(@RequestParam int month, @RequestParam int year) {
+        return ResponseEntity.ok(bookingDetailService.mostUsedService(month, year));
+    }
 }

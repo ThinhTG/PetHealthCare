@@ -3,10 +3,8 @@ package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.PetUpdateRequest;
-import com.pethealthcare.demo.dto.request.UserCreateRequest;
-import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.model.Pet;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.dto.response.ResponseObject;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.service.PetService;
 import com.pethealthcare.demo.service.UserService;
