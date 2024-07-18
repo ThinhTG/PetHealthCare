@@ -1,4 +1,3 @@
-
 package com.pethealthcare.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -43,4 +41,7 @@ public class Booking {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Refund refund;
 }

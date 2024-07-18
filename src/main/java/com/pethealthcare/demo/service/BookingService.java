@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -88,7 +89,7 @@ public class BookingService {
 
     }
 
-    public List<Booking>  getBookingsByUserID(int userId) {
+    public List<Booking> getBookingsByUserID(int userId) {
         User user = new User();
         user.setUserId(userId);
         return bookingRepository.getBookingByUser(user);
@@ -132,5 +133,17 @@ public class BookingService {
     }
 
 
+    public Booking deleteBooking(int bookingId) {
+        Booking booking = bookingRepository.findBookingByBookingId(bookingId);
+        booking.setStatus("CANCELLED");
+        bookingRepository.save(booking);
+        for(BookingDetail bookingDetail : booking.getBookingDetails()){
+            bookingDetail.setStatus("CANCELLED");
+        }
+        return booking;
+    }
 
+    public List<Booking> getBookingsByStatus(String status) {
+        return bookingRepository.findByStatus(status);
+    }
 }

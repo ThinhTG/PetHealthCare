@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "feedback")
+@Table(name = "Feedback")
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +19,10 @@ public class Feedback {
     @Column(name = "FeedbackContent",columnDefinition = "nvarchar(50)")
     private String feedbackContent;
 
-    @Column(name = "Age")
+    @Column(name = "Rate")
     private int rating;
 
     @JsonIgnore
     @OneToOne(mappedBy = "feedback", cascade = CascadeType.ALL, orphanRemoval = true)
     private BookingDetail bookingDetail;
-
-
 }
