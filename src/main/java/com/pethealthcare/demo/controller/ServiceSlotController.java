@@ -2,7 +2,6 @@ package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.GetSlotAvailableRequest;
 import com.pethealthcare.demo.dto.request.ServiceSlotCreateRequest;
-import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.service.ServiceSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,14 @@ public class ServiceSlotController {
         return new ResponseEntity<>(serviceSlotService.addServiceSlots(request), HttpStatus.CREATED);
     }
 
-    @GetMapping("/slot-available")
+    @PostMapping ("/slot-available")
     List<ServiceSlot> getSlotAvailable(@RequestBody GetSlotAvailableRequest request) {
         return serviceSlotService.getSlotAvailable(request);
     }
+
+    @PostMapping ("/slot-not-create")
+    List<ServiceSlot> getSlotNotCreate(@RequestBody GetSlotAvailableRequest request) {
+        return serviceSlotService.getSlotNotCreat(request);
+    }
+
 }

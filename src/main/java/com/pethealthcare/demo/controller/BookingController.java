@@ -1,12 +1,14 @@
 package com.pethealthcare.demo.controller;
 
-import com.pethealthcare.demo.dto.request.BookingCancelRequest;
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
+import com.pethealthcare.demo.dto.request.RevenueResponse;
 import com.pethealthcare.demo.model.Booking;
+
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.responsitory.BookingRepository;
+
 import com.pethealthcare.demo.service.BookingService;
 import com.pethealthcare.demo.service.PaymentService;
 import com.pethealthcare.demo.service.RefundService;
@@ -16,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -97,9 +98,9 @@ public class BookingController {
     }
 
     @GetMapping("/revenue-monthly")
-    public ResponseEntity<Double> getMonthlyRevenue(@RequestParam int year, @RequestParam int month) {
-        double revenue = bookingService.getRevenueByMonth(year, month);
-        return ResponseEntity.ok(revenue);
+    public ResponseEntity<List<RevenueResponse>> getMonthlyRevenue(@RequestParam int year) {
+        List<RevenueResponse> revenueResponses = bookingService.getRevenueByMonth(year);
+        return ResponseEntity.ok(revenueResponses);
     }
 
     @GetMapping("/revenue-yearly")
@@ -107,5 +108,6 @@ public class BookingController {
         double revenue = bookingService.getRevenueByYear(year);
         return ResponseEntity.ok(revenue);
     }
+
 
 }

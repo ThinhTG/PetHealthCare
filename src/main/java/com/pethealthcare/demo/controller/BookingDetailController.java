@@ -1,11 +1,18 @@
 package com.pethealthcare.demo.controller;
 
+
 import com.pethealthcare.demo.model.Booking;
+
+import com.pethealthcare.demo.dto.response.MostUsedServiceResponse;
+
 import com.pethealthcare.demo.model.BookingDetail;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.dto.response.ResponseObject;
+import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.responsitory.BookingDetailRepository;
+
 import com.pethealthcare.demo.responsitory.BookingRepository;
 import com.pethealthcare.demo.responsitory.PaymentRepository;
+
 import com.pethealthcare.demo.service.BookingDetailService;
 import com.pethealthcare.demo.service.PaymentService;
 import com.pethealthcare.demo.service.RefundService;
@@ -83,6 +90,7 @@ public class BookingDetailController {
         return bookingDetailService.getBookingDetailByUser(userId);
     }
 
+
     @GetMapping("/cancelBookingDetail/{bookingID}/{bookingDetailID}")
     ResponseEntity<ResponseObject> cancelBooking(@PathVariable int bookingID, @PathVariable int bookingDetailID) {
         Booking booking = bookingRepository.findBookingByBookingId(bookingID);
@@ -101,6 +109,12 @@ public class BookingDetailController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ResponseObject("failed", "booking status is not valid for cancellation", "")
         );
+    }
+
+
+    @GetMapping("/getMostUsedServiceByMonth")
+    ResponseEntity<MostUsedServiceResponse>  getMostUsedServiceByMonth(@RequestParam int month, @RequestParam int year) {
+        return ResponseEntity.ok(bookingDetailService.mostUsedService(month, year));
     }
 
 }

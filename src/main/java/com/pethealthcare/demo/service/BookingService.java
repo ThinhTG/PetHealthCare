@@ -55,8 +55,10 @@ public class BookingService {
 
     public Booking createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
-        LocalDate localDate = LocalDate.now();
-        newBooking.setDate(localDate);
+        Date date = new Date();
+        Instant instant = date.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        newBooking.setDate(date);
 
         User user = userRepository.findUserByUserId(request.getCustomerId());
 

@@ -1,4 +1,4 @@
-package com.pethealthcare.demo.model;
+package com.pethealthcare.demo.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
