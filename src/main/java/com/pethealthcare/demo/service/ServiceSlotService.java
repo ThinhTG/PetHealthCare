@@ -37,6 +37,13 @@ public class ServiceSlotService {
                 request.getDate(), false);
     }
 
+    public List<ServiceSlot> getSlotNotCreat(GetSlotAvailableRequest request) {
+        User user = userRepository.findUserByUserId(request.getUserId());
+
+        return serviceSlotRepository.findByUserAndDate(user,
+                request.getDate());
+    }
+
     public String addServiceSlots(List<ServiceSlotCreateRequest> requests) {
         for (ServiceSlotCreateRequest request : requests) {
             User user = userRepository.findUserByUserId(request.getUserId());

@@ -28,4 +28,9 @@ public class ServiceSlotController {
         return serviceSlotService.getSlotAvailable(request);
     }
 
+    @PostMapping ("/slot-not-create")
+    List<ServiceSlot> getSlotNotCreate(@RequestBody GetSlotAvailableRequest request) {
+        return serviceSlotService.getSlotNotCreat(request);
+    }
+
 }

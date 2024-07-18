@@ -18,10 +18,10 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> getBookingByUser(User user);
     Booking findBookingByBookingId(int bookingId);
     List<Booking> findByDateBetween(LocalDate startDate, LocalDate endDate);
-    @Query(value = "SELECT new com.pethealthcare.demo.dto.request.RevenueResponse(MONTH(b.date), SUM(b.totalPrice))\n" +
-            "FROM Booking b \n" +
-            "WHERE YEAR(b.date) = :year \n" +
-            "GROUP BY MONTH(b.date)  \n" +
-            "ORDER BY MONTH(b.date) ASC")
+    @Query(value = "SELECT new com.pethealthcare.demo.dto.request.RevenueResponse(MONTH(b.payDate), SUM(b.amount))\n" +
+            "FROM Payment b \n" +
+            "WHERE YEAR(b.payDate) = :year \n" +
+            "GROUP BY MONTH(b.payDate)  \n" +
+            "ORDER BY MONTH(b.payDate) ASC")
     List<RevenueResponse> getRevenueByMonth(@Param("year") int year);
 }

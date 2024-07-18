@@ -11,12 +11,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedicalHistoryCreateRequest {
-    @JsonProperty("VeterinaryName")
+    @JsonProperty("veterinaryName")
     private String veterinaryName;
 
-    @JsonProperty("TreatmentResult")
+    @JsonProperty("treatmentResult")
     private String treatmentResult;
 
-    @JsonProperty("DateMedical")
+    @JsonProperty("dateMedical")
     private Date dateMedical;
 }
