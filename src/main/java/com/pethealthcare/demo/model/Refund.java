@@ -18,17 +18,22 @@ public class Refund {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int transactionNo;
 
-    @Column(nullable = false)
+    @Column
     private int amount;
 
-    @Column(nullable = false)
-        private int refundPercent;
+    @Column
+    private int refundPercent;
 
-    @Column(nullable = false)
-    private LocalDate payDate;
+    @Column
+    private LocalDate refundDate;
 
-    @JsonIgnore
+//    @JsonIgnore
+//    @OneToOne
+//    @JoinColumn(name = "bookingId")
+//    private Booking booking;
+
+
     @OneToOne
-    @JoinColumn(name = "bookingId", nullable = false)
-    private Booking booking;
+    @JoinColumn(name = "bookingDetailId")
+    private BookingDetail bookingDetail;
 }

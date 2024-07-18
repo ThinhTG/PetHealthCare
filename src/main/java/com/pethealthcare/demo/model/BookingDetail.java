@@ -54,4 +54,7 @@ public class BookingDetail {
     @JoinColumn(name = "feedbackId")
     private Feedback feedback;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "bookingDetail", cascade = CascadeType.ALL)
+    private Refund refund;
 }

@@ -2,6 +2,7 @@ package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
+import com.pethealthcare.demo.model.Refund;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.responsitory.BookingDetailRepository;
 import com.pethealthcare.demo.responsitory.BookingRepository;
@@ -83,19 +84,20 @@ public class BookingDetailController {
         return bookingDetailService.getBookingDetailByUser(userId);
     }
 
-    @GetMapping("/cancelBookingDetail/{bookingID}/{bookingDetailID}")
-    ResponseEntity<ResponseObject> cancelBooking(@PathVariable int bookingID, @PathVariable int bookingDetailID) {
-        Booking booking = bookingRepository.findBookingByBookingId(bookingID);
+    @GetMapping("/cancelBookingDetail/{bookingDetailID}")
+    ResponseEntity<ResponseObject> cancelBooking( @PathVariable int bookingDetailID) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
-        if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")) {
+        Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId() );
+        if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")
+        && booking.getStatus().equalsIgnoreCase("cancelled") || booking.getStatus().equalsIgnoreCase("completed")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("failed", "booking is already cancelled or completed", "")
             );
-        } else if (booking.getStatus().equalsIgnoreCase("PAID")) {
+        } else if (booking.getStatus().equalsIgnoreCase("PROCESSING")||booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
             bookingDetailService.deleteBookingDetail(bookingDetailID);
-            refundService.returnDepositCacnelBookingDetail(bookingID, bookingDetailID);
+            Refund refund = refundService.returnDepositCancelBookingDetail(bookingDetailID);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "booking deleted successfully", refundService.returnDepositCacnelBookingDetail(bookingID, bookingDetailID))
+                    new ResponseObject("ok", "booking deleted successfully", refund)
             );
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(

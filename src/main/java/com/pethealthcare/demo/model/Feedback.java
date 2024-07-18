@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Feedback")
+@Table(name = "feedback")
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int feedbackId;
 
-    @Column(name = "FeedbackContent",columnDefinition = "nvarchar(50)")
+    @Column
     private String feedbackContent;
 
-    @Column(name = "Rate")
+    @Column
     private int rating;
 
     @JsonIgnore
