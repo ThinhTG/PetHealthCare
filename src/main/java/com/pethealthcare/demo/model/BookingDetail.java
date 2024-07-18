@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Entity
@@ -23,7 +24,7 @@ public class BookingDetail {
     private boolean needCage;
 
     @Column(columnDefinition = "date")
-    private LocalDate date;
+    private Date date;
 
     @JsonIgnore
     @ToString.Exclude
