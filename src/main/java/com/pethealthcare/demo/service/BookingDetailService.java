@@ -28,6 +28,8 @@ public class BookingDetailService {
     @Autowired
     private BookingRepository bookingRepository;
 
+
+
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
     }

@@ -50,8 +50,9 @@ public class BookingDetail {
     @JoinColumn(name = "slotId")
     private Slot slot;
 
-    @OneToOne
-    @JoinColumn(name = "feedbackId")
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "bookingDetail", cascade = CascadeType.ALL)
     private Feedback feedback;
 
     @JsonIgnore

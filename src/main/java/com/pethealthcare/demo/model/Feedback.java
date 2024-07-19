@@ -22,7 +22,7 @@ public class Feedback {
     @Column
     private int rating;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "feedback", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
+    @JoinColumn(name = "bookingDetailId")
     private BookingDetail bookingDetail;
 }

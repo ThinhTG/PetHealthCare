@@ -20,15 +20,10 @@ public class FeedbackService {
     private BookingDetailRepository bookingDetailRepository;
 
     public Feedback createFeedback(int bookingDetailId, FeedbackRequest feedbackRequest){
-        Optional<BookingDetail> bookingDetailOptional = bookingDetailRepository.findById(bookingDetailId);
-
-        if (!bookingDetailOptional.isPresent()) {
-            // Handle the case where the BookingDetail is not found
-            throw new EntityNotFoundException("BookingDetail not found with id: " + bookingDetailId);
-        }
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
 
         Feedback feedback = new Feedback();
-
+        feedback.setBookingDetail(bookingDetail);
         feedback.setFeedbackContent(feedbackRequest.getFeedbackContent());
         feedback.setRating(feedbackRequest.getRating());
 

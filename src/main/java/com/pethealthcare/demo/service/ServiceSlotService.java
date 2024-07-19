@@ -73,4 +73,20 @@ public class ServiceSlotService {
 
         serviceSlotRepository.save(serviceSlot);
     }
+
+    public void cancelSlot(int userId, LocalDate date, int slotId) {
+        User user = userRepository.findUserByUserId(userId);
+        Slot slot = slotRepository.findSlotBySlotId(slotId);
+        ServiceSlot serviceSlot = serviceSlotRepository.findServiceSlotByUserAndDateAndSlot(user, date, slot);
+        if (serviceSlot == null) {
+            throw new RuntimeException("Service Slot is not existed");
+        }
+        serviceSlot.setStatus(false);
+
+        serviceSlotRepository.save(serviceSlot);
+    }
+
+
+
+
 }

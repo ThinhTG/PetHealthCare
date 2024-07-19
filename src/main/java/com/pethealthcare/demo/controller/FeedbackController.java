@@ -19,8 +19,8 @@ public class FeedbackController {
     private FeedbackService feedbackService;
 
     @PostMapping("/create/{id}")
-    ResponseEntity<ResponseObject> createMedicalHistory(@PathVariable int bookingDetailId, @RequestBody FeedbackRequest request) {
-        Feedback feedback = feedbackService.createFeedback(bookingDetailId, request);
+    ResponseEntity<ResponseObject> createMedicalHistory(@PathVariable int id, @RequestBody FeedbackRequest request) {
+        Feedback feedback = feedbackService.createFeedback(id, request);
         if (feedback != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Feedback has been accepted", feedback)

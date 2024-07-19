@@ -10,6 +10,7 @@ import com.pethealthcare.demo.responsitory.PaymentRepository;
 import com.pethealthcare.demo.service.BookingDetailService;
 import com.pethealthcare.demo.service.PaymentService;
 import com.pethealthcare.demo.service.RefundService;
+import com.pethealthcare.demo.service.ServiceSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,9 @@ public class BookingDetailController {
 
     @Autowired
     private RefundService refundService;
+
+    @Autowired
+    private ServiceSlotService serviceSlotService;
 
     @GetMapping("/getAll")
     ResponseEntity<List<BookingDetail>> getAllBookingDetail() {
@@ -95,7 +99,9 @@ public class BookingDetailController {
             );
         } else if (booking.getStatus().equalsIgnoreCase("PROCESSING")||booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
             bookingDetailService.deleteBookingDetail(bookingDetailID);
+            serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
             Refund refund = refundService.returnDepositCancelBookingDetail(bookingDetailID);
+
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "booking deleted successfully", refund)
             );
