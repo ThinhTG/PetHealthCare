@@ -3,6 +3,7 @@ package com.pethealthcare.demo.controller;
 import com.pethealthcare.demo.dto.request.BookingCancelRequest;
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
+import com.pethealthcare.demo.dto.request.RevenueResponse;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.ResponseObject;
@@ -90,17 +91,8 @@ public class BookingController {
         );
     }
 
-    @GetMapping("/revenue-daily")
-    public ResponseEntity<Double> getDailyRevenue(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        double revenue = bookingService.getRevenueByDate(date);
-        return ResponseEntity.ok(revenue);
-    }
 
-    @GetMapping("/revenue-monthly")
-    public ResponseEntity<Double> getMonthlyRevenue(@RequestParam int year, @RequestParam int month) {
-        double revenue = bookingService.getRevenueByMonth(year, month);
-        return ResponseEntity.ok(revenue);
-    }
+
 
     @GetMapping("/revenue-yearly")
     public ResponseEntity<Double> getYearlyRevenue(@RequestParam int year) {
