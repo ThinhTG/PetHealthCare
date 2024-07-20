@@ -104,4 +104,10 @@ public class BookingDetailService {
             bookingRepository.save(booking);
         }
     }
+
+    public BookingDetail updateStatusBookingDetail(int bookingDetailId, String status) {
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
+        bookingDetail.setStatus(status);
+        return bookingDetailRepository.save(bookingDetail);
+    }
 }
