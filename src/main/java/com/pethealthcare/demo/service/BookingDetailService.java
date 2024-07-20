@@ -79,4 +79,10 @@ public class BookingDetailService {
 
 
     }
+
+    public BookingDetail updateStatusBookingDetail(int bookingDetailId, String status) {
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
+        bookingDetail.setStatus(status);
+        return bookingDetailRepository.save(bookingDetail);
+    }
 }

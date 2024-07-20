@@ -1,5 +1,7 @@
 package com.pethealthcare.demo.controller;
 
+import com.pethealthcare.demo.dto.request.BookingCreateRequest;
+import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.responsitory.BookingDetailRepository;
@@ -69,6 +71,13 @@ public class BookingDetailController {
     @GetMapping("/getAllBookingDetail_ByUserId")
     List<BookingDetail> getBookingDetailByUserid(@RequestParam int userId) {
         return bookingDetailService.getBookingDetailByUser(userId);
+    }
+
+    @PutMapping("/update/status/{bookingDetailId}")
+    ResponseEntity<ResponseObject> updateBooking(@PathVariable int bookingDetailId, @RequestBody BookingStatusUpdateRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateStatusBookingDetail(bookingDetailId, request.getStatus()))
+        );
     }
 
 

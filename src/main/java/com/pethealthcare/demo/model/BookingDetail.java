@@ -26,6 +26,11 @@ public class BookingDetail {
     @Column(columnDefinition = "date")
     private LocalDate date;
 
+    @Column
+    private String status;
+
+
+
     @ManyToOne
     @JoinColumn(name = "bookingId")
     private Booking booking;
