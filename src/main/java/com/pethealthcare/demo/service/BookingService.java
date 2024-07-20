@@ -3,7 +3,6 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.request.BookingCancelRequest;
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingDetailCreateRequest;
-import com.pethealthcare.demo.dto.request.RevenueResponse;
 import com.pethealthcare.demo.mapper.BookingDetailMapper;
 import com.pethealthcare.demo.mapper.BookingMapper;
 import com.pethealthcare.demo.model.*;
@@ -12,9 +11,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -56,8 +55,10 @@ public class BookingService {
 
     public Booking createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
-        LocalDateTime localDate = LocalDateTime.now();
-        newBooking.setDate(localDate);
+        Date date = new Date();
+        Instant instant = date.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        newBooking.setDate(date);
 
         User user = userRepository.findUserByUserId(request.getCustomerId());
 
@@ -90,7 +91,7 @@ public class BookingService {
 
     }
 
-    public List<Booking>  getBookingsByUserID(int userId) {
+    public List<Booking> getBookingsByUserID(int userId) {
         User user = new User();
         user.setUserId(userId);
         return bookingRepository.getBookingByUser(user);
@@ -132,9 +133,19 @@ public class BookingService {
         List<Booking> bookings = bookingRepository.findByDateBetween(startDate, endDate);
         return bookings.stream().mapToDouble(Booking::getTotalPrice).sum();
     }
-    public List<RevenueResponse> getRevenueByMonth(int year){
-        return bookingRepository.getRevenueByMonth(year);
+
+
+    public Booking deleteBooking(int bookingId) {
+        Booking booking = bookingRepository.findBookingByBookingId(bookingId);
+        booking.setStatus("CANCELLED");
+        bookingRepository.save(booking);
+        for(BookingDetail bookingDetail : booking.getBookingDetails()){
+            bookingDetail.setStatus("CANCELLED");
+        }
+        return booking;
     }
 
-
+    public List<Booking> getBookingsByStatus(String status) {
+        return bookingRepository.findByStatus(status);
+    }
 }

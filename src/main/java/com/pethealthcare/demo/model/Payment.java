@@ -38,4 +38,5 @@ public class Payment {
     @JoinColumn(name = "bookingId")
     private Booking booking;
 
+
 }

@@ -13,6 +13,6 @@ public class BookingDetailCreateRequest {
     private int veterinarianId;
     private int serviceId;
     private boolean needCage;
-    private LocalDate date;
+    private Date date;
     private int slotId;
 }
