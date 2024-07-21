@@ -88,4 +88,13 @@ public class MedicalHistoryService  {
         return medicalHistoryRepository.existsByMedicalHistoryId(id);
     }
 
+    public void updateStatus (int medicalHistoryId, String status){
+        MedicalHistory newMedHis = medicalHistoryRepository.findMedicalHistoryByMedicalHistoryId(medicalHistoryId);
+        if (status.equalsIgnoreCase("in")){
+            newMedHis.setStatus("Pets are staying in cages");
+        }
+        if (status.equalsIgnoreCase("out")){
+            newMedHis.setStatus("Pets have been discharged");
+        }
+    }
 }
