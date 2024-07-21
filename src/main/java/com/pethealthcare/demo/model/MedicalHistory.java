@@ -27,6 +27,9 @@ public class MedicalHistory {
     @Column (name = "DateMedical", columnDefinition = "date")
     private Date dateMedical;
 
+    @Column
+    private String status;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "petId")
