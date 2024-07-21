@@ -27,12 +27,6 @@ public class Refund {
     @Column
     private LocalDate refundDate;
 
-//    @JsonIgnore
-//    @OneToOne
-//    @JoinColumn(name = "bookingId")
-//    private Booking booking;
-
-
     @OneToOne
     @JoinColumn(name = "bookingDetailId")
     private BookingDetail bookingDetail;

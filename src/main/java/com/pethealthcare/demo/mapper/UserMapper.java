@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.mapper;
 
+import com.pethealthcare.demo.dto.request.AccCreateRequest;
 import com.pethealthcare.demo.dto.request.UserCreateRequest;
 import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.model.User;
@@ -19,4 +20,5 @@ public interface UserMapper {
             @Mapping(target = "serviceSlots", ignore = true)
     })
     User toUser(UserCreateRequest request);
+    User toUser(AccCreateRequest request);
 }
