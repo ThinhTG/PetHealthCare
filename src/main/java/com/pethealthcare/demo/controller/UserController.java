@@ -32,6 +32,21 @@ public class UserController {
         }
     }
 
+
+    @PostMapping("/createmultirole")
+    ResponseEntity<ResponseObject> createAcc(@RequestBody AccCreateRequest request) {
+        User createdUser = userService.createAcc(request);
+        if (createdUser != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    new ResponseObject("ok", "Account created successfully", createdUser)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("failed", "Email address already used", "")
+            );
+        }
+    }
+
     @PutMapping("/forgot-password")
     ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         return new ResponseEntity<>(userService.forgotPassword(request.getEmail()), HttpStatus.OK);

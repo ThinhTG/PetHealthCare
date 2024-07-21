@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.service;
 
 
+import com.pethealthcare.demo.dto.request.AccCreateRequest;
 import com.pethealthcare.demo.dto.request.UserCreateRequest;
 import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.mapper.UserMapper;
@@ -32,6 +33,20 @@ public class UserService {
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
             newUser.setRole("Customer");
+            newUser.setStatus("Active");
+
+            return userRepository.save(newUser);
+        }
+        return null;
+    }
+
+    public User createAcc(AccCreateRequest request) {
+        boolean exist = userRepository.existsByEmail(request.getEmail());
+        if (!exist) {
+            User newUser = userMapper.toUser(request);
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+            newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+            newUser.setRole(request.getRole());
             newUser.setStatus("Active");
 
             return userRepository.save(newUser);

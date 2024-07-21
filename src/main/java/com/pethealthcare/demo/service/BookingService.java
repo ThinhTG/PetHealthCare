@@ -133,15 +133,7 @@ public class BookingService {
     }
 
 
-    public Booking deleteBooking(int bookingId) {
-        Booking booking = bookingRepository.findBookingByBookingId(bookingId);
-        booking.setStatus("CANCELLED");
-        bookingRepository.save(booking);
-        for(BookingDetail bookingDetail : booking.getBookingDetails()){
-            bookingDetail.setStatus("CANCELLED");
-        }
-        return booking;
-    }
+
 
     public List<Booking> getBookingsByStatus(String status) {
         return bookingRepository.findByStatus(status);

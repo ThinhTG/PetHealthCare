@@ -41,7 +41,4 @@ public class Booking {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-//    @JsonIgnore
-//    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Refund refund;
 }
