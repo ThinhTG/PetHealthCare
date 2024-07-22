@@ -95,8 +95,6 @@ public class BookingDetailService {
                     bookingDetails.add(bookingDetail);
                 }
             }
-
-
         }
         return bookingDetails;
     }
