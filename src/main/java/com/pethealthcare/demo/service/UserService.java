@@ -148,4 +148,16 @@ public class UserService {
             return null;
         }
     }
+
+    public boolean deleteUser(int userID) {
+        Optional<User> optionalUser = userRepository.findById(userID);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setStatus("Deleted");
+            userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
