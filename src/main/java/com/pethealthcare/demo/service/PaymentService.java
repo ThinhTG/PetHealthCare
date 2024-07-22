@@ -136,37 +136,7 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-//    public double getRevenue() {
-//        double revunue = 0.0;
-//        for (Payment payment : paymentRepository.findAll()) {
-//            revunue += payment.getTotal();
-//        }
-//        return revunue;
-//    }
-//
-//    public double getRevenueInPeriod(LocalDateTime startDate, LocalDateTime endDate) {
-//        List<Payment> payments = paymentRepository.findAll();
-//        double revenue = 0.0;
-//        for (Payment payment : payments) {
-//            if (payment.getPaymentDate().isAfter(startDate) && payment.getPaymentDate().isBefore(endDate)) {
-//                revenue += payment.getTotal();
-//            }
-//        }
-//        return revenue;
-//    }
-//
-//    public double returnDeposit(int bookingId, BookingCancelRequest request) {
-//        Booking booking = bookingRepository.findById(request.getBookingId()).orElseThrow(() -> new IllegalArgumentException("Booking not found"));
-//        Payment payment = paymentRepository.findById(bookingId).orElseThrow(() -> new IllegalArgumentException("Payment not found"));
-//        LocalDateTime paymentDate = payment.getPaymentDate();
-//        LocalDateTime sevenDaysAfterPayment = paymentDate.plusDays(7);
-//
-//        if (request.getPaymentDate().isBefore(sevenDaysAfterPayment)) {
-//            payment.setDeposit(payment.getDeposit() * 0.5);
-//        }
-//
-//        return payment.getDeposit();
-//    }
+
 
 
 
