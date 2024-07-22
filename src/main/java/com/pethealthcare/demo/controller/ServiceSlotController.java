@@ -2,7 +2,6 @@ package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.GetSlotAvailableRequest;
 import com.pethealthcare.demo.dto.request.ServiceSlotCreateRequest;
-import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.service.ServiceSlotService;
 import org.springframework.beans.factory.annotation.Autowired;

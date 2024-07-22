@@ -1,7 +1,7 @@
 package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.AuthenticationRequest;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

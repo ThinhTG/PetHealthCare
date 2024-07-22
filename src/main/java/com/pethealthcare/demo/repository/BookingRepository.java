@@ -1,6 +1,6 @@
 package com.pethealthcare.demo.repository;
 
-import com.pethealthcare.demo.dto.request.RevenueResponse;
+import com.pethealthcare.demo.response.RevenueResponse;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

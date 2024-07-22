@@ -1,4 +1,4 @@
-package com.pethealthcare.demo.dto.request;
+package com.pethealthcare.demo.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

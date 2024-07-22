@@ -3,14 +3,12 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.model.*;
 import com.pethealthcare.demo.repository.*;
 import com.pethealthcare.demo.repository.UserRepository;
+import com.pethealthcare.demo.response.MostUsedServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BookingDetailService {
@@ -24,9 +22,10 @@ public class BookingDetailService {
     private BookingRepository bookingRepository;
 
     @Autowired
-    private  PetRepository petRepository;
+    private PetRepository petRepository;
 
-
+    @Autowired
+    private ServiceRepository serviceRepository;
 
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
@@ -140,7 +139,8 @@ public class BookingDetailService {
         }
 
         return bookingDetails;
-}
+    }
+
     public void updateStatusByBookingId(int bookingId, String status) {
         Booking booking = bookingRepository.findBookingByBookingId(bookingId);
         List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(booking);
@@ -148,5 +148,38 @@ public class BookingDetailService {
             detail.setStatus(status);
         }
         bookingDetailRepository.saveAll(bookingDetails);
+    }
+
+    public MostUsedServiceResponse mostUsedService(int month, int year) {
+        List<BookingDetail> bookingDetails = bookingDetailRepository
+                .findMostUsedServiceByMonthAndYear(month, year);
+        Map<Integer, Integer> serviceIdCount = new HashMap<>();
+        for (BookingDetail bookingDetail : bookingDetails) {
+            int serviceId = bookingDetail.getServices().getServiceId();
+            serviceIdCount.put(serviceId, serviceIdCount.getOrDefault(serviceId, 0) + 1);
+        }
+
+        int maxCount = 0;
+        for (int count : serviceIdCount.values()) {
+            if (count > maxCount) {
+                maxCount = count;
+            }
+        }
+
+        List<Services> mostFrequentServices = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : serviceIdCount.entrySet()) {
+            if (entry.getValue() == maxCount) {
+                Services service = serviceRepository.findServicesByServiceId(entry.getKey());
+                if (service != null) {
+                    mostFrequentServices.add(service);
+                }
+            }
+        }
+
+        if (mostFrequentServices.isEmpty()) {
+            throw new RuntimeException("No services found");
+        }
+
+        return new MostUsedServiceResponse(maxCount, mostFrequentServices);
     }
 }
