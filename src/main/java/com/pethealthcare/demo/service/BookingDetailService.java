@@ -140,5 +140,13 @@ public class BookingDetailService {
         }
 
         return bookingDetails;
+}
+    public void updateStatusByBookingId(int bookingId, String status) {
+        Booking booking = bookingRepository.findBookingByBookingId(bookingId);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(booking);
+        for (BookingDetail detail : bookingDetails) {
+            detail.setStatus(status);
+        }
+        bookingDetailRepository.saveAll(bookingDetails);
     }
 }

@@ -39,7 +39,7 @@ public class User {
     @Column(columnDefinition = "nvarchar(50)", nullable = false)
     private String status;
 
-    @Column
+    @Column(columnDefinition = "nvarchar(255)")
     private String imageUrl;
 
     @JsonIgnore

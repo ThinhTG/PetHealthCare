@@ -86,4 +86,10 @@ public class MedicalHistoryController {
                 new ResponseObject("failed", "User not found", "")
         );
     }
+
+    @PutMapping("/updateStatus")
+    ResponseEntity<String> updateStatus(@RequestParam int id, @RequestParam String status){
+        medicalHistoryService.updateStatus(id, status);
+        return ResponseEntity.status(HttpStatus.OK).body("Update successfully");
+    }
 }

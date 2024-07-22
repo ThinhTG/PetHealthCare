@@ -125,7 +125,7 @@ public class BookingDetailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("failed", "booking is already cancelled or completed", "")
             );
-        } else if (booking.getStatus().equalsIgnoreCase("PROCESSING")||booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
+        } else if (booking.getStatus().equalsIgnoreCase("PROCESSING")||booking.getStatus().equalsIgnoreCase("Confirmed") ||booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
             Refund refund = refundService.returnDepositCancelBookingDetail(bookingDetailID);
@@ -137,6 +137,12 @@ public class BookingDetailController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ResponseObject("failed", "booking status is not valid for cancellation", "")
         );
+    }
+
+    @PutMapping("/status/{bookingId}")
+    public ResponseEntity<?> updateBookingStatus(@PathVariable int bookingId, @RequestParam String status) {
+        bookingDetailService.updateStatusByBookingId(bookingId, status);
+        return ResponseEntity.ok().build();
     }
 
 }
