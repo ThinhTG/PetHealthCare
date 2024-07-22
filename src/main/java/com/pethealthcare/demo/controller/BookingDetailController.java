@@ -119,4 +119,10 @@ public class BookingDetailController {
         );
     }
 
+    @PutMapping("/status/{bookingId}")
+    public ResponseEntity<?> updateBookingStatus(@PathVariable int bookingId, @RequestParam String status) {
+        bookingDetailService.updateStatusByBookingId(bookingId, status);
+        return ResponseEntity.ok().build();
+    }
+
 }
