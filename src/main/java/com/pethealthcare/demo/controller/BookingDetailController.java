@@ -89,11 +89,21 @@ public class BookingDetailController {
         return bookingDetailService.getBookingDetailByUser(userId);
     }
 
+    @GetMapping("/getAllBookingDetail_ByCusId")
+    List<BookingDetail> getBookingDetailByCusid(@RequestParam int cusId) {
+        return bookingDetailService.getBookingDetailByCus(cusId);
+    }
+
     @PutMapping("/update/status/{bookingDetailId}")
     ResponseEntity<ResponseObject> updateBooking(@PathVariable int bookingDetailId, @RequestBody BookingStatusUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateStatusBookingDetail(bookingDetailId, request.getStatus()))
         );
+    }
+
+    @GetMapping("/getBookingDetailByStatus/{status}")
+    ResponseEntity<List<BookingDetail>> getBookingDetailByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByStatus(status));
     }
 
     @GetMapping("/cancelBookingDetail/{bookingDetailID}")
