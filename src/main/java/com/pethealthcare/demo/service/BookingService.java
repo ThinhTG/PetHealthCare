@@ -1,22 +1,16 @@
 package com.pethealthcare.demo.service;
 
-import com.pethealthcare.demo.dto.request.BookingCancelRequest;
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingDetailCreateRequest;
 import com.pethealthcare.demo.dto.request.RevenueResponse;
 import com.pethealthcare.demo.mapper.BookingDetailMapper;
 import com.pethealthcare.demo.mapper.BookingMapper;
 import com.pethealthcare.demo.model.*;
-import com.pethealthcare.demo.responsitory.*;
-import jakarta.transaction.Transactional;
+import com.pethealthcare.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 @Service

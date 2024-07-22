@@ -1,8 +1,8 @@
 package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.model.*;
-import com.pethealthcare.demo.responsitory.*;
-import com.pethealthcare.demo.responsitory.UserRepository;
+import com.pethealthcare.demo.repository.*;
+import com.pethealthcare.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

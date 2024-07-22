@@ -1,4 +1,4 @@
-package com.pethealthcare.demo.responsitory;
+package com.pethealthcare.demo.repository;
 
 import com.pethealthcare.demo.model.Cage;
 import com.pethealthcare.demo.model.CageType;

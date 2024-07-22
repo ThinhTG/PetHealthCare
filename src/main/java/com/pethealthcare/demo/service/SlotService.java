@@ -2,10 +2,9 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.SlotCreateRequest;
 import com.pethealthcare.demo.model.Slot;
-import com.pethealthcare.demo.responsitory.SlotRepository;
+import com.pethealthcare.demo.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 

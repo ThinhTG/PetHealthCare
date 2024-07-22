@@ -1,4 +1,4 @@
-package com.pethealthcare.demo.responsitory;
+package com.pethealthcare.demo.repository;
 
 import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.model.Slot;
@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Repository

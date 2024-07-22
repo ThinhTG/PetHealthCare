@@ -1,19 +1,17 @@
 package com.pethealthcare.demo.service;
 
-import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Payment;
 import com.pethealthcare.demo.model.Refund;
-import com.pethealthcare.demo.responsitory.BookingDetailRepository;
-import com.pethealthcare.demo.responsitory.BookingRepository;
-import com.pethealthcare.demo.responsitory.PaymentRepository;
-import com.pethealthcare.demo.responsitory.RefundRepository;
+import com.pethealthcare.demo.repository.BookingDetailRepository;
+import com.pethealthcare.demo.repository.BookingRepository;
+import com.pethealthcare.demo.repository.PaymentRepository;
+import com.pethealthcare.demo.repository.RefundRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Service
 public class RefundService {
