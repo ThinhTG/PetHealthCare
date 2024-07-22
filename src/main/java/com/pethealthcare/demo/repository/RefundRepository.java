@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface RefundRepository extends JpaRepository<Refund, Integer>{
     Refund findRefundByBookingDetail_BookingDetailId(int bookingDetailId);
 
+
+
 }

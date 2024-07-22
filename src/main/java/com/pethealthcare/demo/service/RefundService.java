@@ -1,17 +1,14 @@
 package com.pethealthcare.demo.service;
 
-import com.pethealthcare.demo.model.BookingDetail;
-import com.pethealthcare.demo.model.Payment;
-import com.pethealthcare.demo.model.Refund;
-import com.pethealthcare.demo.repository.BookingDetailRepository;
-import com.pethealthcare.demo.repository.BookingRepository;
-import com.pethealthcare.demo.repository.PaymentRepository;
-import com.pethealthcare.demo.repository.RefundRepository;
+import com.pethealthcare.demo.model.*;
+import com.pethealthcare.demo.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class RefundService {
@@ -25,6 +22,9 @@ public class RefundService {
     private BookingDetailRepository bookingDetailRepository;
     @Autowired
     private RefundRepository refundRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 //    public Refund returnDepositCancelBooking(int bookingId) {
 //        Refund refund = refundRepository.findRefundByBooking_BookingId(bookingId);
@@ -53,6 +53,35 @@ public class RefundService {
 //
 //        return refundRepository.save(refund);
 //    }
+
+    public List<Refund> getReturn(){
+        return refundRepository.findAll();
+    }
+
+    public List<Refund> getReturnByCusId(int userId) {
+        User user = userRepository.findUserByUserId(userId);
+        List<Booking> bookings = bookingRepository.getBookingByUser(user);
+        List<BookingDetail> bookingDetails = new ArrayList<>();
+        List<BookingDetail> bookingDetailByBooking;
+        List<Refund> refunds = new ArrayList<>();
+        for (Booking booking : bookings) {
+            bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
+            for (BookingDetail bookingDetail : bookingDetailByBooking) {
+                    bookingDetails.add(bookingDetail);
+
+            }
+            for (Refund refund : refundRepository.findAll()) {
+                for (BookingDetail bookingDetail : bookingDetails) {
+                    if (refund.getBookingDetail().getBookingDetailId() == bookingDetail.getBookingDetailId()) {
+                        refunds.add(refund);
+                    }
+                }
+            }
+        }
+        return refunds;
+    }
+
+
 
 
     public Refund returnDepositCancelBookingDetail(int bookingDetailId) {
