@@ -89,4 +89,14 @@ public class PetService {
     public void deletePetByID(int id){
         petRepository.deletePetByPetId(id);
     }
+
+    public void updateVaccination(int petId, String vaccination) {
+        Pet pet = petRepository.findPetByPetId(petId);
+        if (pet.getVaccination() == null || pet.getVaccination().isEmpty()) {
+            pet.setVaccination(vaccination);
+        } else {
+            pet.setVaccination(pet.getVaccination() + ", " + vaccination);
+        }
+        petRepository.save(pet);
+    }
 }
