@@ -39,6 +39,9 @@ public class User {
     @Column(columnDefinition = "nvarchar(50)", nullable = false)
     private String status;
 
+    @Column
+    private String imageUrl;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;

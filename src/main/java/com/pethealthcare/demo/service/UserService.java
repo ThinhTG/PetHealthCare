@@ -48,6 +48,7 @@ public class UserService {
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
             newUser.setRole(request.getRole());
             newUser.setStatus("Active");
+            newUser.setImageUrl(request.getImageUrl());
 
             return userRepository.save(newUser);
         }
