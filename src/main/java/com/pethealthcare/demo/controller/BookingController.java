@@ -50,6 +50,10 @@ public class BookingController {
         return bookingService.getBookingsByUserID(userID);
     }
 
+    @GetMapping("/api/revenue")
+    public List<RevenueResponse> getRevenueByMonth(@RequestParam int year) {
+        return bookingService.getRevenueByMonth(year);
+    }
 
 //    @PostMapping("/delete/{bookingID}")
 //    ResponseEntity<ResponseObject> deleteBooking(@PathVariable int bookingID, BookingCancelRequest request) {
