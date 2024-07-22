@@ -1,10 +1,7 @@
 package com.pethealthcare.demo.controller;
 
 
-import com.pethealthcare.demo.dto.request.PetCreateRequest;
-import com.pethealthcare.demo.dto.request.PetUpdateRequest;
-import com.pethealthcare.demo.dto.request.UserCreateRequest;
-import com.pethealthcare.demo.dto.request.UserUpdateRequest;
+import com.pethealthcare.demo.dto.request.*;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.ResponseObject;
 import com.pethealthcare.demo.model.User;
@@ -31,8 +28,8 @@ public class PetController {
     }
 
     @PostMapping("/create/{id}")
-    ResponseEntity<ResponseObject> createPet(@PathVariable int id,@RequestBody PetCreateRequest request) {
-        Pet createdPet = petService.createPet(id,request);
+    ResponseEntity<ResponseObject> createPet(@PathVariable int id, @RequestBody PetCreateRequest request) {
+        Pet createdPet = petService.createPet(id, request);
         if (createdPet != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Pet added successfully", createdPet)
@@ -45,8 +42,8 @@ public class PetController {
     }
 
     @PutMapping("/update/{userid}/{petid}")
-    ResponseEntity<ResponseObject> updatePet(@PathVariable int userid,@PathVariable int petid, @RequestBody PetUpdateRequest request) {
-        Pet updatePet = petService.updatePet(userid,petid, request);
+    ResponseEntity<ResponseObject> updatePet(@PathVariable int userid, @PathVariable int petid, @RequestBody PetUpdateRequest request) {
+        Pet updatePet = petService.updatePet(userid, petid, request);
         if (updatePet != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "User updated successfully", updatePet)
@@ -65,7 +62,7 @@ public class PetController {
     }
 
     @DeleteMapping("/deletePet/{userid}/{petid}")
-    ResponseEntity<ResponseObject> deletePet(@PathVariable int userid,@PathVariable int petid) {
+    ResponseEntity<ResponseObject> deletePet(@PathVariable int userid, @PathVariable int petid) {
         User existsUser = userService.getAccountById(userid);
         if (existsUser != null) {
             boolean existsPet = petService.findPetByID(petid);
@@ -84,10 +81,10 @@ public class PetController {
         );
     }
 
-
-
-
-
-
-
+    @PutMapping("/update-Vaccination")
+    ResponseEntity<ResponseObject> updateVaccination(@RequestBody PetUpdateVacionationRequest request) {
+        petService.updateVaccination(request.getPetId(), request.getVaccination());
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Vaccination updated successfully"));
+    }
 }

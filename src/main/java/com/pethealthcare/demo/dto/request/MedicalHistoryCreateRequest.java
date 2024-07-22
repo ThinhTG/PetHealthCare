@@ -14,9 +14,7 @@ public class MedicalHistoryCreateRequest {
 
     private String veterinaryName;
 
-
     private String treatmentResult;
-
 
     private Date dateMedical;
 
