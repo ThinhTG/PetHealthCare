@@ -72,7 +72,7 @@ public class RefundService {
         LocalDate sixDaysAfterPayment = bookingDetailDate.minusDays(6);
         LocalDate threeDaysAfterPayment = bookingDetailDate.minusDays(3);
         if ((LocalDate.now().isAfter(sixDaysAfterPayment) || LocalDate.now().isEqual(sixDaysAfterPayment)) && (LocalDate.now().isBefore(threeDaysAfterPayment) || LocalDate.now().isEqual(threeDaysAfterPayment))) {
-            double priceAfterCancel = bookingDetail.getServices().getPrice() * 0.25;
+            double priceAfterCancel = bookingDetail.getServices().getPrice() * 0.75;
             refund.setRefundPercent(75);
             refund.setAmount((int) priceAfterCancel);
             refund.setRefundDate(LocalDate.now());
