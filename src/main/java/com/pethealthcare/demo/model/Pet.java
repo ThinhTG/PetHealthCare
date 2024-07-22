@@ -36,6 +36,9 @@ public class Pet {
     @Column(name = "Vaccination",columnDefinition = "nvarchar(50)")
     private String vaccination;
 
+    @Column
+    private boolean stayCage;
+
     @JsonIgnore
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;

@@ -46,6 +46,7 @@ public class CageService {
 
         BookingDetail bookingDetail = bookingDetailOptional.get();
         Pet pet = petRepository.findPetByPetId(bookingDetail.getPet().getPetId());
+        pet.setStayCage(true);
         cage.setPet(pet);
         bookingDetail.setNeedCage(false);
         cage.setStatus(false);
@@ -70,7 +71,8 @@ public class CageService {
 
     public Cage checkoutCage(int Cageid) {
         Cage cage = cageRepository.findById(Cageid);
-
+        Pet pet = petRepository.findPetByPetId(cage.getPet().getPetId());
+        pet.setStayCage(false);
         cage.setPet(null);
         cage.setStatus(true);
 

@@ -25,7 +25,7 @@ public class MedicalHistory {
     private String treatmentResult;
 
     @Column (name = "DateMedical", columnDefinition = "date")
-    private Date dateMedical;
+    private Date dateMedicalHistory;
 
     @ManyToOne
     @JsonIgnore

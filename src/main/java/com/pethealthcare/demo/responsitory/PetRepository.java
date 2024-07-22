@@ -19,4 +19,6 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     void deletePetByPetId(int petId);
 
     Pet findPetByPetId(int petId);
+
+    List<Pet> getPetByStayCage(boolean stayCage);
 }

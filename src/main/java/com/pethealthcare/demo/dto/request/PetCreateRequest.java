@@ -15,4 +15,5 @@ public class PetCreateRequest {
     private String petGender;
     private String petType;
     private String vaccination;
+
 }

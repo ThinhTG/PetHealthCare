@@ -19,6 +19,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Booking findBookingByBookingId(int bookingId);
     List<Booking> findByDateBetween(LocalDate startDate, LocalDate endDate);
     List<Booking> findByStatus(String status);
+    List<Booking> getBookingByStatus(String status);
     @Query(value = "SELECT new com.pethealthcare.demo.dto.request.RevenueResponse(MONTH(b.payDate), SUM(b.amount))\n" +
             "FROM Payment b \n" +
             "WHERE YEAR(b.payDate) = :year \n" +

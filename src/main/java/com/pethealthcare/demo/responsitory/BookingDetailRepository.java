@@ -2,6 +2,7 @@ package com.pethealthcare.demo.responsitory;
 
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
+import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,6 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     List<BookingDetail> getBookingDetailsByBooking(Booking booking);
     List<BookingDetail> getBookingDetailByuser(User user);
     List<BookingDetail> getBookingDetailByStatus(String status);
-
+    List<BookingDetail> getBookingDetailByPet(Pet pet);
+    List<BookingDetail> findBookingDetailByBooking(Booking booking);
 }
