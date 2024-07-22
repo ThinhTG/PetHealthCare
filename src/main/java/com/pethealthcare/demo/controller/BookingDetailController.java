@@ -106,6 +106,16 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailByStatus(status));
     }
 
+    @GetMapping("/getBookingDetailByCusIdStatus/{cusId}")
+    ResponseEntity<List<BookingDetail>> getBookingDetailByCusIdStatus(@PathVariable int cusId) {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByCus(cusId));
+    }
+
+    @GetMapping("/getBookingDetailByStayCage/")
+    ResponseEntity<List<BookingDetail>> getBookingDetailByStayCage() {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByStayCage());
+    }
+
     @GetMapping("/cancelBookingDetail/{bookingDetailID}")
     ResponseEntity<ResponseObject> cancelBooking( @PathVariable int bookingDetailID) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);

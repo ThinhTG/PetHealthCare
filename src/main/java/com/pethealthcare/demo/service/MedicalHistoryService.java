@@ -13,6 +13,7 @@ import com.pethealthcare.demo.responsitory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,8 +50,25 @@ public class MedicalHistoryService  {
         return false;
     }
 
-    public MedicalHistory getMedicalHistory(int id) {
-        return medicalHistoryRepository.findMedicalHistoryByMedicalHistoryId(id);
+    public List<MedicalHistory> getMedicalHistoryByPetStayCage() {
+        List<MedicalHistory> medicalHistories = medicalHistoryRepository.findAll();
+
+        List<MedicalHistory> medicalHistoriesStayCage = new ArrayList<>();
+
+        for ( MedicalHistory medicalHistory : medicalHistories) {
+            if (medicalHistory.getPet().isStayCage()) {
+
+                medicalHistoriesStayCage.add(medicalHistory);
+            }
+        }
+        return  medicalHistoriesStayCage;
+
+    }
+
+
+    public MedicalHistory getMedicalHistoriesByMedicalHistoryId(int medicalHistoryId){
+
+        return medicalHistoryRepository.findMedicalHistoryByMedicalHistoryId(medicalHistoryId);
     }
 
     public List<MedicalHistory> getMedicalHistoriesByPetId(int petId){
@@ -67,8 +85,8 @@ public class MedicalHistoryService  {
             MedicalHistory medicalHistory = optionalMedicalHistory.get();
 
             // Update fields
-            if (request.getDateMedical() != null && !request.getDateMedical().equals(medicalHistory.getDateMedical())) {
-                medicalHistory.setDateMedical(request.getDateMedical());
+            if (request.getDateMedical() != null && !request.getDateMedical().equals(medicalHistory.getDateMedicalHistory())) {
+                medicalHistory.setDateMedicalHistory(request.getDateMedical());
             }
             if (request.getTreatmentResult() != null && !request.getTreatmentResult().equals(medicalHistory.getTreatmentResult()) && !request.getTreatmentResult().isEmpty()) {
                 medicalHistory.setTreatmentResult(request.getTreatmentResult());

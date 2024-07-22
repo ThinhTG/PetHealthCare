@@ -34,7 +34,7 @@ public class MedicalHistoryController {
         MedicalHistory medicalHistory = medicalHistoryService.createMedicalHistory(id, request);
         if (medicalHistory != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
-                    new ResponseObject("ok", "Pet added successfully", medicalHistory)
+                    new ResponseObject("ok", "Medical history successfully", medicalHistory)
             );
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
@@ -57,6 +57,10 @@ public class MedicalHistoryController {
         }
     }
 
+    @GetMapping("/getMedicalHistoryByPetStayCage")
+    List<MedicalHistory> getMedicalHistory() {
+        return medicalHistoryService.getMedicalHistoryByPetStayCage();
+    }
 
     @GetMapping("/getAll/{petID}")
     List<MedicalHistory> getMedicalHistoriesByPetID(@PathVariable int petID) {

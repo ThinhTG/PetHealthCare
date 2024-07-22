@@ -19,7 +19,7 @@ public class FeedbackController {
     private FeedbackService feedbackService;
 
     @PostMapping("/create/{id}")
-    ResponseEntity<ResponseObject> createMedicalHistory(@PathVariable int id, @RequestBody FeedbackRequest request) {
+    ResponseEntity<ResponseObject> createFeedBack(@PathVariable int id, @RequestBody FeedbackRequest request) {
         Feedback feedback = feedbackService.createFeedback(id, request);
         if (feedback != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -31,4 +31,7 @@ public class FeedbackController {
             );
         }
     }
+
+
+
 }

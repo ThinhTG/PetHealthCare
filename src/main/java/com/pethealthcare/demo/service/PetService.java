@@ -36,6 +36,7 @@ public class PetService {
         if (!exist) {
             Pet newPet = petMapper.toPet(request);
             newPet.setUser(user);
+            newPet.setStayCage(false);
             return petRepository.save(newPet);
         }
         return null;

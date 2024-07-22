@@ -1,17 +1,12 @@
 package com.pethealthcare.demo.service;
 
-import com.pethealthcare.demo.model.Booking;
-import com.pethealthcare.demo.model.BookingDetail;
-import com.pethealthcare.demo.model.Payment;
-import com.pethealthcare.demo.model.User;
+import com.pethealthcare.demo.model.*;
 import com.pethealthcare.demo.responsitory.*;
 import com.pethealthcare.demo.responsitory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.awt.print.Book;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +22,9 @@ public class BookingDetailService {
 
     @Autowired
     private BookingRepository bookingRepository;
+
+    @Autowired
+    private  PetRepository petRepository;
 
 
 
@@ -88,13 +86,19 @@ public class BookingDetailService {
 
     public List<BookingDetail> getBookingDetailByCus(int cusId) {
         User user = userRepository.findUserByUserId(cusId);
-        List<BookingDetail> bookingDetails = new ArrayList<>(); // Initialize the list
         List<Booking> bookings = bookingRepository.getBookingByUser(user);
-
+        List<BookingDetail> bookingDetails = new ArrayList<>();
+        List<BookingDetail> bookingDetailByBooking;
         for (Booking booking : bookings) {
-            bookingDetails.addAll(bookingDetailRepository.getBookingDetailsByBooking(booking));
-        }
+            bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
+            for (BookingDetail bookingDetail : bookingDetailByBooking) {
+                if (bookingDetail.getStatus().equalsIgnoreCase("COMPLETED")) {
+                    bookingDetails.add(bookingDetail);
+                }
+            }
 
+
+        }
         return bookingDetails;
     }
 
@@ -125,6 +129,18 @@ public class BookingDetailService {
         return bookingDetailRepository.save(bookingDetail);
     }
 
+    public List<BookingDetail> getBookingDetailByStayCage() {
+
+        List<Pet> pets = petRepository.getPetByStayCage(true);
+
+        List<BookingDetail> bookingDetails = new ArrayList<>();
+
+        for (Pet pet : pets) {
+            bookingDetails.addAll(bookingDetailRepository.getBookingDetailByPet(pet));
+        }
+
+        return bookingDetails;
+}
     public void updateStatusByBookingId(int bookingId, String status) {
         Booking booking = bookingRepository.findBookingByBookingId(bookingId);
         List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(booking);
