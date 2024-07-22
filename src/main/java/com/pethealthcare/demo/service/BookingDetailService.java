@@ -88,7 +88,7 @@ public class BookingDetailService {
         User user = userRepository.findUserByUserId(cusId);
         List<Booking> bookings = bookingRepository.getBookingByUser(user);
         List<BookingDetail> bookingDetails = new ArrayList<>();
-        List<BookingDetail> bookingDetailByBooking = new ArrayList<>();
+        List<BookingDetail> bookingDetailByBooking;
         for (Booking booking : bookings) {
             bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
             for (BookingDetail bookingDetail : bookingDetailByBooking) {
