@@ -86,18 +86,32 @@ public class BookingDetailService {
 
     }
 
+    public List<BookingDetail> getBookingDetailByCus(int cusId) {
+        User user = userRepository.findUserByUserId(cusId);
+        List<BookingDetail> bookingDetails = new ArrayList<>(); // Initialize the list
+        List<Booking> bookings = bookingRepository.getBookingByUser(user);
+
+        for (Booking booking : bookings) {
+            bookingDetails.addAll(bookingDetailRepository.getBookingDetailsByBooking(booking));
+        }
+
+        return bookingDetails;
+    }
+
+    public List<BookingDetail> getBookingDetailByStatus(String status) {
+        return bookingDetailRepository.getBookingDetailByStatus(status);
+    }
+
     public void deleteBookingDetail(int bookingDetailId) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
         bookingDetail.setStatus("CANCELLED");
         bookingDetailRepository.save(bookingDetail);
 
-        // Get all BookingDetail instances associated with the Booking
         List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(bookingDetail.getBooking());
 
-        // Check if all BookingDetail instances are cancelled
         boolean allCancelled = bookingDetails.stream().allMatch(detail -> detail.getStatus().equalsIgnoreCase("CANCELLED"));
 
-        // If all BookingDetail instances are cancelled, set the status of the Booking to "CANCELLED"
+
         if (allCancelled) {
             Booking booking = bookingDetail.getBooking();
             booking.setStatus("CANCELLED");
