@@ -1,16 +1,16 @@
-package com.pethealthcare.demo.dto.request;
+package com.pethealthcare.demo.response;
 
 import com.pethealthcare.demo.model.Services;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.security.Provider;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MostServiceResponse {
-    private int serviceId;
-    private long usageCount;
+public class MostUsedServiceResponse {
+    private int usageCount;
+    private List<Services> services;
 }

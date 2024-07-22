@@ -2,9 +2,9 @@ package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
-import com.pethealthcare.demo.dto.request.RevenueResponse;
+import com.pethealthcare.demo.response.RevenueResponse;
 import com.pethealthcare.demo.model.Booking;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.repository.BookingRepository;
 import com.pethealthcare.demo.service.BookingService;
 import com.pethealthcare.demo.service.RefundService;

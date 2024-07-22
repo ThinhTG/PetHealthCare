@@ -2,7 +2,7 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingDetailCreateRequest;
-import com.pethealthcare.demo.dto.request.RevenueResponse;
+import com.pethealthcare.demo.response.RevenueResponse;
 import com.pethealthcare.demo.mapper.BookingDetailMapper;
 import com.pethealthcare.demo.mapper.BookingMapper;
 import com.pethealthcare.demo.model.*;

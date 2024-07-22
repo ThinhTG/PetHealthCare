@@ -1,17 +1,13 @@
 package com.pethealthcare.demo.controller;
 
-import com.pethealthcare.demo.dto.request.PaymentCreateRequest;
 import com.pethealthcare.demo.model.Payment;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.time.LocalDateTime;
 
 
 @RestController
