@@ -21,7 +21,7 @@ public class MedicalHistory {
     @Column (name = "VeterinaryName",columnDefinition = "nvarchar(50)")
     private String veterinaryName;
 
-    @Column (name = "TreatmentResult",columnDefinition = "nvarchar(50)")
+    @Column (name = "TreatmentResult",columnDefinition = "nvarchar(MAX)")
     private String treatmentResult;
 
     @Column (name = "DateMedical", columnDefinition = "date")

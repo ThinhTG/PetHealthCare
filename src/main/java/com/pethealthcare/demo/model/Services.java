@@ -27,7 +27,7 @@ public class Services {
     @Column(columnDefinition = "text", nullable = false)
     private String description;
 
-    @Column(columnDefinition = "nvarchar(255)")
+    @Column(columnDefinition = "nvarchar(MAX)")
     private String imageUrl;
 
     @JsonIgnore
