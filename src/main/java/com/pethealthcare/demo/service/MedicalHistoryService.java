@@ -2,14 +2,11 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.MedicalHistoryCreateRequest;
 import com.pethealthcare.demo.dto.request.MedicalHistoryUpdateRequest;
-import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.mapper.MedicalHistoryMapper;
 import com.pethealthcare.demo.model.MedicalHistory;
 import com.pethealthcare.demo.model.Pet;
-import com.pethealthcare.demo.model.User;
-import com.pethealthcare.demo.responsitory.MedicalHistoryRepository;
-import com.pethealthcare.demo.responsitory.PetRepository;
-import com.pethealthcare.demo.responsitory.UserRepository;
+import com.pethealthcare.demo.repository.MedicalHistoryRepository;
+import com.pethealthcare.demo.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

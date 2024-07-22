@@ -5,7 +5,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.pethealthcare.demo.dto.request.AuthenticationRequest;
 import com.pethealthcare.demo.model.User;
-import com.pethealthcare.demo.responsitory.UserRepository;
+import com.pethealthcare.demo.repository.UserRepository;
 import lombok.experimental.NonFinal;
 import org.json.JSONObject;
 import org.slf4j.Logger;

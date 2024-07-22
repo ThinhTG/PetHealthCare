@@ -6,14 +6,13 @@ import com.pethealthcare.demo.mapper.ServiceSlotMapper;
 import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.model.Slot;
 import com.pethealthcare.demo.model.User;
-import com.pethealthcare.demo.responsitory.ServiceSlotRepository;
-import com.pethealthcare.demo.responsitory.SlotRepository;
-import com.pethealthcare.demo.responsitory.UserRepository;
+import com.pethealthcare.demo.repository.ServiceSlotRepository;
+import com.pethealthcare.demo.repository.SlotRepository;
+import com.pethealthcare.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service

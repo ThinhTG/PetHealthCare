@@ -3,7 +3,7 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.request.ServiceCreateRequest;
 import com.pethealthcare.demo.mapper.ServiceMapper;
 import com.pethealthcare.demo.model.Services;
-import com.pethealthcare.demo.responsitory.ServiceRepository;
+import com.pethealthcare.demo.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

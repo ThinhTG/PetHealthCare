@@ -5,13 +5,12 @@ import com.pethealthcare.demo.dto.request.PetUpdateRequest;
 import com.pethealthcare.demo.mapper.PetMapper;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
-import com.pethealthcare.demo.responsitory.PetRepository;
-import com.pethealthcare.demo.responsitory.UserRepository;
+import com.pethealthcare.demo.repository.PetRepository;
+import com.pethealthcare.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
 import java.util.List;
 import java.util.Optional;
 

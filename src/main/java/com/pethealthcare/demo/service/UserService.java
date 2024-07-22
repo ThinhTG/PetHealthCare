@@ -6,7 +6,7 @@ import com.pethealthcare.demo.dto.request.UserCreateRequest;
 import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.mapper.UserMapper;
 import com.pethealthcare.demo.model.User;
-import com.pethealthcare.demo.responsitory.UserRepository;
+import com.pethealthcare.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
