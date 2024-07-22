@@ -61,6 +61,7 @@ public class BookingService {
         for (BookingDetailCreateRequest request1 : request.getBookingDetails()) {
             BookingDetail bookingDetail = bookingDetailMapper.toBookingDetail(request1);
             bookingDetail.setDate(request1.getDate());
+            bookingDetail.setStatus("WAITING");
             bookingDetail.setBooking(newBooking);
 
 
@@ -90,30 +91,10 @@ public class BookingService {
         return bookingRepository.getBookingByUser(user);
     }
 
-
-//    public void deleteBooking(int bookingId, BookingCancelRequest request) {
-//        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new IllegalArgumentException("Booking not found"));
-//        booking.setStatus("CANCELLED");
-//        paymentService.returnDeposit(bookingId, request);
-//
-//    }
-
     public Booking updateStatusBooking(int bookingId, String status) {
         Booking booking = bookingRepository.findBookingByBookingId(bookingId);
         booking.setStatus(status);
         return bookingRepository.save(booking);
-    }
-
-    public double getRevenueByDate(LocalDate date) {
-        LocalDate startOfDay = date;
-        LocalDate endOfDay = date.plusDays(1);
-        return calculateRevenue(startOfDay, endOfDay);
-    }
-
-    public double getRevenueByMonth(int year, int month) {
-        LocalDate startOfMonth = LocalDate.of(year, month, 1);
-        LocalDate endOfMonth = startOfMonth.plusMonths(1).minusDays(1);
-        return calculateRevenue(startOfMonth, endOfMonth);
     }
 
     public double getRevenueByYear(int year) {
@@ -130,8 +111,6 @@ public class BookingService {
     public List<RevenueResponse> getRevenueByMonth(int year) {
         return bookingRepository.getRevenueByMonth(year);
     }
-
-
 
 
     public List<Booking> getBookingsByStatus(String status) {
