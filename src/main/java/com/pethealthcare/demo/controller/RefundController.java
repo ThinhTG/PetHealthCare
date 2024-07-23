@@ -28,7 +28,7 @@ public class RefundController {
     }
 
     @GetMapping("/getRefundByBookingDetailId/{bookingDetailId}")
-    List<Refund> getRefundByBookingDetailId(@PathVariable int bookingDetailId) {
+    Refund getRefundByBookingDetailId(@PathVariable int bookingDetailId) {
         return refundService.getReturnByBookingDetailId(bookingDetailId);
     }
 
