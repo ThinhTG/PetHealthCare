@@ -81,15 +81,8 @@ public class RefundService {
         return refunds;
     }
 
-    public List<Refund> getReturnByBookingDetailId(int bookingDetailId) {
-        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
-        List<Refund> refunds = new ArrayList<>();
-        for (Refund refund : refundRepository.findAll()) {
-            if (refund.getBookingDetail().getBookingDetailId() == bookingDetail.getBookingDetailId()) {
-                refunds.add(refund);
-            }
-        }
-        return refunds;
+    public Refund getReturnByBookingDetailId(int bookingDetailId) {
+        return refundRepository.findRefundByBookingDetail_BookingDetailId(bookingDetailId);
     }
 
 
