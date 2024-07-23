@@ -4,7 +4,8 @@ import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Refund;
-import com.pethealthcare.demo.model.ResponseObject;
+import com.pethealthcare.demo.response.MostUsedServiceResponse;
+import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.BookingRepository;
 import com.pethealthcare.demo.service.BookingDetailService;
@@ -115,15 +116,17 @@ public class BookingDetailController {
     }
 
     @GetMapping("/cancelBookingDetail/{bookingDetailID}")
-    ResponseEntity<ResponseObject> cancelBooking( @PathVariable int bookingDetailID) {
+    ResponseEntity<ResponseObject> cancelBooking(@PathVariable int bookingDetailID) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
-        Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId() );
+        Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
         if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")
-        && booking.getStatus().equalsIgnoreCase("cancelled") || booking.getStatus().equalsIgnoreCase("completed")) {
+                && booking.getStatus().equalsIgnoreCase("cancelled") || booking.getStatus().equalsIgnoreCase("completed")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("failed", "booking is already cancelled or completed", "")
             );
+
         } else if (booking.getStatus().equalsIgnoreCase("Confirmed") ||booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
+
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
             Refund refund = refundService.returnDepositCancelBookingDetail(bookingDetailID);
@@ -143,4 +146,8 @@ public class BookingDetailController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/getMostUsedServiceByMonthAndYear")
+    MostUsedServiceResponse getMostUsedServiceByMonthAndYear(@RequestParam int month, @RequestParam int year) {
+        return bookingDetailService.mostUsedService(month, year);
+    }
 }
