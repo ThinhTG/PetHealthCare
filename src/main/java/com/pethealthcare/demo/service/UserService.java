@@ -25,6 +25,8 @@ public class UserService {
     private EmailService emailService;
     @Autowired
     private OtpService otpService;
+    @Autowired
+    private WalletService walletService;
 
     public User createUser(UserCreateRequest request) {
         boolean exist = userRepository.existsByEmail(request.getEmail());
@@ -34,8 +36,10 @@ public class UserService {
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
             newUser.setRole("Customer");
             newUser.setStatus("Active");
+            User user = userRepository.save(newUser);
+            walletService.createWallet(user.getUserId());
+            return user;
 
-            return userRepository.save(newUser);
         }
         return null;
     }
@@ -77,10 +81,10 @@ public class UserService {
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
             }
-            if(request.getPhone() != null && !request.getPhone().equals(user.getPhone())) {
+            if (request.getPhone() != null && !request.getPhone().equals(user.getPhone())) {
                 user.setPhone(request.getPhone());
             }
-            if(request.getAddress() != null && !request.getAddress().equals(user.getAddress())) {
+            if (request.getAddress() != null && !request.getAddress().equals(user.getAddress())) {
                 user.setAddress(request.getAddress());
             }
 
@@ -138,7 +142,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userID);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if(newrole != null && !newrole.isEmpty()) {
+            if (newrole != null && !newrole.isEmpty()) {
                 user.setRole(newrole);
             }
             // Save updated user
