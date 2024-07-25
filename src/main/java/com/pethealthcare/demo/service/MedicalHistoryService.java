@@ -62,12 +62,6 @@ public class MedicalHistoryService  {
 
     }
 
-
-    public MedicalHistory getMedicalHistoriesByMedicalHistoryId(int medicalHistoryId){
-
-        return medicalHistoryRepository.findMedicalHistoryByMedicalHistoryId(medicalHistoryId);
-    }
-
     public List<MedicalHistory> getMedicalHistoriesByPetId(int petId){
         MedicalHistory medicalHistory = new MedicalHistory();
         Pet pet = new Pet();

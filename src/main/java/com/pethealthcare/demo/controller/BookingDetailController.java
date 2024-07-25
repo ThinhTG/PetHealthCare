@@ -115,8 +115,8 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailByStayCage());
     }
 
-    @GetMapping("/cancelBookingDetail/{bookingDetailID}")
-    ResponseEntity<ResponseObject> cancelBooking(@PathVariable int bookingDetailID) {
+    @GetMapping("/cancelBookingDetail/")
+    ResponseEntity<ResponseObject> cancelBooking(@RequestParam int bookingDetailID, @RequestParam int userId) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
         Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
         if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")
@@ -129,7 +129,7 @@ public class BookingDetailController {
 
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
-            Refund refund = refundService.returnDepositCancelBookingDetail(bookingDetailID);
+            Refund refund = refundService.returnDepositCancelBookingDetail(bookingDetailID, userId);
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "booking deleted successfully", refund)

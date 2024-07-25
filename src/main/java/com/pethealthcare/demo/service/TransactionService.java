@@ -2,9 +2,13 @@ package com.pethealthcare.demo.service;
 
 
 import com.pethealthcare.demo.config.VNPayConfig;
-import com.pethealthcare.demo.model.Payment;
+import com.pethealthcare.demo.dto.request.TransactionCreateRequest;
+import com.pethealthcare.demo.model.Booking;
+import com.pethealthcare.demo.model.Transaction;
+import com.pethealthcare.demo.model.Wallet;
 import com.pethealthcare.demo.repository.BookingRepository;
-import com.pethealthcare.demo.repository.PaymentRepository;
+import com.pethealthcare.demo.repository.TransactionRepository;
+import com.pethealthcare.demo.repository.WalletRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,18 +27,18 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class PaymentService {
+public class TransactionService {
     @Autowired
-    private PaymentRepository paymentRepository;
-
-    @Autowired
-    private BookingService bookingService;
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private BookingRepository bookingRepository;
 
     @Autowired
     private VNPayConfig vnPayConfig;
+
+    @Autowired
+    private WalletRepository walletRepository;
 
     public static String hmacSHA512(final String key, final String data) {
         try {
@@ -98,10 +102,10 @@ public class PaymentService {
     public String createVnPayPayment(HttpServletRequest request) {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
-        int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+        int walletId = Integer.parseInt(request.getParameter("walletId"));
         Map<String, String> vnpParamsMap = vnPayConfig.getPayConfig();
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
-        vnpParamsMap.put("vnp_OrderInfo", "" + bookingId);
+        vnpParamsMap.put("vnp_OrderInfo", "" + walletId);
         if (bankCode != null && !bankCode.isEmpty()) {
             vnpParamsMap.put("vnp_BankCode", bankCode);
         }
@@ -110,33 +114,42 @@ public class PaymentService {
         String hashData = getPaymentURL(vnpParamsMap, false);
         String vnpSecureHash = hmacSHA512(vnPayConfig.getSecretKey(), hashData);
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
-        String paymentUrl = vnPayConfig.getVnp_PayUrl() + "?" + queryUrl;
-        return paymentUrl;
+        return vnPayConfig.getVnp_PayUrl() + "?" + queryUrl;
     }
 
-    public Payment createPayment(int transactionNo, int amount, String bankCode,
-                                 String bankTranNo, String cardType, String vnpPayDate, String orderInfo, int txnRef) {
+    public Transaction deposit(int amount, String vnpPayDate, String orderInfo) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime payDate = LocalDateTime.parse(vnpPayDate, formatter);
-        int bookingId = Integer.parseInt(orderInfo);
-        Payment payment = new Payment();
-        payment.setTransactionNo(transactionNo);
-        payment.setAmount(amount / 100);
-        payment.setBankCode(bankCode);
-        payment.setBankTranNo(bankTranNo);
-        payment.setCardType(cardType);
-        payment.setPayDate(payDate);
-        payment.setTxnRef(txnRef);
-        payment.setBooking(bookingRepository.findBookingByBookingId(bookingId));
-        bookingService.updateStatusBooking(bookingId, "PAID");
-
-        return paymentRepository.save(payment);
+        int walletId = Integer.parseInt(orderInfo);
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount / 100);
+        transaction.setTransactionType("DEPOSIT");
+        transaction.setTransactionDate(payDate);
+        Wallet wallet = walletRepository.findWalletByWalletId(walletId);
+        wallet.setBalance(wallet.getBalance() + (double) amount / 100);
+        walletRepository.save(wallet);
+        transaction.setWallet(wallet);
+        return transactionRepository.save(transaction);
     }
 
-
-
-
-
+    public String payBooking(TransactionCreateRequest request){
+        Wallet wallet = walletRepository.findWalletByWalletId(request.getWalletId());
+        if(wallet.getBalance() < request.getAmount()){
+            return "Account balance is not enough to make transactions";
+        }
+        Transaction transaction = new Transaction();
+        transaction.setAmount(request.getAmount());
+        transaction.setTransactionType("PAYMENT");
+        transaction.setTransactionDate(LocalDateTime.now());
+        wallet.setBalance(wallet.getBalance() - request.getAmount());
+        walletRepository.save(wallet);
+        transaction.setWallet(wallet);
+        Booking booking = bookingRepository.findBookingByBookingId(request.getBookingId());
+        booking.setStatus("PAID");
+        transaction.setBooking(booking);
+        transactionRepository.save(transaction);
+        return "Payment success";
+    }
 
 }
 

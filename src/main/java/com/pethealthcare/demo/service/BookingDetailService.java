@@ -31,7 +31,6 @@ public class BookingDetailService {
         return bookingDetailRepository.findAll();
     }
 
-
     public List<BookingDetail> getAllBookingDetailNeedCage() {
         List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
         List<BookingDetail> bookingDetailsNeedCage = new ArrayList<BookingDetail>();
@@ -43,7 +42,6 @@ public class BookingDetailService {
         }
         return bookingDetailsNeedCage;
     }
-
 
     public BookingDetail updateNeedCage(int bookingDetailId) {
         Optional<BookingDetail> optionalBookingDetail = bookingDetailRepository.findById(bookingDetailId);
@@ -180,4 +178,6 @@ public class BookingDetailService {
 
         return new MostUsedServiceResponse(maxCount, mostFrequentServices);
     }
+
+
 }

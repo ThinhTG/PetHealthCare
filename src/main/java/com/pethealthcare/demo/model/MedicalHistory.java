@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -25,7 +26,7 @@ public class MedicalHistory {
     private String treatmentResult;
 
     @Column (name = "DateMedical", columnDefinition = "date")
-    private Date dateMedicalHistory;
+    private LocalDate dateMedicalHistory;
 
     @Column
     private String status;
