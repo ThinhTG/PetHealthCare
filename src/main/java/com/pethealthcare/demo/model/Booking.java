@@ -34,7 +34,7 @@ public class Booking {
 
     @JsonIgnore
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Payment> payment;
+    private List<Transaction> transaction;
 
     @JsonIgnore
     @ManyToOne

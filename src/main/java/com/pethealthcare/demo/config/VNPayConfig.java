@@ -1,6 +1,6 @@
 package com.pethealthcare.demo.config;
 
-import com.pethealthcare.demo.service.PaymentService;
+import com.pethealthcare.demo.service.TransactionService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,7 @@ public class VNPayConfig {
         vnpParamsMap.put("vnp_Command", "pay");
         vnpParamsMap.put("vnp_TmnCode", this.vnp_TmnCode);
         vnpParamsMap.put("vnp_CurrCode", "VND");
-        vnpParamsMap.put("vnp_TxnRef", PaymentService.getRandomNumber(8));
+        vnpParamsMap.put("vnp_TxnRef", TransactionService.getRandomNumber(8));
         vnpParamsMap.put("vnp_OrderInfo", "");
         vnpParamsMap.put("vnp_OrderType", this.orderType);
         vnpParamsMap.put("vnp_Locale", "vn");

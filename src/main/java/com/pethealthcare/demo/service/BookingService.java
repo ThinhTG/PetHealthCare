@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BookingService {
@@ -42,11 +45,12 @@ public class BookingService {
     @Autowired
     private SlotRepository slotRepository;
 
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     public List<Booking> getAllBooking() {
         return bookingRepository.findAll();
 
     }
-
 
     public Booking createBooking(BookingCreateRequest request) {
         Booking newBooking = bookingMapper.toBooking(request);
@@ -54,7 +58,7 @@ public class BookingService {
         newBooking.setDate(localDate);
 
         User user = userRepository.findUserByUserId(request.getCustomerId());
-
+        newBooking.setStatus("PENDING");
         newBooking.setUser(user);
         newBooking = bookingRepository.save(newBooking);
 
@@ -81,8 +85,20 @@ public class BookingService {
             bookingDetailRepository.save(bookingDetail);
         }
 
+        scheduleBookingStatusCheck(newBooking.getBookingId());
+
         return newBooking;
 
+    }
+
+    private void scheduleBookingStatusCheck(int bookingId) {
+        scheduler.schedule(() -> {
+            Booking booking = bookingRepository.findById(bookingId).orElse(null);
+            if (booking != null && !"PAID".equals(booking.getStatus())) {
+                booking.setStatus("CANCELLED");
+                bookingRepository.save(booking);
+            }
+        }, 15, TimeUnit.MINUTES);
     }
 
     public List<Booking> getBookingsByUserID(int userId) {
@@ -111,7 +127,6 @@ public class BookingService {
     public List<RevenueResponse> getRevenueByMonth(int year) {
         return bookingRepository.getRevenueByMonth(year);
     }
-
 
     public List<Booking> getBookingsByStatus(String status) {
         return bookingRepository.findByStatus(status);

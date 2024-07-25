@@ -5,38 +5,30 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Payment")
+@Table(name = "[Transaction]")
 @Entity
-public class Payment {
+public class Transaction {
     @Id
-    private int transactionNo;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int transactionId;
 
-    @Column
     private int amount;
 
-    @Column
-    private String bankCode;
+    private String transactionType;
 
-    @Column
-    private String bankTranNo;
-
-    @Column
-    private String CardType;
-
-    @Column
-    private LocalDateTime payDate;
-
-    @Column
-    private int txnRef;
+    private LocalDateTime transactionDate;
 
     @ManyToOne
     @JoinColumn(name = "bookingId")
     private Booking booking;
 
-
+    @ManyToOne
+    @JoinColumn(name = "walletId")
+    private Wallet wallet;
 }
