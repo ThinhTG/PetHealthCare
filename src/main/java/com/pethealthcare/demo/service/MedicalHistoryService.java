@@ -26,6 +26,9 @@ public class MedicalHistoryService  {
     @Autowired
     private MedicalHistoryMapper medicalHistoryMapper;
 
+    @Autowired
+    private PetService petService;
+
     public List<MedicalHistory> medicalHistories() {
         return medicalHistoryRepository.findAll();
     }
@@ -34,7 +37,13 @@ public class MedicalHistoryService  {
         Pet pet = petRepository.findPetByPetId(id);
 
         MedicalHistory newMedicalHistory = medicalHistoryMapper.toMedicalHistory(request);
+
         newMedicalHistory.setPet(pet);
+
+        if (request.getVaccine() != null && !request.getVaccine().isEmpty()) {
+            petService.updateVaccination(id, request.getVaccine());
+        }
+
         return medicalHistoryRepository.save(newMedicalHistory);
 
     }
@@ -79,9 +88,9 @@ public class MedicalHistoryService  {
             if (request.getDateMedical() != null && !request.getDateMedical().equals(medicalHistory.getDateMedicalHistory())) {
                 medicalHistory.setDateMedicalHistory(request.getDateMedical());
             }
-            if (request.getTreatmentResult() != null && !request.getTreatmentResult().equals(medicalHistory.getTreatmentResult()) && !request.getTreatmentResult().isEmpty()) {
-                medicalHistory.setTreatmentResult(request.getTreatmentResult());
-            }
+//            if (request.getTreatmentResult() != null && !request.getTreatmentResult().equals(medicalHistory.getTreatmentResult()) && !request.getTreatmentResult().isEmpty()) {
+//                medicalHistory.setTreatmentResult(request.getTreatmentResult());
+//            }
             if (request.getVeterinaryName() != null && !request.getVeterinaryName().equals(medicalHistory.getVeterinaryName()) && !request.getVeterinaryName().isEmpty()) {
                 medicalHistory.setVeterinaryName(request.getVeterinaryName());
             }
@@ -97,13 +106,13 @@ public class MedicalHistoryService  {
         return medicalHistoryRepository.existsByMedicalHistoryId(id);
     }
 
-    public void updateStatus (int medicalHistoryId, String status){
-        MedicalHistory newMedHis = medicalHistoryRepository.findMedicalHistoryByMedicalHistoryId(medicalHistoryId);
-        if (status.equalsIgnoreCase("in")){
-            newMedHis.setStatus("Pets are staying in cages");
-        }
-        if (status.equalsIgnoreCase("out")){
-            newMedHis.setStatus("Pets have been discharged");
-        }
-    }
+//    public void updateStatus (int medicalHistoryId, String status){
+//        MedicalHistory newMedHis = medicalHistoryRepository.findMedicalHistoryByMedicalHistoryId(medicalHistoryId);
+//        if (status.equalsIgnoreCase("in")){
+//            newMedHis.setStatus("Pets are staying in cages");
+//        }
+//        if (status.equalsIgnoreCase("out")){
+//            newMedHis.setStatus("Pets have been discharged");
+//        }
+//    }
 }

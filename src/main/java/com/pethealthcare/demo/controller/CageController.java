@@ -5,7 +5,7 @@ import com.pethealthcare.demo.dto.request.CageCreateRequest;
 import com.pethealthcare.demo.dto.request.CheckingCageRequest;
 import com.pethealthcare.demo.dto.request.CheckoutCageRequest;
 import com.pethealthcare.demo.model.Cage;
-import com.pethealthcare.demo.model.CageType;
+import com.pethealthcare.demo.enums.CageType;
 import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.service.CageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,8 @@ public class CageController {
                 new ResponseObject("ok", "Cage create successfully", cageService.getALl()));
 
     }
+
+
 
     @GetMapping("/empty")
     ResponseEntity<ResponseObject> getAllEmptyCage(){

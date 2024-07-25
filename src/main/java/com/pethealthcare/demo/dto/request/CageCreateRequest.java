@@ -1,6 +1,6 @@
 package com.pethealthcare.demo.dto.request;
 
-import com.pethealthcare.demo.model.CageType;
+import com.pethealthcare.demo.enums.CageType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

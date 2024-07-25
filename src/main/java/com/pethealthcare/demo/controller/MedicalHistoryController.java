@@ -30,11 +30,12 @@ public class MedicalHistoryController {
     }
 
     @PostMapping("/create/{id}")
-    ResponseEntity<ResponseObject> createMedicalHistory(@PathVariable int id, @RequestBody MedicalHistoryCreateRequest request) {
+    public ResponseEntity<ResponseObject> createMedicalHistory(@PathVariable int id, @RequestBody MedicalHistoryCreateRequest request) {
+        System.out.println("Received request: " + request);
         MedicalHistory medicalHistory = medicalHistoryService.createMedicalHistory(id, request);
         if (medicalHistory != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
-                    new ResponseObject("ok", "Medical history successfully", medicalHistory)
+                    new ResponseObject("ok", "Medical history created successfully", medicalHistory)
             );
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
@@ -42,6 +43,7 @@ public class MedicalHistoryController {
             );
         }
     }
+
 
     @PutMapping("/update/{medicalHistoryId}")
     ResponseEntity<ResponseObject> updateMedicalHistory(@PathVariable int medicalHistoryId, @RequestBody MedicalHistoryUpdateRequest request) {
@@ -87,9 +89,9 @@ public class MedicalHistoryController {
         );
     }
 
-    @PutMapping("/updateStatus")
-    ResponseEntity<String> updateStatus(@RequestParam int id, @RequestParam String status){
-        medicalHistoryService.updateStatus(id, status);
-        return ResponseEntity.status(HttpStatus.OK).body("Update successfully");
-    }
+//    @PutMapping("/updateStatus")
+//    ResponseEntity<String> updateStatus(@RequestParam int id, @RequestParam String status){
+//        medicalHistoryService.updateStatus(id, status);
+//        return ResponseEntity.status(HttpStatus.OK).body("Update successfully");
+//    }
 }

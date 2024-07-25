@@ -115,6 +115,11 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailByStayCage());
     }
 
+    @GetMapping("/getBookingDetailStatusByVet/{vetId}")
+    ResponseEntity<List<BookingDetail>> getBookingDetailStatusByVet(@PathVariable int vetId) {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailStatusByVet(vetId));
+    }
+
     @GetMapping("/cancelBookingDetail/")
     ResponseEntity<ResponseObject> cancelBooking(@RequestParam int bookingDetailID, @RequestParam int userId) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);

@@ -1,7 +1,7 @@
 package com.pethealthcare.demo.repository;
 
 import com.pethealthcare.demo.model.Cage;
-import com.pethealthcare.demo.model.CageType;
+import com.pethealthcare.demo.enums.CageType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
