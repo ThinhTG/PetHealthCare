@@ -2,7 +2,7 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Cage;
-import com.pethealthcare.demo.model.CageType;
+import com.pethealthcare.demo.enums.CageType;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.CageRepository;

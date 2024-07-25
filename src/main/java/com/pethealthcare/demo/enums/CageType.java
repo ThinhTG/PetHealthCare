@@ -1,4 +1,4 @@
-package com.pethealthcare.demo.model;
+package com.pethealthcare.demo.enums;
 
 public enum CageType {
     DOG,

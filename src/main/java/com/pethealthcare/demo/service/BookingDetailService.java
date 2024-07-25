@@ -1,5 +1,7 @@
 package com.pethealthcare.demo.service;
 
+import com.pethealthcare.demo.dto.request.BookingDetailUpdateRequest;
+import com.pethealthcare.demo.enums.ServiceStatus;
 import com.pethealthcare.demo.model.*;
 import com.pethealthcare.demo.repository.*;
 import com.pethealthcare.demo.repository.UserRepository;
@@ -83,6 +85,22 @@ public class BookingDetailService {
 
     }
 
+    public List<BookingDetail> getBookingDetailStatusByVet(int vetId) {
+        User user = userRepository.findUserByUserId(vetId);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
+        List<BookingDetail> nonCancelledBookingDetails = new ArrayList<>();
+
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (!bookingDetail.getStatus().equalsIgnoreCase("CANCELLED")) {
+                nonCancelledBookingDetails.add(bookingDetail);
+            }
+        }
+
+        return nonCancelledBookingDetails;
+    }
+
+
+
     public List<BookingDetail> getBookingDetailByCus(int cusId) {
         User user = userRepository.findUserByUserId(cusId);
         List<Booking> bookings = bookingRepository.getBookingByUser(user);
@@ -98,6 +116,32 @@ public class BookingDetailService {
         }
         return bookingDetails;
     }
+
+    public List<BookingDetail> getBookingDetailBySerivceInactive(){
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
+        List<BookingDetail> bookingDetailByServiceInactive = new ArrayList<>();
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (bookingDetail.getServices().getStatus().equals(ServiceStatus.INACTIVE)) {
+                bookingDetailByServiceInactive.add(bookingDetail);
+            }
+        }
+        return bookingDetailByServiceInactive;
+    }
+
+    public BookingDetail updateBookingDetail(int id, BookingDetailUpdateRequest request) {
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(id);
+
+        if (bookingDetail != null) {
+            bookingDetail.setServices(request.getService());
+            bookingDetail.setDate(request.getServiceSlot().getDate());
+            bookingDetail.setSlot(request.getServiceSlot().getSlot());
+            bookingDetail.setUser(request.getServiceSlot().getUser());
+            bookingDetailRepository.save(bookingDetail);
+        }
+
+        return bookingDetail;
+    }
+
 
     public List<BookingDetail> getBookingDetailByStatus(String status) {
         return bookingDetailRepository.getBookingDetailByStatus(status);

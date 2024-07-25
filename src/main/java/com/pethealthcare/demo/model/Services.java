@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pethealthcare.demo.enums.ServiceStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,10 @@ public class Services {
 
     @Column(columnDefinition = "nvarchar(MAX)")
     private String imageUrl;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ServiceStatus status;
 
     @JsonIgnore
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL, orphanRemoval = true)

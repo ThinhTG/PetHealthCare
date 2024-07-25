@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.model;
 
+import com.pethealthcare.demo.enums.CageType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

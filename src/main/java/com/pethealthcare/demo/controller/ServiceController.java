@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.ServiceCreateRequest;
+import com.pethealthcare.demo.enums.ServiceStatus;
 import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.service.ServiceService;
@@ -51,17 +52,18 @@ public class ServiceController {
     }
 
     @DeleteMapping("/delete/{serviceID}")
-    ResponseEntity<ResponseObject> deletePet(@PathVariable int serviceID) {
+    ResponseEntity<ResponseObject> deleteService(@PathVariable int serviceID) {
 
 
             Services foundService = service.getServiceById(serviceID);
-            if (foundService != null) {
-                service.deleteService(serviceID);
+
+            if (foundService != null  &&  foundService.getStatus().equals(ServiceStatus.ACTIVE)){
+
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Delete service Successfully", "")
+                        new ResponseObject("ok", "Delete service Successfully", service.deleteService(serviceID))
                 );
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseObject("failed", "service not found", "")
             );
     }

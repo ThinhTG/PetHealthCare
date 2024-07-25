@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -18,17 +19,26 @@ public class MedicalHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int medicalHistoryId;
 
-    @Column (name = "VeterinaryName",columnDefinition = "nvarchar(50)")
+    @Column
     private String veterinaryName;
 
-    @Column (name = "TreatmentResult",columnDefinition = "nvarchar(MAX)")
-    private String treatmentResult;
-
-    @Column (name = "DateMedical", columnDefinition = "date")
-    private Date dateMedicalHistory;
+    @Column
+    private LocalDate dateMedicalHistory;
 
     @Column
-    private String status;
+    private String diseaseName;
+
+    @Column
+    private String treatmentMethod;
+
+    @Column
+    private String note;
+
+    @Column
+    private String reminders;
+
+    @Column
+    private String vaccine;
 
     @ManyToOne
     @JsonIgnore
