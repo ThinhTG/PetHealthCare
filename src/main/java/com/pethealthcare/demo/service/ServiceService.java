@@ -28,6 +28,10 @@ public class ServiceService {
         return serviceRepository.findAll();
     }
 
+    public List<Services> getAllActiveServices() {
+        return serviceRepository.findAllByStatus(ServiceStatus.ACTIVE);
+    }
+
     public Services createService(ServiceCreateRequest request) {
         boolean exists = serviceRepository.existsByName(request.getName());
         if (!exists) {
@@ -58,32 +62,40 @@ public class ServiceService {
         return null;
     }
 
-    public List<BookingDetail> deleteService(int serviceId) {
+//    public List<BookingDetail> deleteService(int serviceId) {
+//        Services service = serviceRepository.findServicesByServiceId(serviceId);
+//
+//        if (service != null && service.getStatus().equals(ServiceStatus.ACTIVE)) {
+//            List<BookingDetail> bookingDetails = service.getBookingDetails();
+//            List<BookingDetail> bookingDetailss = new ArrayList<>();
+//
+//            for (BookingDetail detail : bookingDetails) {
+//                if (detail.getStatus().equalsIgnoreCase("CONFIRMED")
+//                        || detail.getStatus().equalsIgnoreCase("WAITING")) {
+//                    bookingDetailss.add(detail);
+//                }
+//            }
+//
+//            service.setStatus(ServiceStatus.INACTIVE);
+//            serviceRepository.save(service);
+//
+//            if (bookingDetailss.isEmpty()) {
+//                return null;
+//            }
+//
+//            return bookingDetailss;
+//        }
+//
+//        return null;
+//    }
+
+    public void deleteService(int serviceId) {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
-
         if (service != null && service.getStatus().equals(ServiceStatus.ACTIVE)) {
-            List<BookingDetail> bookingDetails = service.getBookingDetails();
-            List<BookingDetail> cancelledBookingDetails = new ArrayList<>();
-
-            for (BookingDetail detail : bookingDetails) {
-                if (detail.getStatus().equalsIgnoreCase("CONFIRMED")
-                        || detail.getStatus().equalsIgnoreCase("WAITING")
-                        || detail.getStatus().equalsIgnoreCase("COMPLETED")) {
-                    cancelledBookingDetails.add(detail);
-                }
-            }
-
             service.setStatus(ServiceStatus.INACTIVE);
             serviceRepository.save(service);
-
-            if (cancelledBookingDetails.isEmpty()) {
-                return null;
-            }
-
-            return cancelledBookingDetails;
         }
 
-        return null;
     }
 
 

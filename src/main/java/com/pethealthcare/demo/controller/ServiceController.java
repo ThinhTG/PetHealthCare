@@ -23,6 +23,11 @@ public class ServiceController {
         return service.getAllServices();
     }
 
+    @GetMapping("/getAllActive")
+    List<Services> getAllActiveService() {
+        return service.getAllActiveServices();
+    }
+
     @PostMapping("/create")
     ResponseEntity<ResponseObject> createUser(@RequestBody ServiceCreateRequest request) {
         Services createdService = service.createService(request);
@@ -60,7 +65,7 @@ public class ServiceController {
             if (foundService != null  &&  foundService.getStatus().equals(ServiceStatus.ACTIVE)){
 
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Delete service Successfully", service.deleteService(serviceID))
+                        new ResponseObject("ok", "Delete service Successfully","")
                 );
             }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(

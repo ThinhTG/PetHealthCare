@@ -39,6 +39,9 @@ public class Pet {
     @Column
     private boolean stayCage;
 
+    @Column
+    private boolean isDeleted;
+
     @JsonIgnore
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;

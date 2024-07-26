@@ -61,6 +61,28 @@ public class RefundService {
     }
 
 
+    public Refund returnDepositStaffCancelBookingDetail(int bookingDetailId, int userId) {
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
+        if (bookingDetail == null) {
+            throw new EntityNotFoundException("BookingDetail not found with id: " + bookingDetailId);
+        }
+        Transaction transaction = transactionRepository.findTransactionByBooking_BookingId(bookingDetail.getBooking().getBookingId());
+        if (transaction == null) {
+            throw new EntityNotFoundException("Transaction not found for BookingId: " + bookingDetail.getBooking().getBookingId());
+        }
+        Wallet wallet = walletRepository.findWalletByUser_UserId(userId);
+        Refund refund = new Refund();
+        refund.setBookingDetail(bookingDetail);
+        double priceAfterCancel = bookingDetail.getServices().getPrice();
+           priceAfterCancel = priceAfterCancel * 1.5;
+            refund.setRefundPercent(150);
+            refund.setAmount((int) priceAfterCancel);
+            refund.setRefundDate(LocalDate.now());
+            wallet.setBalance(wallet.getBalance() + priceAfterCancel);
+
+        return refundRepository.save(refund);
+    }
+
 
     public Refund returnDepositCancelBookingDetail(int bookingDetailId, int userId) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
