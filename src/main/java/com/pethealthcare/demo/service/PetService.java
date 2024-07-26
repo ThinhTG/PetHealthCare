@@ -8,9 +8,12 @@ import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.repository.PetRepository;
 import com.pethealthcare.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +23,8 @@ public class PetService {
     PetRepository petRepository;
     @Autowired
     private PetMapper petMapper;
-
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
     @Autowired
     private UserRepository userRepository;
 
@@ -28,7 +32,7 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    public Pet createPet(int id,PetCreateRequest request) {
+    public Pet createPet(int id, PetCreateRequest request, MultipartFile file) throws IOException {
         User user = userRepository.findUserByUserId(id);
 
         boolean exist = petRepository.existsByUserAndPetName(user, request.getPetName());
@@ -36,12 +40,19 @@ public class PetService {
             Pet newPet = petMapper.toPet(request);
             newPet.setUser(user);
             newPet.setStayCage(false);
+
+            if (file != null && !file.isEmpty()) {
+                String fileName = firebaseStorageService.uploadFile(file);
+                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
+                newPet.setImageUrl(fileUrl);
+            }
+
             return petRepository.save(newPet);
         }
         return null;
     }
 
-    public Pet updatePet(int userID,int petid, PetUpdateRequest request) {
+    public Pet updatePet(int petid, PetUpdateRequest request, MultipartFile file) throws IOException {
         // Find user by id
         Optional<Pet> optionalPet = petRepository.findById(petid);
         if (optionalPet.isPresent()) {
@@ -63,7 +74,11 @@ public class PetService {
             if(request.getVaccination() != null && !request.getVaccination().equals(pet.getVaccination()) && !request.getVaccination().isEmpty()) {
                 pet.setVaccination(request.getVaccination());
             }
-
+            if (file != null && !file.isEmpty()) {
+                String fileName = firebaseStorageService.uploadFile(file);
+                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
+                pet.setImageUrl(fileUrl);
+            }
             petRepository.save(pet);
             return pet;
     } else {

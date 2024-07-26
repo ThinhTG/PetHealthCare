@@ -39,6 +39,9 @@ public class Pet {
     @Column
     private boolean stayCage;
 
+    @Column(columnDefinition = "nvarchar(255)")
+    private String imageUrl;
+
     @JsonIgnore
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;

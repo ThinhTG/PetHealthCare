@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class UserController {
 
 
     @PostMapping("/createmultirole")
-    ResponseEntity<ResponseObject> createAcc(@RequestBody AccCreateRequest request) {
-        User createdUser = userService.createAcc(request);
+    ResponseEntity<ResponseObject> createAcc(@RequestBody AccCreateRequest request, @RequestParam MultipartFile file) throws Exception {
+        User createdUser = userService.createAcc(request, file);
         if (createdUser != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Account created successfully", createdUser)
@@ -65,8 +66,8 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updateUser(@PathVariable int id, @RequestBody UserUpdateRequest request) {
-        User updateUser = userService.updateUser(id, request);
+    ResponseEntity<ResponseObject> updateUser(@PathVariable int id, @RequestBody UserUpdateRequest request, @RequestParam MultipartFile file) throws Exception {
+        User updateUser = userService.updateUser(id, request, file);
         if (updateUser != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "User updated successfully", updateUser)

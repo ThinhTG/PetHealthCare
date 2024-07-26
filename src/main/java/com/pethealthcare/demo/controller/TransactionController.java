@@ -41,4 +41,10 @@ public class TransactionController {
         );
     }
 
+    @GetMapping("/get-all")
+    public ResponseEntity<ResponseObject> getAllTransaction(@RequestParam int walletId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Success", transactionService.getTransactionsByWalletId(walletId))
+        );
+    }
 }

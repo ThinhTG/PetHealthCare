@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +29,8 @@ public class UserService {
     private OtpService otpService;
     @Autowired
     private WalletService walletService;
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
 
     public User createUser(UserCreateRequest request) {
         boolean exist = userRepository.existsByEmail(request.getEmail());
@@ -44,7 +48,7 @@ public class UserService {
         return null;
     }
 
-    public User createAcc(AccCreateRequest request) {
+    public User createAcc(AccCreateRequest request, MultipartFile file) throws IOException {
         boolean exist = userRepository.existsByEmail(request.getEmail());
         if (!exist) {
             User newUser = userMapper.toUser(request);
@@ -52,7 +56,11 @@ public class UserService {
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
             newUser.setRole(request.getRole());
             newUser.setStatus("Active");
-            newUser.setImageUrl(request.getImageUrl());
+            if (file != null && !file.isEmpty()) {
+                String fileName = firebaseStorageService.uploadFile(file);
+                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
+                newUser.setImageUrl(fileUrl);
+            }
 
             return userRepository.save(newUser);
         }
@@ -63,7 +71,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(int userid, UserUpdateRequest request) {
+    public User updateUser(int userid, UserUpdateRequest request, MultipartFile file) throws IOException {
         // Find user by id
         Optional<User> optionalUser = userRepository.findById(userid);
         if (optionalUser.isPresent()) {
@@ -88,6 +96,11 @@ public class UserService {
                 user.setAddress(request.getAddress());
             }
 
+            if (file != null && !file.isEmpty()) {
+                String fileName = firebaseStorageService.uploadFile(file);
+                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
+                user.setImageUrl(fileUrl);
+            }
             // Save updated user
             userRepository.save(user);
             return user;
