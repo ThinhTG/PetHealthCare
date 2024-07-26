@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pethealthcare.demo.dto.request.*;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
@@ -40,7 +41,14 @@ public class PetController {
     }
 
     @PostMapping("/create/{id}")
-    ResponseEntity<ResponseObject> createPet(@PathVariable int id, @RequestBody PetCreateRequest request, @RequestParam MultipartFile file) throws IOException {
+    public ResponseEntity<ResponseObject> createPet(
+            @PathVariable int id,
+            @RequestParam("request") String requestJson,
+            @RequestParam("file") MultipartFile file) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        PetCreateRequest request = objectMapper.readValue(requestJson, PetCreateRequest.class);
+        System.out.println(file);
         Pet createdPet = petService.createPet(id, request, file);
         if (createdPet != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -61,7 +69,12 @@ public class PetController {
 
 
     @PutMapping("/update/{petid}")
-    ResponseEntity<ResponseObject> updatePet(@PathVariable int petid, @RequestBody PetUpdateRequest request, @RequestParam MultipartFile file) throws IOException {
+    ResponseEntity<ResponseObject> updatePet(
+            @PathVariable int petid,
+            @RequestParam("request") String requestJson,
+            @RequestParam MultipartFile file) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        PetUpdateRequest request = objectMapper.readValue(requestJson, PetUpdateRequest.class);
         Pet updatePet = petService.updatePet(petid, request, file);
 
         if (updatePet != null) {

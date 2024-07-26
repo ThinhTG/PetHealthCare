@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pethealthcare.demo.dto.request.*;
 import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.model.User;
@@ -34,7 +35,9 @@ public class UserController {
 
 
     @PostMapping("/createmultirole")
-    ResponseEntity<ResponseObject> createAcc(@RequestBody AccCreateRequest request, @RequestParam MultipartFile file) throws Exception {
+    ResponseEntity<ResponseObject> createAcc(@RequestParam("request") String requestJson, @RequestParam MultipartFile file) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        AccCreateRequest request = objectMapper.readValue(requestJson, AccCreateRequest.class);
         User createdUser = userService.createAcc(request, file);
         if (createdUser != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -66,7 +69,9 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updateUser(@PathVariable int id, @RequestBody UserUpdateRequest request, @RequestParam MultipartFile file) throws Exception {
+    ResponseEntity<ResponseObject> updateUser(@PathVariable int id, @RequestParam("request") String requestJson, @RequestParam MultipartFile file) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        UserUpdateRequest request = objectMapper.readValue(requestJson, UserUpdateRequest.class);
         User updateUser = userService.updateUser(id, request, file);
         if (updateUser != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
