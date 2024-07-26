@@ -48,9 +48,16 @@ public class PetController {
         }
     }
 
+
+    @GetMapping("/getPet")
+    List<Pet> getPet() {
+        return petRepository.getPetByIsDeleted(false);
+    }
+
     @PutMapping("/update/{petid}")
     ResponseEntity<ResponseObject> updatePet(@PathVariable int petid, @RequestBody PetUpdateRequest request, @RequestParam MultipartFile file) throws IOException {
         Pet updatePet = petService.updatePet(petid, request, file);
+
         if (updatePet != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "User updated successfully", updatePet)

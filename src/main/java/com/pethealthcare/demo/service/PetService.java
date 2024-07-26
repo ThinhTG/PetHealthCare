@@ -2,18 +2,20 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.PetUpdateRequest;
-import com.pethealthcare.demo.enums.ServiceStatus;
 import com.pethealthcare.demo.mapper.PetMapper;
-import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.repository.PetRepository;
 import com.pethealthcare.demo.repository.UserRepository;
+
 import jakarta.transaction.Transactional;
 import org.checkerframework.checker.units.qual.A;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+
 
 import java.io.IOException;
 import java.util.ArrayList;

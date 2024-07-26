@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.model;
 
+import com.pethealthcare.demo.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,8 @@ public class Transaction {
 
     private int amount;
 
-    private String transactionType;
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
 
     private LocalDateTime transactionDate;
 

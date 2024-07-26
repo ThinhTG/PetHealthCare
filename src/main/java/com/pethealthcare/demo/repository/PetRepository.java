@@ -21,4 +21,6 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
     Pet findPetByPetId(int petId);
 
     List<Pet> getPetByStayCage(boolean stayCage);
+
+    List<Pet> getPetByIsDeleted(boolean status);
 }

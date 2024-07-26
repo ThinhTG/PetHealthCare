@@ -39,7 +39,7 @@ public class UserService {
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
             newUser.setRole("Customer");
-            newUser.setStatus("Active");
+            newUser.setStatus(true);
             User user = userRepository.save(newUser);
             walletService.createWallet(user.getUserId());
             return user;
@@ -54,13 +54,15 @@ public class UserService {
             User newUser = userMapper.toUser(request);
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-            newUser.setRole(request.getRole());
-            newUser.setStatus("Active");
+            newUser.setRole(request.getRole(
+            newUser.setStatus(true);
+
             if (file != null && !file.isEmpty()) {
                 String fileName = firebaseStorageService.uploadFile(file);
                 String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
                 newUser.setImageUrl(fileUrl);
             }
+
 
             return userRepository.save(newUser);
         }
@@ -170,7 +172,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userID);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setStatus("Deleted");
+            user.setStatus(false);
             userRepository.save(user);
             return true;
         } else {

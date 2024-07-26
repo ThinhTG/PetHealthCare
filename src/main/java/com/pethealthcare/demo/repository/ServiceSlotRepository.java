@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.repository;
 
+import com.pethealthcare.demo.enums.ServiceSlotStatus;
 import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.model.Slot;
 import com.pethealthcare.demo.model.User;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ServiceSlotRepository extends JpaRepository<ServiceSlot, Integer> {
-    List<ServiceSlot> findByUserAndDateAndStatus(User user, LocalDate date, boolean status);
+    List<ServiceSlot> findByUserAndDateAndStatus(User user, LocalDate date, ServiceSlotStatus status);
 
     boolean existsByUserAndSlotAndDate(User user, Slot slot, LocalDate date);
 

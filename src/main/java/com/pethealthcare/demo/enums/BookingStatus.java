@@ -1,9 +1,8 @@
 package com.pethealthcare.demo.enums;
 
-public enum BookingDetailStatus
-{
-    WAITING,
+public enum BookingStatus {
+    PENDING,
     CANCELLED,
     COMPLETED,
-    EXAMINING
+    PAID
 }

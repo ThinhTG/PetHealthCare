@@ -1,14 +1,13 @@
 package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.ServiceCreateRequest;
-import com.pethealthcare.demo.enums.ServiceStatus;
 import com.pethealthcare.demo.mapper.ServiceMapper;
-import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +29,14 @@ public class ServiceService {
         return serviceRepository.findAll();
     }
 
+
+    public List<Services> getAllActiveServices() {
+        return serviceRepository.findAllByStatus(true);
+    }
+
+
     public Services createService(ServiceCreateRequest request, MultipartFile file) throws IOException {
+
         boolean exists = serviceRepository.existsByName(request.getName());
         if (!exists) {
             Services service = serviceMapper.toService(request);
@@ -67,5 +73,22 @@ public class ServiceService {
 
         return null;
     }
+
+
+        public void deleteService(int serviceId) {
+        Services service = serviceRepository.findServicesByServiceId(serviceId);
+        if (service != null && service.isStatus()) {
+            service.setStatus(false);
+            serviceRepository.save(service);
+        }
+
+    }
+
+
+
+
+
+
+
 }
 

@@ -2,6 +2,7 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.GetSlotAvailableRequest;
 import com.pethealthcare.demo.dto.request.ServiceSlotCreateRequest;
+import com.pethealthcare.demo.enums.ServiceSlotStatus;
 import com.pethealthcare.demo.mapper.ServiceSlotMapper;
 import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.model.Slot;
@@ -33,7 +34,7 @@ public class ServiceSlotService {
         User user = userRepository.findUserByUserId(request.getUserId());
 
         return serviceSlotRepository.findByUserAndDateAndStatus(user,
-                request.getDate(), false);
+                request.getDate(), ServiceSlotStatus.AVAILABLE);
     }
 
     public String addServiceSlots(List<ServiceSlotCreateRequest> requests) {
@@ -48,7 +49,7 @@ public class ServiceSlotService {
             boolean existed = serviceSlotRepository.existsByUserAndSlotAndDate(user, slot, request.getDate());
             if (!existed) {
                 ServiceSlot serviceSlot = serviceSlotMapper.toServiceSlot(request);
-                serviceSlot.setStatus(false);
+                serviceSlot.setStatus(ServiceSlotStatus.AVAILABLE);
                 serviceSlot.setUser(user);
                 serviceSlot.setSlot(slot);
                 serviceSlotRepository.save(serviceSlot);
@@ -68,7 +69,7 @@ public class ServiceSlotService {
         if (serviceSlot == null) {
             throw new RuntimeException("Service Slot is not existed");
         }
-        serviceSlot.setStatus(true);
+        serviceSlot.setStatus(ServiceSlotStatus.BOOKED);
 
         serviceSlotRepository.save(serviceSlot);
     }
@@ -80,7 +81,7 @@ public class ServiceSlotService {
         if (serviceSlot == null) {
             throw new RuntimeException("Service Slot is not existed");
         }
-        serviceSlot.setStatus(false);
+        serviceSlot.setStatus(ServiceSlotStatus.CANCELLED);
 
         serviceSlotRepository.save(serviceSlot);
     }

@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pethealthcare.demo.enums.ServiceSlotStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class ServiceSlot {
     private LocalDate date;
 
     @Column
-    private boolean status;
+    private ServiceSlotStatus status;
 
     @ManyToOne
     @JoinColumn(name = "userId")
