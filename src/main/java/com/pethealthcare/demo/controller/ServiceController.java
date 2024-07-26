@@ -1,7 +1,6 @@
 package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.ServiceCreateRequest;
-import com.pethealthcare.demo.enums.ServiceStatus;
 import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.service.ServiceService;
@@ -17,6 +16,8 @@ import java.util.List;
 public class ServiceController {
     @Autowired
     ServiceService service;
+    @Autowired
+    private ServiceService serviceService;
 
     @GetMapping("/getAll")
     List<Services> getAllService() {
@@ -62,8 +63,8 @@ public class ServiceController {
 
             Services foundService = service.getServiceById(serviceID);
 
-            if (foundService != null  &&  foundService.getStatus().equals(ServiceStatus.ACTIVE)){
-
+            if (foundService != null  &&  foundService.isStatus()){
+                serviceService.deleteService(serviceID);
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject("ok", "Delete service Successfully","")
                 );

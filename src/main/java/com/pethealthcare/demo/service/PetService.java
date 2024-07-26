@@ -2,18 +2,14 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.PetUpdateRequest;
-import com.pethealthcare.demo.enums.ServiceStatus;
 import com.pethealthcare.demo.mapper.PetMapper;
-import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.repository.PetRepository;
 import com.pethealthcare.demo.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

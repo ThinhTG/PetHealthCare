@@ -1,15 +1,12 @@
 package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.ServiceCreateRequest;
-import com.pethealthcare.demo.enums.ServiceStatus;
 import com.pethealthcare.demo.mapper.ServiceMapper;
-import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +26,7 @@ public class ServiceService {
     }
 
     public List<Services> getAllActiveServices() {
-        return serviceRepository.findAllByStatus(ServiceStatus.ACTIVE);
+        return serviceRepository.findAllByStatus(true);
     }
 
     public Services createService(ServiceCreateRequest request) {
@@ -89,10 +86,10 @@ public class ServiceService {
 //        return null;
 //    }
 
-    public void deleteService(int serviceId) {
+        public void deleteService(int serviceId) {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
-        if (service != null && service.getStatus().equals(ServiceStatus.ACTIVE)) {
-            service.setStatus(ServiceStatus.INACTIVE);
+        if (service != null && service.isStatus()) {
+            service.setStatus(false);
             serviceRepository.save(service);
         }
 

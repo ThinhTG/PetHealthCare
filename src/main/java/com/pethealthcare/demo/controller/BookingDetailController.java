@@ -3,7 +3,9 @@ package com.pethealthcare.demo.controller;
 import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
+import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.Refund;
+import com.pethealthcare.demo.repository.PetRepository;
 import com.pethealthcare.demo.response.MostUsedServiceResponse;
 import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.repository.BookingDetailRepository;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,6 +39,9 @@ public class BookingDetailController {
 
     @Autowired
     private ServiceSlotService serviceSlotService;
+
+    @Autowired
+    private PetRepository petRepository;
 
     @GetMapping("/getAll")
     ResponseEntity<List<BookingDetail>> getAllBookingDetail() {
@@ -125,6 +131,39 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailStatusByVet(vetId));
     }
 
+    @GetMapping("/cancelBookingDetailByPet/")
+    public ResponseEntity<ResponseObject> cancelBookingDetailByPet(@RequestParam int petId, @RequestParam int userId) {
+        Pet pet = petRepository.findPetByPetId(petId);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByPet(pet);
+        List<Refund> refunds = new ArrayList<>();
+        boolean anyCancellable = false;
+
+        for (BookingDetail bookingDetail : bookingDetails) {
+            String status = bookingDetail.getStatus().toUpperCase();
+
+            if (status.equals("WAITING") || status.equals("CONFIRMED")) {
+                bookingDetailService.deleteBookingDetail(bookingDetail.getBookingDetailId());
+                serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
+                Refund refund = refundService.returnDepositCancelBookingDetail(bookingDetail.getBookingDetailId(), userId);
+                refunds.add(refund);
+                anyCancellable = true;
+            }
+        }
+
+        if (anyCancellable) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Bookings deleted successfully", refunds)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("failed", "No booking found with valid status for cancellation", "")
+            );
+        }
+    }
+
+
+
+
     @GetMapping("/cancelBookingDetail/")
     ResponseEntity<ResponseObject> cancelBookingDetail(@RequestParam int bookingDetailID, @RequestParam int userId) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
@@ -155,12 +194,13 @@ public class BookingDetailController {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
         Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
         if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")
-                && booking.getStatus().equalsIgnoreCase("cancelled") || booking.getStatus().equalsIgnoreCase("completed")) {
+                && booking.getStatus().equalsIgnoreCase("cancelled") || booking.getStatus().equalsIgnoreCase("completed")
+        || bookingDetail.getStatus().equalsIgnoreCase("pending")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("failed", "booking is already cancelled or completed", "")
+                    new ResponseObject("failed", "booking/bookingdetail is already cancelled or completed or pending", "")
             );
 
-        } else if (booking.getStatus().equalsIgnoreCase("Confirmed") ||booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
+        } else if ( booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
 
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());

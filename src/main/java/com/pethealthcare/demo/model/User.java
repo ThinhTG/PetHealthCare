@@ -37,7 +37,7 @@ public class User {
     private String role;
 
     @Column(columnDefinition = "nvarchar(50)", nullable = false)
-    private String status;
+    private boolean status;
 
     @Column(columnDefinition = "nvarchar(MAX)")
     private String imageUrl;

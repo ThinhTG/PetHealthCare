@@ -3,6 +3,7 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.config.VNPayConfig;
 import com.pethealthcare.demo.dto.request.TransactionCreateRequest;
+import com.pethealthcare.demo.enums.TransactionType;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.Transaction;
 import com.pethealthcare.demo.model.Wallet;
@@ -123,7 +124,7 @@ public class TransactionService {
         int walletId = Integer.parseInt(orderInfo);
         Transaction transaction = new Transaction();
         transaction.setAmount(amount / 100);
-        transaction.setTransactionType("DEPOSIT");
+        transaction.setTransactionType(TransactionType.DEPOSIT);
         transaction.setTransactionDate(payDate);
         Wallet wallet = walletRepository.findWalletByWalletId(walletId);
         wallet.setBalance(wallet.getBalance() + (double) amount / 100);
@@ -139,7 +140,7 @@ public class TransactionService {
         }
         Transaction transaction = new Transaction();
         transaction.setAmount(request.getAmount());
-        transaction.setTransactionType("PAYMENT");
+        transaction.setTransactionType(TransactionType.PAYMENT);
         transaction.setTransactionDate(LocalDateTime.now());
         wallet.setBalance(wallet.getBalance() - request.getAmount());
         walletRepository.save(wallet);

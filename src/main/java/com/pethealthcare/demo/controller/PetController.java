@@ -46,6 +46,11 @@ public class PetController {
         }
     }
 
+    @GetMapping("/getPet")
+    List<Pet> getPet() {
+        return petRepository.getPetByIsDeleted(false);
+    }
+
     @PutMapping("/update/{userid}/{petid}")
     ResponseEntity<ResponseObject> updatePet(@PathVariable int userid, @PathVariable int petid, @RequestBody PetUpdateRequest request) {
         Pet updatePet = petService.updatePet(userid, petid, request);

@@ -1,7 +1,6 @@
 package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.BookingDetailUpdateRequest;
-import com.pethealthcare.demo.enums.ServiceStatus;
 import com.pethealthcare.demo.model.*;
 import com.pethealthcare.demo.repository.*;
 import com.pethealthcare.demo.repository.UserRepository;
@@ -115,17 +114,36 @@ public class BookingDetailService {
         return bookingDetails;
     }
 
-    public List<BookingDetail> getBookingDetailBySerivceInactive(){
-        List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
-        List<BookingDetail> bookingDetailByServiceInactive = new ArrayList<>();
+//    public List<BookingDetail> getBookingDetailBySerivceInactive(){
+//        List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
+//        List<BookingDetail> bookingDetailByServiceInactive = new ArrayList<>();
+//        for (BookingDetail bookingDetail : bookingDetails) {
+//            if (bookingDetail.getServices().getStatus()) {
+//                bookingDetailByServiceInactive.add(bookingDetail);
+//            }
+//        }
+//        return bookingDetailByServiceInactive;
+//    }
+
+    public void deleteBookingDetailByPet(int petId) {
+        Pet pet = petRepository.findPetByPetId(petId);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByPet(pet);
         for (BookingDetail bookingDetail : bookingDetails) {
-            if (bookingDetail.getServices().getStatus().equals(ServiceStatus.INACTIVE)) {
-                bookingDetailByServiceInactive.add(bookingDetail);
+            bookingDetail.setStatus("CANCELLED");
+            bookingDetailRepository.save(bookingDetail);
+
+            List<BookingDetail> bookingDetailss = bookingDetailRepository.getBookingDetailsByBooking(bookingDetail.getBooking());
+
+            boolean allCancelled = bookingDetailss.stream().allMatch(detail -> detail.getStatus().equalsIgnoreCase("CANCELLED"));
+
+
+            if (allCancelled) {
+                Booking booking = bookingDetail.getBooking();
+                booking.setStatus("CANCELLED");
+                bookingRepository.save(booking);
             }
         }
-        return bookingDetailByServiceInactive;
     }
-
 
 
     public List<BookingDetail> getBookingDetailByPetIsDeleted(int petId){

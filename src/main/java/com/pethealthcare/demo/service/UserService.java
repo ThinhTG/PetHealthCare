@@ -35,7 +35,7 @@ public class UserService {
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
             newUser.setRole("Customer");
-            newUser.setStatus("Active");
+            newUser.setStatus(true);
             User user = userRepository.save(newUser);
             walletService.createWallet(user.getUserId());
             return user;
@@ -51,7 +51,7 @@ public class UserService {
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
             newUser.setRole(request.getRole());
-            newUser.setStatus("Active");
+            newUser.setStatus(true);
             newUser.setImageUrl(request.getImageUrl());
 
             return userRepository.save(newUser);
@@ -157,7 +157,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userID);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setStatus("Deleted");
+            user.setStatus(false);
             userRepository.save(user);
             return true;
         } else {
