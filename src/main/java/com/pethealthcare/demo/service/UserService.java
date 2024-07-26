@@ -54,7 +54,7 @@ public class UserService {
             User newUser = userMapper.toUser(request);
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-            newUser.setRole(request.getRole(
+            newUser.setRole(request.getRole());
             newUser.setStatus(true);
 
             if (file != null && !file.isEmpty()) {
