@@ -1,5 +1,7 @@
 package com.pethealthcare.demo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pethealthcare.demo.dto.request.PetUpdateRequest;
 import com.pethealthcare.demo.dto.request.ServiceCreateRequest;
 import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.model.Services;
@@ -31,7 +33,9 @@ public class ServiceController {
     }
 
     @PostMapping("/create")
-    ResponseEntity<ResponseObject> createService(@RequestBody ServiceCreateRequest request, @RequestParam MultipartFile file) throws IOException {
+    ResponseEntity<ResponseObject> createService(@RequestParam("request") String requestJson, @RequestParam MultipartFile file) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ServiceCreateRequest request = objectMapper.readValue(requestJson, ServiceCreateRequest.class);
         Services createdService = serviceService.createService(request, file);
         if (createdService != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -45,7 +49,11 @@ public class ServiceController {
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updateService(@PathVariable int id, @RequestBody ServiceCreateRequest request, @RequestParam MultipartFile file) throws IOException {
+    ResponseEntity<ResponseObject> updateService(@PathVariable int id,
+                                                 @RequestParam("request") String requestJson,
+                                                 @RequestParam MultipartFile file) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ServiceCreateRequest request = objectMapper.readValue(requestJson, ServiceCreateRequest.class);
         Services updateService = serviceService.updateService(id, request, file);
         if (updateService != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
