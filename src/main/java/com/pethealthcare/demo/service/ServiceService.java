@@ -8,7 +8,9 @@ import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +24,13 @@ public class ServiceService {
     private ServiceMapper serviceMapper;
 
     @Autowired
-    private BookingDetailService bookingDetailService;
+    private FirebaseStorageService firebaseStorageService;
 
     public List<Services> getAllServices() {
         return serviceRepository.findAll();
     }
+
+    public Services createService(ServiceCreateRequest request, MultipartFile file) throws IOException {
 
     public List<Services> getAllActiveServices() {
         return serviceRepository.findAllByStatus(ServiceStatus.ACTIVE);
@@ -36,13 +40,17 @@ public class ServiceService {
         boolean exists = serviceRepository.existsByName(request.getName());
         if (!exists) {
             Services service = serviceMapper.toService(request);
-            service.setImageUrl(request.getImageUrl());
+            if (file != null && !file.isEmpty()) {
+                String fileName = firebaseStorageService.uploadFile(file);
+                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
+                service.setImageUrl(fileUrl);
+            }
             return serviceRepository.save(service);
         }
         return null;
     }
 
-    public Services updateService(int serviceId, ServiceCreateRequest request) {
+    public Services updateService(int serviceId, ServiceCreateRequest request, MultipartFile file) throws IOException {
         Optional<Services> updateService = serviceRepository.findById(serviceId);
         if (updateService.isPresent()) {
             Services service = updateService.get();
@@ -54,6 +62,11 @@ public class ServiceService {
             }
             if(service.getPrice() != request.getPrice()) {
                 service.setPrice(request.getPrice());
+            }
+            if (file != null && !file.isEmpty()) {
+                String fileName = firebaseStorageService.uploadFile(file);
+                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
+                service.setImageUrl(fileUrl);
             }
             return serviceRepository.save(service);
         }
