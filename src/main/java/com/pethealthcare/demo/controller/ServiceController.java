@@ -65,7 +65,7 @@ public class ServiceController {
             if (foundService != null  &&  foundService.getStatus().equals(ServiceStatus.ACTIVE)){
 
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Delete service Successfully", service.deleteService(serviceID))
+                        new ResponseObject("ok", "Delete service Successfully","")
                 );
             }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
