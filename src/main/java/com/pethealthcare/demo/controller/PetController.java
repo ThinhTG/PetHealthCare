@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,8 +35,8 @@ public class PetController {
     }
 
     @PostMapping("/create/{id}")
-    ResponseEntity<ResponseObject> createPet(@PathVariable int id, @RequestBody PetCreateRequest request) {
-        Pet createdPet = petService.createPet(id, request);
+    ResponseEntity<ResponseObject> createPet(@PathVariable int id, @RequestBody PetCreateRequest request, @RequestParam MultipartFile file) throws IOException {
+        Pet createdPet = petService.createPet(id, request, file);
         if (createdPet != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Pet added successfully", createdPet)
@@ -46,14 +48,16 @@ public class PetController {
         }
     }
 
+
     @GetMapping("/getPet")
     List<Pet> getPet() {
         return petRepository.getPetByIsDeleted(false);
     }
 
-    @PutMapping("/update/{userid}/{petid}")
-    ResponseEntity<ResponseObject> updatePet(@PathVariable int userid, @PathVariable int petid, @RequestBody PetUpdateRequest request) {
-        Pet updatePet = petService.updatePet(userid, petid, request);
+    @PutMapping("/update/{petid}")
+    ResponseEntity<ResponseObject> updatePet(@PathVariable int petid, @RequestBody PetUpdateRequest request, @RequestParam MultipartFile file) throws IOException {
+        Pet updatePet = petService.updatePet(petid, request, file);
+
         if (updatePet != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "User updated successfully", updatePet)
