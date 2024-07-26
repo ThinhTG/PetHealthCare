@@ -22,6 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -152,5 +153,8 @@ public class TransactionService {
         return "Payment success";
     }
 
+    public List<Transaction> getTransactionsByWalletId(int walletId){
+        return transactionRepository.findTransactionsByWallet_WalletId(walletId);
+    }
 }
 

@@ -6,7 +6,11 @@ import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,27 +23,34 @@ public class ServiceService {
     private ServiceMapper serviceMapper;
 
     @Autowired
-    private BookingDetailService bookingDetailService;
+    private FirebaseStorageService firebaseStorageService;
 
     public List<Services> getAllServices() {
         return serviceRepository.findAll();
     }
 
+
     public List<Services> getAllActiveServices() {
         return serviceRepository.findAllByStatus(true);
     }
 
-    public Services createService(ServiceCreateRequest request) {
+
+    public Services createService(ServiceCreateRequest request, MultipartFile file) throws IOException {
+
         boolean exists = serviceRepository.existsByName(request.getName());
         if (!exists) {
             Services service = serviceMapper.toService(request);
-            service.setImageUrl(request.getImageUrl());
+            if (file != null && !file.isEmpty()) {
+                String fileName = firebaseStorageService.uploadFile(file);
+                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
+                service.setImageUrl(fileUrl);
+            }
             return serviceRepository.save(service);
         }
         return null;
     }
 
-    public Services updateService(int serviceId, ServiceCreateRequest request) {
+    public Services updateService(int serviceId, ServiceCreateRequest request, MultipartFile file) throws IOException {
         Optional<Services> updateService = serviceRepository.findById(serviceId);
         if (updateService.isPresent()) {
             Services service = updateService.get();
@@ -52,39 +63,17 @@ public class ServiceService {
             if(service.getPrice() != request.getPrice()) {
                 service.setPrice(request.getPrice());
             }
+            if (file != null && !file.isEmpty()) {
+                String fileName = firebaseStorageService.uploadFile(file);
+                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
+                service.setImageUrl(fileUrl);
+            }
             return serviceRepository.save(service);
         }
 
-//        Services services = serviceMapper.toService(request);
         return null;
     }
 
-//    public List<BookingDetail> deleteService(int serviceId) {
-//        Services service = serviceRepository.findServicesByServiceId(serviceId);
-//
-//        if (service != null && service.getStatus().equals(ServiceStatus.ACTIVE)) {
-//            List<BookingDetail> bookingDetails = service.getBookingDetails();
-//            List<BookingDetail> bookingDetailss = new ArrayList<>();
-//
-//            for (BookingDetail detail : bookingDetails) {
-//                if (detail.getStatus().equalsIgnoreCase("CONFIRMED")
-//                        || detail.getStatus().equalsIgnoreCase("WAITING")) {
-//                    bookingDetailss.add(detail);
-//                }
-//            }
-//
-//            service.setStatus(ServiceStatus.INACTIVE);
-//            serviceRepository.save(service);
-//
-//            if (bookingDetailss.isEmpty()) {
-//                return null;
-//            }
-//
-//            return bookingDetailss;
-//        }
-//
-//        return null;
-//    }
 
         public void deleteService(int serviceId) {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
@@ -101,9 +90,5 @@ public class ServiceService {
 
 
 
-    public Services getServiceById(int  serviceID) {
-
-        return serviceRepository.findByServiceId(serviceID);
-    }
 }
 

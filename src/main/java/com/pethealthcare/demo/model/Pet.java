@@ -39,6 +39,9 @@ public class Pet {
     @Column
     private boolean stayCage;
 
+    @Column(columnDefinition = "nvarchar(255)")
+    private String imageUrl;
+
     @Column
     private boolean isDeleted;
 

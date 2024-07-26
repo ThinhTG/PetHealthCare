@@ -8,30 +8,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/Service")
 public class ServiceController {
     @Autowired
+
     ServiceService service;
     @Autowired
     private ServiceService serviceService;
+    
 
     @GetMapping("/getAll")
     List<Services> getAllService() {
-        return service.getAllServices();
-    }
-
-    @GetMapping("/getAllActive")
-    List<Services> getAllActiveService() {
-        return service.getAllActiveServices();
+        return serviceService.getAllServices();
     }
 
     @PostMapping("/create")
-    ResponseEntity<ResponseObject> createUser(@RequestBody ServiceCreateRequest request) {
-        Services createdService = service.createService(request);
+    ResponseEntity<ResponseObject> createService(@RequestBody ServiceCreateRequest request, @RequestParam MultipartFile file) throws IOException {
+        Services createdService = serviceService.createService(request, file);
         if (createdService != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Service created successfully", createdService)
@@ -44,8 +43,8 @@ public class ServiceController {
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updateUser(@PathVariable int id, @RequestBody ServiceCreateRequest request) {
-        Services updateService = service.updateService(id, request);
+    ResponseEntity<ResponseObject> updateService(@PathVariable int id, @RequestBody ServiceCreateRequest request, @RequestParam MultipartFile file) throws IOException {
+        Services updateService = serviceService.updateService(id, request, file);
         if (updateService != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Service updated successfully", updateService)
@@ -57,11 +56,12 @@ public class ServiceController {
         }
     }
 
+
     @DeleteMapping("/delete/{serviceID}")
     ResponseEntity<ResponseObject> deleteService(@PathVariable int serviceID) {
 
 
-            Services foundService = service.getServiceById(serviceID);
+            Services foundService = serviceService.getServiceById(serviceID);
 
             if (foundService != null  &&  foundService.isStatus()){
                 serviceService.deleteService(serviceID);
@@ -73,5 +73,6 @@ public class ServiceController {
                     new ResponseObject("failed", "service not found", "")
             );
     }
+
 
 }
