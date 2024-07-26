@@ -30,6 +30,7 @@ public class Services {
     @Column(columnDefinition = "nvarchar(MAX)")
     private String imageUrl;
 
+    //status = true -> active, status = false -> inactive
     @Column
     private boolean status;
 

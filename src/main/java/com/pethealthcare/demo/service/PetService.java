@@ -3,6 +3,7 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.PetUpdateRequest;
 import com.pethealthcare.demo.mapper.PetMapper;
+import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.repository.PetRepository;
@@ -35,6 +36,20 @@ public class PetService {
 
     public List<Pet> getAllPet() {
         return petRepository.findAll();
+    }
+
+    public List<Pet> getAllActivePet(int userID) {
+        User user = userRepository.findUserByUserId(userID);
+        List <Pet> pets = petRepository.findPetsByUser(user);
+        List <Pet> petss = new ArrayList<>();
+        for (Pet pet : pets) {
+            for (Pet pet1 : pets) {
+                if (!pet1.isDeleted()){
+                    petss.add(pet1);
+                }
+            }
+        }
+        return petss;
     }
 
     public Pet createPet(int id, PetCreateRequest request, MultipartFile file) throws IOException {
