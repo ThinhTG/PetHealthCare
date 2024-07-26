@@ -14,24 +14,23 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/Service")
 public class ServiceController {
-    @Autowired
-    ServiceService service;
+
     @Autowired
     private ServiceService serviceService;
 
     @GetMapping("/getAll")
     List<Services> getAllService() {
-        return service.getAllServices();
+        return serviceService.getAllServices();
     }
 
     @GetMapping("/getAllActive")
     List<Services> getAllActiveService() {
-        return service.getAllActiveServices();
+        return serviceService.getAllActiveServices();
     }
 
     @PostMapping("/create")
     ResponseEntity<ResponseObject> createUser(@RequestBody ServiceCreateRequest request) {
-        Services createdService = service.createService(request);
+        Services createdService = serviceService.createService(request);
         if (createdService != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Service created successfully", createdService)
@@ -45,7 +44,7 @@ public class ServiceController {
 
     @PutMapping("/update/{id}")
     ResponseEntity<ResponseObject> updateUser(@PathVariable int id, @RequestBody ServiceCreateRequest request) {
-        Services updateService = service.updateService(id, request);
+        Services updateService = serviceService.updateService(id, request);
         if (updateService != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Service updated successfully", updateService)
@@ -61,7 +60,7 @@ public class ServiceController {
     ResponseEntity<ResponseObject> deleteService(@PathVariable int serviceID) {
 
 
-            Services foundService = service.getServiceById(serviceID);
+            Services foundService = serviceService.getServiceById(serviceID);
 
             if (foundService != null  &&  foundService.isStatus()){
                 serviceService.deleteService(serviceID);
