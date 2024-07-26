@@ -5,6 +5,7 @@ import com.pethealthcare.demo.dto.request.*;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.repository.PetRepository;
+import com.pethealthcare.demo.repository.UserRepository;
 import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.service.PetService;
@@ -26,8 +27,11 @@ public class PetController {
     @Autowired
     UserService userService;
 
+
     @Autowired
     private PetRepository petRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/getAll")
     List<Pet> getAllPet() {
@@ -49,10 +53,12 @@ public class PetController {
     }
 
 
-    @GetMapping("/getPet")
-    List<Pet> getPet() {
-        return petRepository.getPetByIsDeleted(false);
+    @GetMapping("/getPet/{userID})")
+    List<Pet> getPet(@PathVariable int userID) {
+        User user = userRepository.findUserByUserId(userID);
+        return petRepository.getPetByIsDeleted(false,user);
     }
+
 
     @PutMapping("/update/{petid}")
     ResponseEntity<ResponseObject> updatePet(@PathVariable int petid, @RequestBody PetUpdateRequest request, @RequestParam MultipartFile file) throws IOException {
