@@ -18,16 +18,11 @@ import java.util.List;
 @RequestMapping(path = "/Service")
 public class ServiceController {
     @Autowired
-    ServiceService service;
+    private ServiceService service;
 
     @GetMapping("/getAll")
     List<Services> getAllService() {
         return service.getAllServices();
-    }
-
-    @GetMapping("/getAllActive")
-    List<Services> getAllActiveService() {
-        return service.getAllActiveServices();
     }
 
     @PostMapping("/create")
@@ -57,22 +52,4 @@ public class ServiceController {
             );
         }
     }
-
-    @DeleteMapping("/delete/{serviceID}")
-    ResponseEntity<ResponseObject> deleteService(@PathVariable int serviceID) {
-
-
-            Services foundService = service.getServiceById(serviceID);
-
-            if (foundService != null  &&  foundService.getStatus().equals(ServiceStatus.ACTIVE)){
-
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Delete service Successfully","")
-                );
-            }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "service not found", "")
-            );
-    }
-
 }
