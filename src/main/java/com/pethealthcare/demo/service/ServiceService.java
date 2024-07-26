@@ -28,6 +28,10 @@ public class ServiceService {
         return serviceRepository.findAll();
     }
 
+    public List<Services> getAllActiveServices() {
+        return serviceRepository.findAllByStatus(ServiceStatus.ACTIVE);
+    }
+
     public Services createService(ServiceCreateRequest request) {
         boolean exists = serviceRepository.existsByName(request.getName());
         if (!exists) {

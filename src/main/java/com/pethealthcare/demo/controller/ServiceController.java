@@ -23,6 +23,11 @@ public class ServiceController {
         return service.getAllServices();
     }
 
+    @GetMapping("/getAllActive")
+    List<Services> getAllActiveService() {
+        return service.getAllActiveServices();
+    }
+
     @PostMapping("/create")
     ResponseEntity<ResponseObject> createUser(@RequestBody ServiceCreateRequest request) {
         Services createdService = service.createService(request);
