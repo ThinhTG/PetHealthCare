@@ -126,6 +126,28 @@ public class BookingDetailService {
         return bookingDetailByServiceInactive;
     }
 
+
+
+    public List<BookingDetail> getBookingDetailByPetIsDeleted(int petId){
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
+        List<BookingDetail> bookingDetailByStatus = new ArrayList<>();
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (bookingDetail.getStatus().equalsIgnoreCase( "CONFIRMED")  || bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
+                bookingDetailByStatus.add(bookingDetail);
+            }
+        }
+        List<BookingDetail> bookingDetailByPet = new ArrayList<>();
+        for (BookingDetail bookingDetail : bookingDetailByStatus) {
+            if (bookingDetail.getPet().getPetId() == petId) {
+                bookingDetailByPet.add(bookingDetail);
+            }
+        }
+        return bookingDetailByPet;
+    }
+
+
+
+
     public BookingDetail updateBookingDetail(int id, BookingDetailUpdateRequest request) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(id);
 

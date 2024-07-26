@@ -115,13 +115,18 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailByStayCage());
     }
 
+    @GetMapping("/getBookingDetailByPetIsDeleted/{petId}")
+    ResponseEntity<List<BookingDetail>> getBookingDetailByPetIsDeleted(@PathVariable int petId) {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByPetIsDeleted(petId));
+    }
+
     @GetMapping("/getBookingDetailStatusByVet/{vetId}")
     ResponseEntity<List<BookingDetail>> getBookingDetailStatusByVet(@PathVariable int vetId) {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailStatusByVet(vetId));
     }
 
     @GetMapping("/cancelBookingDetail/")
-    ResponseEntity<ResponseObject> cancelBooking(@RequestParam int bookingDetailID, @RequestParam int userId) {
+    ResponseEntity<ResponseObject> cancelBookingDetail(@RequestParam int bookingDetailID, @RequestParam int userId) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
         Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
         if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")
@@ -144,6 +149,33 @@ public class BookingDetailController {
                 new ResponseObject("failed", "booking status is not valid for cancellation", "")
         );
     }
+
+    @GetMapping("/staffCancelBookingDetail/")
+    ResponseEntity<ResponseObject> staffCancelBookingDetail(@RequestParam int bookingDetailID, @RequestParam int userId) {
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
+        Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
+        if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")
+                && booking.getStatus().equalsIgnoreCase("cancelled") || booking.getStatus().equalsIgnoreCase("completed")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("failed", "booking is already cancelled or completed", "")
+            );
+
+        } else if (booking.getStatus().equalsIgnoreCase("Confirmed") ||booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
+
+            bookingDetailService.deleteBookingDetail(bookingDetailID);
+            serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
+            Refund refund = refundService.returnDepositStaffCancelBookingDetail(bookingDetailID, userId);
+
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "booking deleted successfully", refund)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject("failed", "booking status is not valid for cancellation", "")
+        );
+    }
+
+
 
     @PutMapping("/status/{bookingId}")
     public ResponseEntity<?> updateBookingStatus(@PathVariable int bookingId, @RequestParam String status) {

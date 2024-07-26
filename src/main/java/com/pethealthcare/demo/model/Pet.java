@@ -42,6 +42,9 @@ public class Pet {
     @Column(columnDefinition = "nvarchar(255)")
     private String imageUrl;
 
+    @Column
+    private boolean isDeleted;
+
     @JsonIgnore
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;
