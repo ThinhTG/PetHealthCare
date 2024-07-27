@@ -42,9 +42,9 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     @Query("SELECT bd FROM BookingDetail bd WHERE MONTH(bd.date) = :month AND YEAR(bd.date) = :year")
     List<BookingDetail> findMostUsedServiceByMonthAndYear(@Param("month") int month, @Param("year") int year);
 
-    BookingDetail findBookingDetailByStatusAndServices_ServiceId(String status, int serviceId);
+    BookingDetail findBookingDetailByStatusAndServices_ServiceId(BookingDetailStatus status, int serviceId);
 
-    BookingDetail findBookingDetailByPet_PetIdAndStatus(int id, String status);
+    BookingDetail findBookingDetailByPet_PetIdAndStatus(int id, BookingDetailStatus status);
 
     List<BookingDetail> getBookingDetailsByBooking(Booking booking);
 }
