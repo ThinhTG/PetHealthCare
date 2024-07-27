@@ -138,10 +138,6 @@ public class UserService {
         return "Reset password successfully";
     }
 
-    public User getUserByNumberPhone(String phone){
-        return userRepository.findUserByPhone(phone);
-    }
-
     public User getAccountById(int id) {
         return userRepository.findUserByUserId(id);
     }

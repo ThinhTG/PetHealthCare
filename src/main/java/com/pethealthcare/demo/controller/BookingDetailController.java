@@ -108,8 +108,17 @@ public class BookingDetailController {
     }
 
     @GetMapping("/getAllBookingDetail_ByPhoneNumberAndDate")
-    List<BookingDetail> getBookingDetailByCusNumberPhone(@RequestParam String phoneNumber, @RequestParam @DateTimeFormat(pattern = "MM-dd-yyyy") LocalDate date) {
-        return bookingDetailService.getBookingDetailByCusPhoneAndDate(phoneNumber, date);
+    ResponseEntity<ResponseObject> getBookingDetailByPhone(@RequestParam String phone,
+                                                           @RequestParam @DateTimeFormat(pattern = "MM-dd-yyyy") LocalDate date) {
+        List<BookingDetail> bookingDetails = bookingDetailService.getBookingDetailByPhone(phone, date);
+        if (bookingDetails == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("ok", "BookingDetail not found by this phone number")
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Find successfully", bookingDetails)
+        );
     }
 
     @PutMapping("/update/status/{bookingDetailId}")
@@ -178,9 +187,6 @@ public class BookingDetailController {
             );
         }
     }
-
-
-
 
     @GetMapping("/cancelBookingDetail/")
     ResponseEntity<ResponseObject> cancelBookingDetail(@RequestParam int bookingDetailID, @RequestParam int userId) {
@@ -260,10 +266,6 @@ public class BookingDetailController {
             );
         }
     }
-
-
-
-
 
     @PutMapping("/status/{bookingId}")
     public ResponseEntity<?> updateBookingStatus(@PathVariable int bookingId, @RequestParam BookingDetailStatus status) {
