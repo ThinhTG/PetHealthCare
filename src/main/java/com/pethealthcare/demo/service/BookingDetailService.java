@@ -86,6 +86,23 @@ public class BookingDetailService {
 
     }
 
+    public BookingDetail updateVetCancel(int bookingDetailId) {
+        Optional<BookingDetail> optionalBookingDetail = bookingDetailRepository.findById(bookingDetailId);
+        if (optionalBookingDetail.isPresent()) {
+            BookingDetail bookingDetail = optionalBookingDetail.get();
+            if (!bookingDetail.isNeedCage()) {
+                bookingDetail.setVetCancelled(false);
+                // Save updated user
+            } else {
+                bookingDetail.setNeedCage(true);
+            }
+            bookingDetailRepository.save(bookingDetail);
+            return bookingDetail;
+        } else {
+            return null;
+        }
+    }
+
     public List<BookingDetail> getBookingDetailByVetCancel(int vetId) {
         User user = userRepository.findUserByUserId(vetId);
         List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
