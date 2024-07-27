@@ -13,6 +13,6 @@ public class UserUpdateRequest {
     private String name;
     private String email;
     private String password;
-    private BigDecimal phone;
+    private String phone;
     private String address;
 }
