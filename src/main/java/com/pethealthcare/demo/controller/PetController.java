@@ -99,13 +99,12 @@ public class PetController {
                 new ResponseObject("ok", message, "")
         );
     }
-}
 
 
-@PutMapping("/update-Vaccination")
-ResponseEntity<ResponseObject> updateVaccination(@RequestBody PetUpdateVacionationRequest request) {
-    petService.updateVaccination(request.getPetId(), request.getVaccination());
-    return ResponseEntity.status(HttpStatus.OK).body(
-            new ResponseObject("ok", "Vaccination updated successfully"));
-}
+    @PutMapping("/update-Vaccination")
+    ResponseEntity<ResponseObject> updateVaccination(@RequestBody PetUpdateVacionationRequest request) {
+        petService.updateVaccination(request.getPetId(), request.getVaccination());
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Vaccination updated successfully"));
+    }
 }
