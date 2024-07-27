@@ -24,6 +24,7 @@ public class ServiceSlot {
     private LocalDate date;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private ServiceSlotStatus status;
 
     @ManyToOne

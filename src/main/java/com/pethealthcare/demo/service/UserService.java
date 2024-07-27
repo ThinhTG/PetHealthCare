@@ -63,8 +63,9 @@ public class UserService {
                 newUser.setImageUrl(fileName);
             }
 
-
-            return userRepository.save(newUser);
+            User user = userRepository.save(newUser);
+            walletService.createWallet(user.getUserId());
+            return user;
         }
         return null;
     }
