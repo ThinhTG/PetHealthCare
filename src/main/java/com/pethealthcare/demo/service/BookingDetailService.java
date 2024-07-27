@@ -56,12 +56,8 @@ public class BookingDetailService {
         Optional<BookingDetail> optionalBookingDetail = bookingDetailRepository.findById(bookingDetailId);
         if (optionalBookingDetail.isPresent()) {
             BookingDetail bookingDetail = optionalBookingDetail.get();
-            if (!bookingDetail.isNeedCage()) {
-                bookingDetail.setNeedCage(true);
-                // Save updated user
-            } else {
-                bookingDetail.setNeedCage(false);
-            }
+            // Save updated user
+            bookingDetail.setNeedCage(!bookingDetail.isNeedCage());
             bookingDetailRepository.save(bookingDetail);
             return bookingDetail;
         } else {
@@ -136,51 +132,16 @@ public class BookingDetailService {
         return bookingDetails;
     }
 
-    public List<BookingDetail> getBookingDetailByCusPhoneAndDate(String phone, LocalDate date) {
-        User user = userService.getUserByNumberPhone(phone);
-        List<Booking> bookings = bookingRepository.getBookingByUser(user);
+    public List<BookingDetail> getBookingDetailByPhone(String phone, LocalDate date) {
+        List<Booking> bookings = bookingRepository.findBookingByUser_Phone(phone);
         List<BookingDetail> bookingDetails = new ArrayList<>();
-        List<BookingDetail> bookingDetailByBooking;
         for (Booking booking : bookings) {
-            bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
-            for (BookingDetail bookingDetail : bookingDetailByBooking) {
-                if (bookingDetail.getStatus() == BookingDetailStatus.WAITING && bookingDetail.getDate().equals(date)){
-                    bookingDetails.add(bookingDetail);
-                }
-            }
+            bookingDetails = bookingDetailRepository.getBookingDetailsByBookingAndDate(booking, date);
+        }
+        if (bookingDetails.isEmpty()) {
+            return null;
         }
         return bookingDetails;
-    }
-
-//    public List<BookingDetail> getBookingDetailBySerivceInactive(){
-//        List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
-//        List<BookingDetail> bookingDetailByServiceInactive = new ArrayList<>();
-//        for (BookingDetail bookingDetail : bookingDetails) {
-//            if (bookingDetail.getServices().getStatus()) {
-//                bookingDetailByServiceInactive.add(bookingDetail);
-//            }
-//        }
-//        return bookingDetailByServiceInactive;
-//    }
-
-    public void deleteBookingDetailByPet(int petId) {
-        Pet pet = petRepository.findPetByPetId(petId);
-        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByPet(pet);
-        for (BookingDetail bookingDetail : bookingDetails) {
-            bookingDetail.setStatus(BookingDetailStatus.CANCELLED);
-            bookingDetailRepository.save(bookingDetail);
-
-            List<BookingDetail> bookingDetailss = bookingDetailRepository.getBookingDetailsByBooking(bookingDetail.getBooking());
-
-            boolean allCancelled = bookingDetailss.stream().allMatch(detail -> detail.getStatus() == BookingDetailStatus.CANCELLED);
-
-
-            if (allCancelled) {
-                Booking booking = bookingDetail.getBooking();
-                booking.setStatus(BookingStatus.CANCELLED);
-                bookingRepository.save(booking);
-            }
-        }
     }
 
     public void deleteBookingDetail(int bookingDetailId) {

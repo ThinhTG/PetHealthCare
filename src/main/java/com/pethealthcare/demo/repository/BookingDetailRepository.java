@@ -29,7 +29,7 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
 
     BookingDetail findBookingDetailByBookingDetailId(int id);
 
-    List<BookingDetail> getBookingDetailsByBooking(Booking booking);
+    List<BookingDetail> getBookingDetailsByBookingAndDate(Booking booking, LocalDate date);
 
     List<BookingDetail> getBookingDetailByuser(User user);
 
@@ -45,4 +45,6 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     BookingDetail findBookingDetailByStatusAndServices_ServiceId(String status, int serviceId);
 
     BookingDetail findBookingDetailByPet_PetIdAndStatus(int id, String status);
+
+    List<BookingDetail> getBookingDetailsByBooking(Booking booking);
 }

@@ -15,9 +15,13 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> getBookingByUser(User user);
+
     Booking findBookingByBookingId(int bookingId);
+
     List<Booking> findByDateBetween(LocalDate startDate, LocalDate endDate);
+
     List<Booking> findByStatus(String status);
+
     @Query(value = "SELECT new com.pethealthcare.demo.response.RevenueResponse(MONTH(b.transactionDate), (SUM(b.amount) - COALESCE(SUM(r.amount * r.refundPercent / 100), 0))) " +
             "FROM Transaction b " +
             "LEFT JOIN Refund r ON b.transactionId = r.transactionNo " +
@@ -26,5 +30,6 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "ORDER BY MONTH(b.transactionDate) ASC")
     List<RevenueResponse> getRevenueByMonth(@Param("year") int year);
 
+    List<Booking> findBookingByUser_Phone(String phone);
 
 }
