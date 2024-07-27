@@ -108,7 +108,7 @@ public class BookingDetailController {
     }
 
     @GetMapping("/getAllBookingDetail_ByPhoneNumberAndDate")
-    List<BookingDetail> getBookingDetailByCusNumberPhone(@RequestParam BigDecimal phoneNumber, @RequestParam @DateTimeFormat(pattern = "MM-dd-yyyy") LocalDate date) {
+    List<BookingDetail> getBookingDetailByCusNumberPhone(@RequestParam String phoneNumber, @RequestParam @DateTimeFormat(pattern = "MM-dd-yyyy") LocalDate date) {
         return bookingDetailService.getBookingDetailByCusPhoneAndDate(phoneNumber, date);
     }
 
