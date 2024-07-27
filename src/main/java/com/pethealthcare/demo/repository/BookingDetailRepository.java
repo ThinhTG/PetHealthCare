@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.repository;
 
 import com.google.api.client.util.DateTime;
+import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
@@ -40,4 +41,6 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
 
     @Query("SELECT bd FROM BookingDetail bd WHERE MONTH(bd.date) = :month AND YEAR(bd.date) = :year")
     List<BookingDetail> findMostUsedServiceByMonthAndYear(@Param("month") int month, @Param("year") int year);
+
+    BookingDetail findBookingDetailByStatusAndServices_ServiceId(String status, int serviceId);
 }

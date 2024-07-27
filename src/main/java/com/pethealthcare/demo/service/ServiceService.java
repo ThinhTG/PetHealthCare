@@ -2,8 +2,11 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.ServiceCreateRequest;
 import com.pethealthcare.demo.mapper.ServiceMapper;
+import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Services;
+import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.ServiceRepository;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +25,9 @@ public class ServiceService {
 
     @Autowired
     private FirebaseStorageService firebaseStorageService;
+
+    @Autowired
+    private BookingDetailRepository bookingDetailRepository;
 
     public List<Services> getAllServices() {
         return serviceRepository.findAll();
@@ -68,13 +74,15 @@ public class ServiceService {
         return null;
     }
 
-        public void deleteService(int serviceId) {
+    public String deleteService(int serviceId) {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
-        if (service != null && service.isStatus()) {
-            service.setStatus(false);
-            serviceRepository.save(service);
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByStatusAndServices_ServiceId("WAITING", serviceId);
+        if (bookingDetail != null) {
+            return "Service is being used";
         }
-
+        service.setStatus(false);
+        serviceRepository.save(service);
+        return "Delete service Successfully";
     }
 
     public Services getServiceById(int  serviceID) {
