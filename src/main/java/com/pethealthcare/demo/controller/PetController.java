@@ -92,9 +92,9 @@ public class PetController {
         return petService.getPetsByUserID(userID);
     }
 
-    @DeleteMapping("/deletePet/{petid}")
-    ResponseEntity<ResponseObject> deletePet(@PathVariable Integer petid) {
-        String message = petService.deletePetByID(petid);
+    @DeleteMapping("/deletePet/{petId}")
+    ResponseEntity<ResponseObject> deletePet(@PathVariable int petId) {
+        String message = petService.deletePetByID(petId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", message, "")
         );

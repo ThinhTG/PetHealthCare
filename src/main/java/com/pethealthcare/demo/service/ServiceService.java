@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.ServiceCreateRequest;
+import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.mapper.ServiceMapper;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Services;
@@ -76,7 +77,7 @@ public class ServiceService {
 
     public String deleteService(int serviceId) {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
-        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByStatusAndServices_ServiceId("WAITING", serviceId);
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByStatusAndServices_ServiceId(BookingDetailStatus.WAITING, serviceId);
         if (bookingDetail != null) {
             return "Service is being used";
         }

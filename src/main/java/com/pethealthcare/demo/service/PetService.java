@@ -2,6 +2,7 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.PetUpdateRequest;
+import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.mapper.PetMapper;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
@@ -121,7 +122,7 @@ public class PetService {
 
     public String deletePetByID(int id) {
         Pet deletePet = petRepository.findPetByPetId(id);
-        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatus(id, "WAITING");
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatus(id, BookingDetailStatus.WAITING);
         if (bookingDetail != null) {
             return "Pet is existing in booking";
         }
