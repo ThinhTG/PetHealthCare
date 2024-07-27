@@ -13,8 +13,5 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingDetailUpdateRequest {
-    private Services service;
     private ServiceSlot serviceSlot;
-
-
 }

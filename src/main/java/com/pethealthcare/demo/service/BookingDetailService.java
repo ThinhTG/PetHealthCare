@@ -203,7 +203,6 @@ public class BookingDetailService {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(id);
 
         if (bookingDetail != null) {
-            bookingDetail.setServices(request.getService());
             bookingDetail.setDate(request.getServiceSlot().getDate());
             bookingDetail.setSlot(request.getServiceSlot().getSlot());
             bookingDetail.setUser(request.getServiceSlot().getUser());
