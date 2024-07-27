@@ -16,5 +16,4 @@ public class AccCreateRequest {
     private BigDecimal phone;
     private String address;
     private String role;
-    private String imageUrl;
 }
