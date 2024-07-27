@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -32,6 +33,8 @@ public class BookingDetailService {
     private ServiceRepository serviceRepository;
     @Autowired
     private ServiceSlotService serviceSlotService;
+    @Autowired
+    private UserService userService;
 
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
@@ -126,6 +129,22 @@ public class BookingDetailService {
             bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
             for (BookingDetail bookingDetail : bookingDetailByBooking) {
                 if (bookingDetail.getStatus() == BookingDetailStatus.COMPLETED) {
+                    bookingDetails.add(bookingDetail);
+                }
+            }
+        }
+        return bookingDetails;
+    }
+
+    public List<BookingDetail> getBookingDetailByCusPhoneAndDate(BigDecimal phone, LocalDate date) {
+        User user = userService.getUserByNumberPhone(phone);
+        List<Booking> bookings = bookingRepository.getBookingByUser(user);
+        List<BookingDetail> bookingDetails = new ArrayList<>();
+        List<BookingDetail> bookingDetailByBooking;
+        for (Booking booking : bookings) {
+            bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
+            for (BookingDetail bookingDetail : bookingDetailByBooking) {
+                if (bookingDetail.getStatus() == BookingDetailStatus.WAITING && bookingDetail.getDate().equals(date)){
                     bookingDetails.add(bookingDetail);
                 }
             }

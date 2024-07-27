@@ -16,10 +16,12 @@ import com.pethealthcare.demo.service.BookingDetailService;
 import com.pethealthcare.demo.service.RefundService;
 import com.pethealthcare.demo.service.ServiceSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -103,6 +105,11 @@ public class BookingDetailController {
     @GetMapping("/getAllBookingDetail_ByCusId")
     List<BookingDetail> getBookingDetailByCusid(@RequestParam int cusId) {
         return bookingDetailService.getBookingDetailByCus(cusId);
+    }
+
+    @GetMapping("/getAllBookingDetail_ByPhoneNumberAndDate")
+    List<BookingDetail> getBookingDetailByCusNumberPhone(@RequestParam BigDecimal phoneNumber, @RequestParam @DateTimeFormat(pattern = "MM-dd-yyyy") LocalDate date) {
+        return bookingDetailService.getBookingDetailByCusPhoneAndDate(phoneNumber, date);
     }
 
     @PutMapping("/update/status/{bookingDetailId}")
