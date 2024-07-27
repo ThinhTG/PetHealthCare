@@ -35,44 +35,43 @@ public class UserService {
     private FirebaseStorageService firebaseStorageService;
 
     public User createUser(UserCreateRequest request) {
-        boolean exist = userRepository.existsByEmail(request.getEmail());
-        if (!exist) {
-            User newUser = userMapper.toUser(request);
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-            newUser.setRole("Customer");
-            newUser.setStatus(true);
-            User user = userRepository.save(newUser);
-            walletService.createWallet(user.getUserId());
-            return user;
-
+        User exist = userRepository.findUserByEmail(request.getEmail());
+        if (exist != null && exist.isStatus()) {
+            return null;
         }
-        return null;
+        User newUser = userMapper.toUser(request);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        newUser.setRole("Customer");
+        newUser.setStatus(true);
+        User user = userRepository.save(newUser);
+        walletService.createWallet(user.getUserId());
+        return user;
     }
 
     public User createAcc(AccCreateRequest request, MultipartFile file) throws IOException {
-        boolean exist = userRepository.existsByEmail(request.getEmail());
-        if (!exist) {
-            User newUser = userMapper.toUser(request);
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-            newUser.setRole(request.getRole());
-            newUser.setStatus(true);
-
-            if (file != null && !file.isEmpty()) {
-                String fileName = firebaseStorageService.uploadFile(file);
-                newUser.setImageUrl(fileName);
-            }
-
-            User user = userRepository.save(newUser);
-            walletService.createWallet(user.getUserId());
-            return user;
+        User exist = userRepository.findUserByEmail(request.getEmail());
+        if (exist != null && exist.isStatus()) {
+            return null;
         }
-        return null;
+        User newUser = userMapper.toUser(request);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        newUser.setRole(request.getRole());
+        newUser.setStatus(true);
+
+        if (file != null && !file.isEmpty()) {
+            String fileName = firebaseStorageService.uploadFile(file);
+            newUser.setImageUrl(fileName);
+        }
+
+        User user = userRepository.save(newUser);
+        walletService.createWallet(user.getUserId());
+        return user;
     }
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAllByStatus(true);
     }
 
     public User updateUser(int userid, UserUpdateRequest request, MultipartFile file) throws IOException {

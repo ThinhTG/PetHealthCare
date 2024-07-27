@@ -32,17 +32,17 @@ public class ServiceService {
     }
 
     public Services createService(ServiceCreateRequest request, MultipartFile file) throws IOException {
-        boolean exists = serviceRepository.existsByName(request.getName());
-        if (!exists) {
-            Services service = serviceMapper.toService(request);
-            service.setStatus(true);
-            if (file != null && !file.isEmpty()) {
-                String fileName = firebaseStorageService.uploadFile(file);
-                service.setImageUrl(fileName);
-            }
-            return serviceRepository.save(service);
+        Services exists = serviceRepository.findServicesByName(request.getName());
+        if (exists != null && exists.isStatus()) {
+            return null;
         }
-        return null;
+        Services service = serviceMapper.toService(request);
+        service.setStatus(true);
+        if (file != null && !file.isEmpty()) {
+            String fileName = firebaseStorageService.uploadFile(file);
+            service.setImageUrl(fileName);
+        }
+        return serviceRepository.save(service);
     }
 
     public Services updateService(int serviceId, ServiceCreateRequest request, MultipartFile file) throws IOException {
