@@ -60,8 +60,7 @@ public class UserService {
 
             if (file != null && !file.isEmpty()) {
                 String fileName = firebaseStorageService.uploadFile(file);
-                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
-                newUser.setImageUrl(fileUrl);
+                newUser.setImageUrl(fileName);
             }
 
 
@@ -101,8 +100,7 @@ public class UserService {
 
             if (file != null && !file.isEmpty()) {
                 String fileName = firebaseStorageService.uploadFile(file);
-                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
-                user.setImageUrl(fileUrl);
+                user.setImageUrl(fileName);
             }
             // Save updated user
             userRepository.save(user);
