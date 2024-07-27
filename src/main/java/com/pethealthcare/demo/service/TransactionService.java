@@ -3,6 +3,7 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.config.VNPayConfig;
 import com.pethealthcare.demo.dto.request.TransactionCreateRequest;
+import com.pethealthcare.demo.enums.BookingStatus;
 import com.pethealthcare.demo.enums.TransactionType;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.Transaction;
@@ -147,7 +148,7 @@ public class TransactionService {
         walletRepository.save(wallet);
         transaction.setWallet(wallet);
         Booking booking = bookingRepository.findBookingByBookingId(request.getBookingId());
-        booking.setStatus("PAID");
+        booking.setStatus(BookingStatus.PAID);
         transaction.setBooking(booking);
         transactionRepository.save(transaction);
         return "Payment success";

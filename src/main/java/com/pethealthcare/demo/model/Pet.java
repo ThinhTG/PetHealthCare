@@ -42,6 +42,7 @@ public class Pet {
     @Column(columnDefinition = "nvarchar(255)")
     private String imageUrl;
 
+
     @Column
     private boolean isDeleted;
 

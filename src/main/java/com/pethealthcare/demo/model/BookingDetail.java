@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pethealthcare.demo.enums.BookingDetailStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +28,13 @@ public class BookingDetail {
     private LocalDate date;
 
     @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private BookingDetailStatus status;
+
+    // vetCancelled is a boolean field that is used to determine if the vet has cancelled the booking
+    // true la vet da huy booking, false la vet chua huy booking
+    @Column
+    private boolean vetCancelled;
 
     @ManyToOne
     @JoinColumn(name = "bookingId")

@@ -47,6 +47,12 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/getVeterinarianActive")
+    List<User> getVeterinarianActive() {
+        return userService.getAllVeterinariansActive();
+    }
+
     @PutMapping("/forgot-password")
     ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         return new ResponseEntity<>(userService.forgotPassword(request.getEmail()), HttpStatus.OK);
@@ -85,7 +91,7 @@ public class UserController {
     }
 
     @GetMapping("/getVeterinarian")
-    List<User> getVeterinarian (){
+    List<User> getVeterinarians(){
         return userService.getAllVeterinarians();
     }
 

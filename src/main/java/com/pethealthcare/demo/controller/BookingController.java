@@ -49,33 +49,6 @@ public class BookingController {
         return bookingService.getRevenueByMonth(year);
     }
 
-//    @PostMapping("/delete/{bookingID}")
-//    ResponseEntity<ResponseObject> deleteBooking(@PathVariable int bookingID, BookingCancelRequest request) {
-//        bookingService.deleteBooking(bookingID, request);
-//        return ResponseEntity.status(HttpStatus.OK).body(
-//                new ResponseObject("ok", "booking deleted successfully")
-//        );
-//    }
-
-//    @GetMapping("/cancel/{bookingID}")
-//    ResponseEntity<ResponseObject> cancelBooking(@PathVariable int bookingID) {
-//        Booking booking = bookingRepository.findBookingByBookingId(bookingID);
-//        if (booking.getStatus().equalsIgnoreCase("CANCELLED") || booking.getStatus().equalsIgnoreCase("COMPLETED")) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("failed", "booking is already cancelled or completed", "")
-//            );
-//        } else if (booking.getStatus().equalsIgnoreCase("PAID")) {
-//            bookingService.deleteBooking(bookingID);
-//            refundService.returnDepositCancelBooking(bookingID);
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "booking deleted successfully", refundService.returnDepositCancelBooking(bookingID))
-//            );
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("failed", "booking status is not valid for cancellation", "")
-//            );
-//        }
-//    }
     @GetMapping("/getAllById/{status}")
     List<Booking> getBookingByStatus(@PathVariable String status) {
         return bookingService.getBookingsByStatus(status);
