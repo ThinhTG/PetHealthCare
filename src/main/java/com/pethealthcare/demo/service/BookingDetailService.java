@@ -1,6 +1,5 @@
 package com.pethealthcare.demo.service;
 
-import com.google.api.client.util.DateTime;
 import com.pethealthcare.demo.dto.request.BookingDetailUpdateRequest;
 import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.enums.BookingStatus;
@@ -86,6 +85,20 @@ public class BookingDetailService {
         return bookingDetailRepository.getBookingDetailByuser(user);
 
 
+    }
+
+    public List<BookingDetail> getBookingDetailByVetCancel(int vetId) {
+        User user = userRepository.findUserByUserId(vetId);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
+        List<BookingDetail> bookingDetailByVetCancel = new ArrayList<>();
+
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (bookingDetail.isVetCancelled()) {
+                bookingDetailByVetCancel.add(bookingDetail);
+            }
+        }
+
+        return bookingDetailByVetCancel;
     }
 
     public List<BookingDetail> getBookingDetailStatusByVet(int vetId) {
@@ -224,31 +237,7 @@ public class BookingDetailService {
         }
         return bookingDetail;
     }
-//
-//    public List<BookingDetail> updateVeterinarianCancelBookingDetail(int bookingDetailId) {
-//        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
-//        Slot slot = bookingDetail.getSlot();
-//        LocalDate dateTime = bookingDetail.getDate();
-//
-//        List<User> veterinarians = userRepository.findAllByRole("Veterinarian");
-//
-//        for (User veterinarian : veterinarians) {
-//            ServiceSlot serviceSlot = serviceSlotService.getSlotAvailable(bookingDetail.getServices().getServiceId(), dateTime);
-//            if (serviceSlot != null) {
-//                bookingDetail.setVetCancelled(true);
-//                bookingDetailRepository.save(bookingDetail);
-//                return bookingDetailRepository.findAll();
-//            }
-//        }
-//
-//        ServiceSlot serviceSlot = serviceSlotService.getSlotAvailable(bookingDetail.getServices().getServiceId(), dateTime);
-//
-//        for ()
-//
-//        bookingDetail.setVetCancelled(true);
-//        bookingDetailRepository.save(bookingDetail);
-//        return bookingDetailRepository.findAll();
-//    }
+
 
 
     public List<BookingDetail> getBookingDetailByStayCage() {

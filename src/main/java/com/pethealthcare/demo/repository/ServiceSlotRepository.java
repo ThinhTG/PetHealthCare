@@ -19,4 +19,6 @@ public interface ServiceSlotRepository extends JpaRepository<ServiceSlot, Intege
     ServiceSlot findServiceSlotByUserAndDateAndSlot (User user, LocalDate date, Slot slot);
 
     List<ServiceSlot> findByUserAndDate(User user, LocalDate date);
+
+    List<ServiceSlot> findServiceSlotByDateAndSlot_SlotIdAndAndStatus(LocalDate date, int slotId, ServiceSlotStatus status);
 }

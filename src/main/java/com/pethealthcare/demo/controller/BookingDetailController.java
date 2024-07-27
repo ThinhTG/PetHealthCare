@@ -137,6 +137,11 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailStatusByVet(vetId));
     }
 
+    @GetMapping("/getBookingDetailByVetCancel/{vetId}")
+    ResponseEntity<List<BookingDetail>> getBookingDetailByVetCancelled(@PathVariable int vetId) {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByVetCancel(vetId));
+    }
+
     @GetMapping("/cancelBookingDetailByPet/")
     public ResponseEntity<ResponseObject> cancelBookingDetailByPet(@RequestParam int petId, @RequestParam int userId) {
         Pet pet = petRepository.findPetByPetId(petId);

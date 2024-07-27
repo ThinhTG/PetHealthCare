@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.controller;
 
 import com.pethealthcare.demo.dto.request.GetSlotAvailableRequest;
+import com.pethealthcare.demo.dto.request.GetVetAvailableRequest;
 import com.pethealthcare.demo.dto.request.ServiceSlotCreateRequest;
 import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.service.ServiceSlotService;
@@ -25,6 +26,11 @@ public class ServiceSlotController {
     @PostMapping ("/slot-available")
     List<ServiceSlot> getSlotAvailable(@RequestBody GetSlotAvailableRequest request) {
         return serviceSlotService.getSlotAvailable(request);
+    }
+
+    @PostMapping ("/vet-available")
+    List<ServiceSlot> getVetAvailable(@RequestBody GetVetAvailableRequest request) {
+        return serviceSlotService.getVetAvailable(request);
     }
 
     @PostMapping ("/slot-not-create")
