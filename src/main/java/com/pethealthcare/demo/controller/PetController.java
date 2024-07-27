@@ -28,8 +28,6 @@ public class PetController {
     PetService petService;
     @Autowired
     UserService userService;
-
-
     @Autowired
     private PetRepository petRepository;
     @Autowired
@@ -94,46 +92,20 @@ public class PetController {
         return petService.getPetsByUserID(userID);
     }
 
-    @DeleteMapping("/deletePet/{userid}/{petid}")
-    ResponseEntity<ResponseObject> deletePet(@PathVariable Integer userid, @PathVariable Integer petid) {
-        if (userid == null || petid == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("failed", "User ID or Pet ID is missing", "")
-            );
-        }
-
-        User existsUser = userService.getAccountById(userid);
-        if (existsUser != null) {
-            boolean existsPet = petService.findPetByID(petid);
-            if (existsPet) {
-                Pet pet = petRepository.findPetByPetId(petid);
-                if (!pet.isDeleted()) {
-                    petService.deletePetByID(petid);
-                    return ResponseEntity.status(HttpStatus.OK).body(
-                            new ResponseObject("ok", "Delete pet successfully", "")
-                    );
-                } else {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                            new ResponseObject("failed", "Pet already deleted", "")
-                    );
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseObject("failed", "Pet not found", "")
-                );
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "User not found", "")
-            );
-        }
-    }
-
-
-    @PutMapping("/update-Vaccination")
-    ResponseEntity<ResponseObject> updateVaccination(@RequestBody PetUpdateVacionationRequest request) {
-        petService.updateVaccination(request.getPetId(), request.getVaccination());
+    @DeleteMapping("/deletePet/{petid}")
+    ResponseEntity<ResponseObject> deletePet(@PathVariable Integer petid) {
+        String message = petService.deletePetByID(petid);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Vaccination updated successfully"));
+                new ResponseObject("ok", message, "")
+        );
     }
+}
+
+
+@PutMapping("/update-Vaccination")
+ResponseEntity<ResponseObject> updateVaccination(@RequestBody PetUpdateVacionationRequest request) {
+    petService.updateVaccination(request.getPetId(), request.getVaccination());
+    return ResponseEntity.status(HttpStatus.OK).body(
+            new ResponseObject("ok", "Vaccination updated successfully"));
+}
 }

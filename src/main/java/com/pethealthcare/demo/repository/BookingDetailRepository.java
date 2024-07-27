@@ -43,4 +43,6 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     List<BookingDetail> findMostUsedServiceByMonthAndYear(@Param("month") int month, @Param("year") int year);
 
     BookingDetail findBookingDetailByStatusAndServices_ServiceId(String status, int serviceId);
+
+    BookingDetail findBookingDetailByPet_PetIdAndStatus(int id, String status);
 }
