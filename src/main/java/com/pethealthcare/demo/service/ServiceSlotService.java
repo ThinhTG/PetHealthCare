@@ -1,6 +1,7 @@
 package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.GetSlotAvailableRequest;
+import com.pethealthcare.demo.dto.request.GetVetAvailableRequest;
 import com.pethealthcare.demo.dto.request.ServiceSlotCreateRequest;
 import com.pethealthcare.demo.enums.ServiceSlotStatus;
 import com.pethealthcare.demo.mapper.ServiceSlotMapper;
@@ -35,6 +36,11 @@ public class ServiceSlotService {
 
         return serviceSlotRepository.findByUserAndDateAndStatus(user,
                 request.getDate(), ServiceSlotStatus.AVAILABLE);
+    }
+
+    public List<ServiceSlot> getVetAvailable(GetVetAvailableRequest request) {
+        return serviceSlotRepository.findServiceSlotByDateAndSlot_SlotIdAndAndStatus(request.getDate(),
+                request.getSlotId(), ServiceSlotStatus.AVAILABLE);
     }
 
     public String addServiceSlots(List<ServiceSlotCreateRequest> requests) {

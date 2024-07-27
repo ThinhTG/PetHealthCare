@@ -43,11 +43,11 @@ public class PetService {
         List <Pet> pets = petRepository.findPetsByUser(user);
         List <Pet> petss = new ArrayList<>();
         for (Pet pet : pets) {
-            for (Pet pet1 : pets) {
-                if (!pet1.isDeleted()){
-                    petss.add(pet1);
+
+                if (!pet.isDeleted()){
+                    petss.add(pet);
                 }
-            }
+
         }
         return petss;
     }
