@@ -67,8 +67,10 @@ public class ServiceController {
     }
 
     @DeleteMapping("/delete/{serviceID}")
-    ResponseEntity<String> deleteService(@PathVariable int serviceID) {
+    ResponseEntity<ResponseObject> deleteService(@PathVariable int serviceID) {
         String message = serviceService.deleteService(serviceID);
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", message, "")
+        );
     }
 }

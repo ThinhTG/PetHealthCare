@@ -3,8 +3,10 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.PetUpdateRequest;
 import com.pethealthcare.demo.mapper.PetMapper;
+import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
+import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.PetRepository;
 import com.pethealthcare.demo.repository.UserRepository;
 
@@ -29,6 +31,8 @@ public class PetService {
     private FirebaseStorageService firebaseStorageService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BookingDetailRepository bookingDetailRepository;
 
     public List<Pet> getAllPet() {
         return petRepository.findAll();
@@ -115,13 +119,15 @@ public class PetService {
         return petRepository.findPetByPetId(id);
     }
 
-    public void deletePetByID(int id){
+    public String deletePetByID(int id) {
         Pet deletePet = petRepository.findPetByPetId(id);
-
-        if (deletePet != null && !deletePet.isDeleted()) {
-            deletePet.setDeleted(true);
-            petRepository.save(deletePet);
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatus(id, "WAITING");
+        if (bookingDetail != null) {
+            return "Pet is existing in booking";
         }
+        deletePet.setDeleted(true);
+        petRepository.save(deletePet);
+        return "Delete pet successfully";
     }
 
     public void updateVaccination(int petId, String vaccination) {
