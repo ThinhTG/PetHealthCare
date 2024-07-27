@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.repository;
 
+import com.google.api.client.util.DateTime;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +20,9 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
 
     @Query("SELECT b FROM BookingDetail b WHERE b.date = :date")
     List<BookingDetail> findBookingDetailsFromDate(@Param("date") Date date);
+
+    @Query("SELECT b FROM BookingDetail b WHERE b.date = :date")
+    List<BookingDetail> findBookingDetailsFromLocalDate(@Param("date") LocalDate date);
 
     List<BookingDetail> findBookingDetailByNeedCage(boolean needCage);
 

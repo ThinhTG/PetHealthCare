@@ -1,11 +1,13 @@
 package com.pethealthcare.demo.controller;
 
+import com.google.api.client.util.DateTime;
+import com.pethealthcare.demo.dto.request.BookingDetailStatusUpdateRequest;
 import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
-import com.pethealthcare.demo.model.Booking;
-import com.pethealthcare.demo.model.BookingDetail;
-import com.pethealthcare.demo.model.Pet;
-import com.pethealthcare.demo.model.Refund;
+import com.pethealthcare.demo.enums.BookingDetailStatus;
+import com.pethealthcare.demo.enums.BookingStatus;
+import com.pethealthcare.demo.model.*;
 import com.pethealthcare.demo.repository.PetRepository;
+import com.pethealthcare.demo.repository.UserRepository;
 import com.pethealthcare.demo.response.MostUsedServiceResponse;
 import com.pethealthcare.demo.response.ResponseObject;
 import com.pethealthcare.demo.repository.BookingDetailRepository;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +45,9 @@ public class BookingDetailController {
 
     @Autowired
     private PetRepository petRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/getAll")
     ResponseEntity<List<BookingDetail>> getAllBookingDetail() {
@@ -100,7 +106,7 @@ public class BookingDetailController {
     }
 
     @PutMapping("/update/status/{bookingDetailId}")
-    ResponseEntity<ResponseObject> updateBooking(@PathVariable int bookingDetailId, @RequestBody BookingStatusUpdateRequest request) {
+    ResponseEntity<ResponseObject> updateBooking(@PathVariable int bookingDetailId, @RequestBody BookingDetailStatusUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateStatusBookingDetail(bookingDetailId, request.getStatus()))
         );
@@ -139,9 +145,9 @@ public class BookingDetailController {
         boolean anyCancellable = false;
 
         for (BookingDetail bookingDetail : bookingDetails) {
-            String status = bookingDetail.getStatus().toUpperCase();
+            BookingDetailStatus status = bookingDetail.getStatus();
 
-            if (status.equals("WAITING") || status.equals("CONFIRMED")) {
+            if (status == BookingDetailStatus.WAITING || status == BookingDetailStatus.CONFIRMED) {
                 bookingDetailService.deleteBookingDetail(bookingDetail.getBookingDetailId());
                 serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
                 Refund refund = refundService.returnDepositCancelBookingDetail(bookingDetail.getBookingDetailId(), userId);
@@ -168,13 +174,13 @@ public class BookingDetailController {
     ResponseEntity<ResponseObject> cancelBookingDetail(@RequestParam int bookingDetailID, @RequestParam int userId) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
         Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
-        if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")
-                && booking.getStatus().equalsIgnoreCase("cancelled") || booking.getStatus().equalsIgnoreCase("completed")) {
+        if (bookingDetail.getStatus() == BookingDetailStatus.CANCELLED || bookingDetail.getStatus() == BookingDetailStatus.COMPLETED
+                && booking.getStatus() == BookingStatus.CANCELLED || booking.getStatus() == BookingStatus.COMPLETED) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("failed", "booking is already cancelled or completed", "")
             );
 
-        } else if (booking.getStatus().equalsIgnoreCase("Confirmed") ||booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
+        } else if (booking.getStatus() == BookingStatus.PAID  && bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING){
 
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
@@ -193,14 +199,13 @@ public class BookingDetailController {
     ResponseEntity<ResponseObject> staffCancelBookingDetail(@RequestParam int bookingDetailID, @RequestParam int userId) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailID);
         Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
-        if (bookingDetail.getStatus().equalsIgnoreCase("cancelled") || bookingDetail.getStatus().equalsIgnoreCase("completed")
-                && booking.getStatus().equalsIgnoreCase("cancelled") || booking.getStatus().equalsIgnoreCase("completed")
-        || bookingDetail.getStatus().equalsIgnoreCase("pending")) {
+        if (bookingDetail.getStatus() == BookingDetailStatus.CANCELLED || bookingDetail.getStatus() == BookingDetailStatus.COMPLETED
+                && booking.getStatus() == BookingStatus.CANCELLED || booking.getStatus() == BookingStatus.COMPLETED) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("failed", "booking/bookingdetail is already cancelled or completed or pending", "")
             );
 
-        } else if ( booking.getStatus().equalsIgnoreCase("PAID") && bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
+        } else if ( booking.getStatus() == BookingStatus.PAID && bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING){
 
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
@@ -215,10 +220,41 @@ public class BookingDetailController {
         );
     }
 
+    @GetMapping("/vetCancelBookingDetail/")
+    public ResponseEntity<ResponseObject> vetCancelBookingDetail(@RequestParam LocalDate dateTime, @RequestParam int vetId) {
+        User user = userRepository.findUserByUserId(vetId);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
+
+        boolean updated = false;
+
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (bookingDetail.getStatus() == BookingDetailStatus.CANCELLED || bookingDetail.getStatus() == BookingDetailStatus.COMPLETED) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                        new ResponseObject("failed", "One or more booking details are already cancelled or completed", "")
+                );
+            } else if (bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING) {
+                bookingDetailService.updateStatusBookingDetailVetCancel(dateTime);
+                updated = true;
+            }
+        }
+
+        if (updated) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Booking details updated successfully", "")
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("failed", "No booking details were updated", "")
+            );
+        }
+    }
+
+
+
 
 
     @PutMapping("/status/{bookingId}")
-    public ResponseEntity<?> updateBookingStatus(@PathVariable int bookingId, @RequestParam String status) {
+    public ResponseEntity<?> updateBookingStatus(@PathVariable int bookingId, @RequestParam BookingDetailStatus status) {
         bookingDetailService.updateStatusByBookingId(bookingId, status);
         return ResponseEntity.ok().build();
     }

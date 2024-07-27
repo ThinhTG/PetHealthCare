@@ -2,6 +2,8 @@ package com.pethealthcare.demo.service;
 
 import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingDetailCreateRequest;
+import com.pethealthcare.demo.enums.BookingDetailStatus;
+import com.pethealthcare.demo.enums.BookingStatus;
 import com.pethealthcare.demo.response.RevenueResponse;
 import com.pethealthcare.demo.mapper.BookingDetailMapper;
 import com.pethealthcare.demo.mapper.BookingMapper;
@@ -58,14 +60,15 @@ public class BookingService {
         newBooking.setDate(localDate);
 
         User user = userRepository.findUserByUserId(request.getCustomerId());
-        newBooking.setStatus("PENDING");
+        newBooking.setStatus(BookingStatus.PENDING);
         newBooking.setUser(user);
         newBooking = bookingRepository.save(newBooking);
 
         for (BookingDetailCreateRequest request1 : request.getBookingDetails()) {
             BookingDetail bookingDetail = bookingDetailMapper.toBookingDetail(request1);
             bookingDetail.setDate(request1.getDate());
-            bookingDetail.setStatus("WAITING");
+            bookingDetail.setStatus(BookingDetailStatus.WAITING);
+            bookingDetail.setVetCancelled(false);
             bookingDetail.setBooking(newBooking);
 
 
@@ -95,7 +98,7 @@ public class BookingService {
         scheduler.schedule(() -> {
             Booking booking = bookingRepository.findById(bookingId).orElse(null);
             if (booking != null && !"PAID".equals(booking.getStatus())) {
-                booking.setStatus("CANCELLED");
+                booking.setStatus(BookingStatus.CANCELLED);
                 bookingRepository.save(booking);
             }
         }, 15, TimeUnit.MINUTES);
@@ -107,7 +110,7 @@ public class BookingService {
         return bookingRepository.getBookingByUser(user);
     }
 
-    public Booking updateStatusBooking(int bookingId, String status) {
+    public Booking updateStatusBooking(int bookingId, BookingStatus status) {
         Booking booking = bookingRepository.findBookingByBookingId(bookingId);
         booking.setStatus(status);
         return bookingRepository.save(booking);

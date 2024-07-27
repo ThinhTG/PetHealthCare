@@ -1,6 +1,9 @@
 package com.pethealthcare.demo.service;
 
+import com.google.api.client.util.DateTime;
 import com.pethealthcare.demo.dto.request.BookingDetailUpdateRequest;
+import com.pethealthcare.demo.enums.BookingDetailStatus;
+import com.pethealthcare.demo.enums.BookingStatus;
 import com.pethealthcare.demo.model.*;
 import com.pethealthcare.demo.repository.*;
 import com.pethealthcare.demo.repository.UserRepository;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -27,6 +31,8 @@ public class BookingDetailService {
 
     @Autowired
     private ServiceRepository serviceRepository;
+    @Autowired
+    private ServiceSlotService serviceSlotService;
 
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
@@ -88,7 +94,7 @@ public class BookingDetailService {
         List<BookingDetail> nonCancelledBookingDetails = new ArrayList<>();
 
         for (BookingDetail bookingDetail : bookingDetails) {
-            if (!bookingDetail.getStatus().equalsIgnoreCase("CANCELLED")) {
+            if ( bookingDetail.getStatus() != BookingDetailStatus.CANCELLED && bookingDetail.getStatus() != BookingDetailStatus.WAITING){
                 nonCancelledBookingDetails.add(bookingDetail);
             }
         }
@@ -106,7 +112,7 @@ public class BookingDetailService {
         for (Booking booking : bookings) {
             bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
             for (BookingDetail bookingDetail : bookingDetailByBooking) {
-                if (bookingDetail.getStatus().equalsIgnoreCase("COMPLETED")) {
+                if (bookingDetail.getStatus() == BookingDetailStatus.COMPLETED) {
                     bookingDetails.add(bookingDetail);
                 }
             }
@@ -129,19 +135,36 @@ public class BookingDetailService {
         Pet pet = petRepository.findPetByPetId(petId);
         List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByPet(pet);
         for (BookingDetail bookingDetail : bookingDetails) {
-            bookingDetail.setStatus("CANCELLED");
+            bookingDetail.setStatus(BookingDetailStatus.CANCELLED);
             bookingDetailRepository.save(bookingDetail);
 
             List<BookingDetail> bookingDetailss = bookingDetailRepository.getBookingDetailsByBooking(bookingDetail.getBooking());
 
-            boolean allCancelled = bookingDetailss.stream().allMatch(detail -> detail.getStatus().equalsIgnoreCase("CANCELLED"));
+            boolean allCancelled = bookingDetailss.stream().allMatch(detail -> detail.getStatus() == BookingDetailStatus.CANCELLED);
 
 
             if (allCancelled) {
                 Booking booking = bookingDetail.getBooking();
-                booking.setStatus("CANCELLED");
+                booking.setStatus(BookingStatus.CANCELLED);
                 bookingRepository.save(booking);
             }
+        }
+    }
+
+    public void deleteBookingDetail(int bookingDetailId) {
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
+        bookingDetail.setStatus(BookingDetailStatus.CANCELLED);
+        bookingDetailRepository.save(bookingDetail);
+
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(bookingDetail.getBooking());
+
+        boolean allCancelled = bookingDetails.stream().allMatch(detail -> detail.getStatus() == BookingDetailStatus.CANCELLED);
+
+
+        if (allCancelled) {
+            Booking booking = bookingDetail.getBooking();
+            booking.setStatus(BookingStatus.CANCELLED);
+            bookingRepository.save(booking);
         }
     }
 
@@ -150,7 +173,7 @@ public class BookingDetailService {
         List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
         List<BookingDetail> bookingDetailByStatus = new ArrayList<>();
         for (BookingDetail bookingDetail : bookingDetails) {
-            if (bookingDetail.getStatus().equalsIgnoreCase( "CONFIRMED")  || bookingDetail.getStatus().equalsIgnoreCase("WAITING")) {
+            if (bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED) {
                 bookingDetailByStatus.add(bookingDetail);
             }
         }
@@ -185,28 +208,48 @@ public class BookingDetailService {
         return bookingDetailRepository.getBookingDetailByStatus(status);
     }
 
-    public void deleteBookingDetail(int bookingDetailId) {
-        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
-        bookingDetail.setStatus("CANCELLED");
-        bookingDetailRepository.save(bookingDetail);
-
-        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(bookingDetail.getBooking());
-
-        boolean allCancelled = bookingDetails.stream().allMatch(detail -> detail.getStatus().equalsIgnoreCase("CANCELLED"));
 
 
-        if (allCancelled) {
-            Booking booking = bookingDetail.getBooking();
-            booking.setStatus("CANCELLED");
-            bookingRepository.save(booking);
-        }
-    }
-
-    public BookingDetail updateStatusBookingDetail(int bookingDetailId, String status) {
+    public BookingDetail updateStatusBookingDetail(int bookingDetailId, BookingDetailStatus status) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
         bookingDetail.setStatus(status);
         return bookingDetailRepository.save(bookingDetail);
     }
+
+    public List<BookingDetail> updateStatusBookingDetailVetCancel(LocalDate dateTime) {
+        List<BookingDetail> bookingDetail = bookingDetailRepository.findBookingDetailsFromLocalDate(dateTime);
+        for (BookingDetail detail : bookingDetail) {
+            detail.setVetCancelled(true);
+            bookingDetailRepository.save(detail);
+        }
+        return bookingDetail;
+    }
+//
+//    public List<BookingDetail> updateVeterinarianCancelBookingDetail(int bookingDetailId) {
+//        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
+//        Slot slot = bookingDetail.getSlot();
+//        LocalDate dateTime = bookingDetail.getDate();
+//
+//        List<User> veterinarians = userRepository.findAllByRole("Veterinarian");
+//
+//        for (User veterinarian : veterinarians) {
+//            ServiceSlot serviceSlot = serviceSlotService.getSlotAvailable(bookingDetail.getServices().getServiceId(), dateTime);
+//            if (serviceSlot != null) {
+//                bookingDetail.setVetCancelled(true);
+//                bookingDetailRepository.save(bookingDetail);
+//                return bookingDetailRepository.findAll();
+//            }
+//        }
+//
+//        ServiceSlot serviceSlot = serviceSlotService.getSlotAvailable(bookingDetail.getServices().getServiceId(), dateTime);
+//
+//        for ()
+//
+//        bookingDetail.setVetCancelled(true);
+//        bookingDetailRepository.save(bookingDetail);
+//        return bookingDetailRepository.findAll();
+//    }
+
 
     public List<BookingDetail> getBookingDetailByStayCage() {
 
@@ -221,7 +264,7 @@ public class BookingDetailService {
         return bookingDetails;
     }
 
-    public void updateStatusByBookingId(int bookingId, String status) {
+    public void updateStatusByBookingId(int bookingId, BookingDetailStatus status) {
         Booking booking = bookingRepository.findBookingByBookingId(bookingId);
         List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(booking);
         for (BookingDetail detail : bookingDetails) {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -151,6 +152,17 @@ public class UserService {
         return getAllUsersByRole("Veterinarian");
     }
 
+    public List<User> getAllVeterinariansActive() {
+        List<User> users = getAllUsersByRole("Veterinarian");
+        List<User> activeUsers = new ArrayList<>();
+        for (User user : users) {
+            if (user.isStatus()) {
+                activeUsers.add(user);
+            }
+        }
+        return activeUsers;
+    }
+
 
     public User updateUserRole(int userID, String newrole) {
         // Find user by id
@@ -167,6 +179,8 @@ public class UserService {
             return null;
         }
     }
+
+
 
     public boolean deleteUser(int userID) {
         Optional<User> optionalUser = userRepository.findById(userID);
