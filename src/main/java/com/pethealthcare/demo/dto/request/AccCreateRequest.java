@@ -13,7 +13,7 @@ public class AccCreateRequest {
     private String name;
     private String email;
     private String password;
-    private BigDecimal phone;
+    private String phone;
     private String address;
     private String role;
     private String imageUrl;

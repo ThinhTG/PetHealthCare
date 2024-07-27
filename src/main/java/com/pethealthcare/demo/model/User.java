@@ -27,8 +27,8 @@ public class User {
     @Column(columnDefinition = "nvarchar(70)", nullable = false)
     private String password;
 
-    @Column(columnDefinition = "decimal(10,0)", nullable = false)
-    private BigDecimal phone;
+    @Column(columnDefinition = "nvarchar(50)", nullable = false)
+    private String phone;
 
     @Column(columnDefinition = "nvarchar(50)")
     private String address;

@@ -136,7 +136,7 @@ public class BookingDetailService {
         return bookingDetails;
     }
 
-    public List<BookingDetail> getBookingDetailByCusPhoneAndDate(BigDecimal phone, LocalDate date) {
+    public List<BookingDetail> getBookingDetailByCusPhoneAndDate(String phone, LocalDate date) {
         User user = userService.getUserByNumberPhone(phone);
         List<Booking> bookings = bookingRepository.getBookingByUser(user);
         List<BookingDetail> bookingDetails = new ArrayList<>();

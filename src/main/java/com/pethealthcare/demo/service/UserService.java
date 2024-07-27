@@ -140,7 +140,7 @@ public class UserService {
         return "Reset password successfully";
     }
 
-    public User getUserByNumberPhone(BigDecimal phone){
+    public User getUserByNumberPhone(String phone){
         return userRepository.findUserByPhone(phone);
     }
 
