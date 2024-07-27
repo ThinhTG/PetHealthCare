@@ -79,6 +79,7 @@ public class RefundService {
             refund.setAmount((int) priceAfterCancel);
             refund.setRefundDate(LocalDate.now());
             wallet.setBalance(wallet.getBalance() + priceAfterCancel);
+        walletRepository.save(wallet);
 
         return refundRepository.save(refund);
     }
@@ -116,6 +117,7 @@ public class RefundService {
             refund.setRefundPercent(100);
             wallet.setBalance(wallet.getBalance() + priceAfterCancel);
         }
+        walletRepository.save(wallet);
         return refundRepository.save(refund);
     }
 }
