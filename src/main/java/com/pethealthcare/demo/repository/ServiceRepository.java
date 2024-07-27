@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<Services, Integer> {
-    boolean existsByName(String name);
+    Services findServicesByName(String name);
 
     Services findServicesByServiceId(int id);
 

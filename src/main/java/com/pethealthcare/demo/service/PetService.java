@@ -3,14 +3,10 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.request.PetCreateRequest;
 import com.pethealthcare.demo.dto.request.PetUpdateRequest;
 import com.pethealthcare.demo.mapper.PetMapper;
-import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Pet;
 import com.pethealthcare.demo.model.User;
 import com.pethealthcare.demo.repository.PetRepository;
 import com.pethealthcare.demo.repository.UserRepository;
-
-import jakarta.transaction.Transactional;
-import org.checkerframework.checker.units.qual.A;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,20 +52,20 @@ public class PetService {
         User user = userRepository.findUserByUserId(id);
 
         Pet pet = petRepository.findPetByUser_UserIdAndAndPetName(id, request.getPetName());
-        if (pet == null && pet.isDeleted()) {
-            Pet newPet = petMapper.toPet(request);
-            newPet.setUser(user);
-            newPet.setStayCage(false);
-
-            if (file != null && !file.isEmpty()) {
-                String fileName = firebaseStorageService.uploadFile(file);
-                newPet.setImageUrl(fileName);
-            }
-
-            newPet.setDeleted(false);
-            return petRepository.save(newPet);
+        if (pet != null && pet.isDeleted()) {
+            return null;
         }
-        return null;
+        Pet newPet = petMapper.toPet(request);
+        newPet.setUser(user);
+        newPet.setStayCage(false);
+
+        if (file != null && !file.isEmpty()) {
+            String fileName = firebaseStorageService.uploadFile(file);
+            newPet.setImageUrl(fileName);
+        }
+
+        newPet.setDeleted(false);
+        return petRepository.save(newPet);
     }
 
     public Pet updatePet(int petid, PetUpdateRequest request, MultipartFile file) throws IOException {
