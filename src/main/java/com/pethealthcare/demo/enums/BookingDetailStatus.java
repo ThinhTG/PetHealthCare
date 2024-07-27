@@ -5,5 +5,6 @@ public enum BookingDetailStatus
     WAITING,
     CANCELLED,
     COMPLETED,
-    CONFIRMED
+    CONFIRMED,
+    EXAMINING
 }
