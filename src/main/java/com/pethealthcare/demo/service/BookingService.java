@@ -99,7 +99,12 @@ public class BookingService {
             Booking booking = bookingRepository.findById(bookingId).orElse(null);
             if (booking != null && !"PAID".equals(booking.getStatus())) {
                 booking.setStatus(BookingStatus.CANCELLED);
+                List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(booking);
                 bookingRepository.save(booking);
+                for (BookingDetail bookingDetail : bookingDetails) {
+                    bookingDetail.setStatus(BookingDetailStatus.CANCELLED);
+                    bookingDetailRepository.save(bookingDetail);
+                }
             }
         }, 15, TimeUnit.MINUTES);
     }
