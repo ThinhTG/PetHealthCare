@@ -26,7 +26,7 @@ import java.util.Optional;
 @Service
 public class PetService {
     @Autowired
-    PetRepository petRepository;
+    private PetRepository petRepository;
     @Autowired
     private PetMapper petMapper;
     @Autowired
@@ -55,8 +55,8 @@ public class PetService {
     public Pet createPet(int id, PetCreateRequest request, MultipartFile file) throws IOException {
         User user = userRepository.findUserByUserId(id);
 
-        boolean exist = petRepository.existsByUserAndPetName(user, request.getPetName());
-        if (!exist) {
+        Pet pet = petRepository.findPetByUser_UserIdAndAndPetName(id, request.getPetName());
+        if (pet == null && pet.isDeleted()) {
             Pet newPet = petMapper.toPet(request);
             newPet.setUser(user);
             newPet.setStayCage(false);
