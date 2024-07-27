@@ -63,8 +63,7 @@ public class PetService {
 
             if (file != null && !file.isEmpty()) {
                 String fileName = firebaseStorageService.uploadFile(file);
-                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
-                newPet.setImageUrl(fileUrl);
+                newPet.setImageUrl(fileName);
             }
 
             newPet.setDeleted(false);
@@ -97,8 +96,7 @@ public class PetService {
             }
             if (file != null && !file.isEmpty()) {
                 String fileName = firebaseStorageService.uploadFile(file);
-                String fileUrl = String.format("https://firebasestorage.googleapis.com/v0/b/pethealthcaresystem-64c52.appspot.com/o/%s?alt=media", fileName);
-                pet.setImageUrl(fileUrl);
+                pet.setImageUrl(fileName);
             }
             petRepository.save(pet);
             return pet;
