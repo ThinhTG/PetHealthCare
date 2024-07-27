@@ -1,8 +1,7 @@
 package com.pethealthcare.demo.controller;
 
-import com.google.api.client.util.DateTime;
 import com.pethealthcare.demo.dto.request.BookingDetailStatusUpdateRequest;
-import com.pethealthcare.demo.dto.request.BookingStatusUpdateRequest;
+import com.pethealthcare.demo.dto.request.BookingDetailUpdateRequest;
 import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.enums.BookingStatus;
 import com.pethealthcare.demo.model.*;
@@ -20,8 +19,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -266,6 +263,32 @@ public class BookingDetailController {
             );
         }
     }
+
+    @GetMapping("/getBookingDetailIdByVetId{vetId}")
+    ResponseEntity<ResponseObject> returnBookingDetail(@PathVariable  int vetId){
+        List<BookingDetail> bookingDetails = bookingDetailService.getBookingDetailByVetCancel(vetId);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok"," get booking successfully", bookingDetails)
+        );
+    }
+
+    @PutMapping("/update/bookingDetail/{bookingDetailId}")
+    ResponseEntity<ResponseObject> updateBookingDetail(@PathVariable int bookingDetailId, @RequestBody BookingDetailUpdateRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateBookingDetail(bookingDetailId, request))
+        );
+    }
+
+    @PutMapping("/update/bookingDetail/{bookingDetailId}")
+    ResponseEntity<ResponseObject> updateBookingDetailVetCancel(@PathVariable int bookingDetailId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateVetCancel(bookingDetailId))
+        );
+    }
+
+
+
+
 
     @PutMapping("/status/{bookingId}")
     public ResponseEntity<?> updateBookingStatus(@PathVariable int bookingId, @RequestParam BookingDetailStatus status) {
