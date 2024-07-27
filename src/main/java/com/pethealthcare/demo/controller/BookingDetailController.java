@@ -279,7 +279,7 @@ public class BookingDetailController {
         );
     }
 
-    @PutMapping("/update/bookingDetail/{bookingDetailId}")
+    @PutMapping("/update/bookingDetailVetCancel/{bookingDetailId}")
     ResponseEntity<ResponseObject> updateBookingDetailVetCancel(@PathVariable int bookingDetailId) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateVetCancel(bookingDetailId))
