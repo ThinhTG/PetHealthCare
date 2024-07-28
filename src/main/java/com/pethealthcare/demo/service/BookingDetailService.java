@@ -153,7 +153,7 @@ public class BookingDetailService {
         List<Booking> bookings = bookingRepository.findBookingByUser_Phone(phone);
         List<BookingDetail> bookingDetails = new ArrayList<>();
         for (Booking booking : bookings) {
-            bookingDetails = bookingDetailRepository.getBookingDetailsByBookingAndDate(booking, date);
+            bookingDetails.addAll(bookingDetailRepository.getBookingDetailsByBookingAndDate(booking, date));
         }
         if (bookingDetails.isEmpty()) {
             return null;

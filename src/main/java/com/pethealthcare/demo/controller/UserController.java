@@ -35,7 +35,8 @@ public class UserController {
 
 
     @PostMapping("/createmultirole")
-    ResponseEntity<ResponseObject> createAcc(@RequestParam("request") String requestJson, @RequestParam MultipartFile file) throws Exception {
+    ResponseEntity<ResponseObject> createAcc(@RequestParam("request") String requestJson,
+                                             @RequestParam(required = false) MultipartFile file) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         AccCreateRequest request = objectMapper.readValue(requestJson, AccCreateRequest.class);
         User createdUser = userService.createAcc(request, file);
@@ -75,7 +76,9 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updateUser(@PathVariable int id, @RequestParam("request") String requestJson, @RequestParam MultipartFile file) throws Exception {
+    ResponseEntity<ResponseObject> updateUser(@PathVariable int id,
+                                              @RequestParam("request") String requestJson,
+                                              @RequestParam(required = false) MultipartFile file) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         UserUpdateRequest request = objectMapper.readValue(requestJson, UserUpdateRequest.class);
         User updateUser = userService.updateUser(id, request, file);

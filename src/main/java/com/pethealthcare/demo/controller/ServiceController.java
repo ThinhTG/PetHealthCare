@@ -33,7 +33,8 @@ public class ServiceController {
     }
 
     @PostMapping("/create")
-    ResponseEntity<ResponseObject> createService(@RequestParam("request") String requestJson, @RequestParam MultipartFile file) throws IOException {
+    ResponseEntity<ResponseObject> createService(@RequestParam("request") String requestJson,
+                                                 @RequestParam(required = false) MultipartFile file) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ServiceCreateRequest request = objectMapper.readValue(requestJson, ServiceCreateRequest.class);
         Services createdService = serviceService.createService(request, file);
@@ -51,7 +52,7 @@ public class ServiceController {
     @PutMapping("/update/{id}")
     ResponseEntity<ResponseObject> updateService(@PathVariable int id,
                                                  @RequestParam("request") String requestJson,
-                                                 @RequestParam MultipartFile file) throws IOException {
+                                                 @RequestParam(required = false) MultipartFile file) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ServiceCreateRequest request = objectMapper.readValue(requestJson, ServiceCreateRequest.class);
         Services updateService = serviceService.updateService(id, request, file);
