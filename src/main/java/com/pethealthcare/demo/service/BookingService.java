@@ -4,6 +4,7 @@ import com.pethealthcare.demo.dto.request.BookingCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingDetailCreateRequest;
 import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.enums.BookingStatus;
+import com.pethealthcare.demo.enums.ServiceSlotStatus;
 import com.pethealthcare.demo.response.RevenueResponse;
 import com.pethealthcare.demo.mapper.BookingDetailMapper;
 import com.pethealthcare.demo.mapper.BookingMapper;
@@ -84,7 +85,7 @@ public class BookingService {
             Slot slot = slotRepository.findSlotBySlotId(request1.getSlotId());
             bookingDetail.setSlot(slot);
 
-            serviceSlotService.bookedSlot(request1.getVeterinarianId(), request1.getDate(), request1.getSlotId());
+            serviceSlotService.updateServiceSlotStatus(request1.getVeterinarianId(), request1.getDate(), request1.getSlotId(), ServiceSlotStatus.BOOKED);
             bookingDetailRepository.save(bookingDetail);
         }
 
@@ -97,13 +98,17 @@ public class BookingService {
     private void scheduleBookingStatusCheck(int bookingId) {
         scheduler.schedule(() -> {
             Booking booking = bookingRepository.findById(bookingId).orElse(null);
-            if (booking != null && !"PAID".equals(booking.getStatus())) {
+            if (booking != null && booking.getStatus() == BookingStatus.PENDING) {
                 booking.setStatus(BookingStatus.CANCELLED);
                 List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(booking);
                 bookingRepository.save(booking);
                 for (BookingDetail bookingDetail : bookingDetails) {
                     bookingDetail.setStatus(BookingDetailStatus.CANCELLED);
                     bookingDetailRepository.save(bookingDetail);
+                    serviceSlotService.updateServiceSlotStatus(bookingDetail.getUser().getUserId(),
+                            bookingDetail.getDate(),
+                            bookingDetail.getSlot().getSlotId(),
+                            ServiceSlotStatus.AVAILABLE);
                 }
             }
         }, 15, TimeUnit.MINUTES);
