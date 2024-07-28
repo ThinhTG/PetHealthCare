@@ -42,7 +42,7 @@ public class PetController {
     public ResponseEntity<ResponseObject> createPet(
             @PathVariable int id,
             @RequestParam("request") String requestJson,
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam(required = false) MultipartFile file) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         PetCreateRequest request = objectMapper.readValue(requestJson, PetCreateRequest.class);
@@ -70,7 +70,7 @@ public class PetController {
     ResponseEntity<ResponseObject> updatePet(
             @PathVariable int petid,
             @RequestParam("request") String requestJson,
-            @RequestParam MultipartFile file) throws IOException {
+            @RequestParam(required = false) MultipartFile file) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         PetUpdateRequest request = objectMapper.readValue(requestJson, PetUpdateRequest.class);
         Pet updatePet = petService.updatePet(petid, request, file);
