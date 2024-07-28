@@ -49,4 +49,7 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     List<BookingDetail> getBookingDetailsByBooking(Booking booking);
 
     List<BookingDetail> findBookingDetailByVetCancelled(boolean vetCancelled);
+
+    boolean existsByServices_ServiceIdAndAndSlot_SlotIdAndDateAndUser_UserId(int serviceId, int slotId, LocalDate date, int userId);
+
 }

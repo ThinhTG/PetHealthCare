@@ -34,6 +34,11 @@ public class BookingController {
     @PostMapping("/add")
     ResponseEntity<ResponseObject> addBooking(@RequestBody BookingCreateRequest request) {
         Booking booking = bookingService.createBooking(request);
+        if (booking == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("error", "booking failed", null)
+            );
+        }
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "booking created successfully", booking)
         );
