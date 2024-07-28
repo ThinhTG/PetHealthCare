@@ -22,4 +22,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findUserByEmail(String email);
 
     List<User> findAllByStatus(boolean status);
+
 }

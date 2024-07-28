@@ -47,4 +47,6 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     BookingDetail findBookingDetailByPet_PetIdAndStatus(int id, BookingDetailStatus status);
 
     List<BookingDetail> getBookingDetailsByBooking(Booking booking);
+
+    List<BookingDetail> findBookingDetailByVetCancelled(boolean vetCancelled);
 }

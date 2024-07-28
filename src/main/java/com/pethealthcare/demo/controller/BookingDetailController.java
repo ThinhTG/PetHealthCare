@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -150,9 +151,9 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailStatusByVet(vetId));
     }
 
-    @GetMapping("/getBookingDetailByVetCancel/{vetId}")
-    ResponseEntity<List<BookingDetail>> getBookingDetailByVetCancelled(@PathVariable int vetId) {
-        return ResponseEntity.ok(bookingDetailService.getBookingDetailByVetCancel(vetId));
+    @GetMapping("/getBookingDetailByVetCancel")
+    ResponseEntity<List<BookingDetail>> getBookingDetailByVetCancelled() {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByVetCancel());
     }
 
     @GetMapping("/cancelBookingDetailByPet/")
@@ -195,7 +196,7 @@ public class BookingDetailController {
                     new ResponseObject("failed", "booking is already cancelled or completed", "")
             );
 
-        } else if (booking.getStatus() == BookingStatus.PAID  && bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING){
+        } else if (booking.getStatus() == BookingStatus.PAID && bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING) {
 
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
@@ -220,7 +221,7 @@ public class BookingDetailController {
                     new ResponseObject("failed", "booking/bookingdetail is already cancelled or completed or pending", "")
             );
 
-        } else if ( booking.getStatus() == BookingStatus.PAID && bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING){
+        } else if (booking.getStatus() == BookingStatus.PAID && bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING) {
 
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());
@@ -264,14 +265,6 @@ public class BookingDetailController {
         }
     }
 
-    @GetMapping("/getBookingDetailIdByVetId{vetId}")
-    ResponseEntity<ResponseObject> returnBookingDetail(@PathVariable  int vetId){
-        List<BookingDetail> bookingDetails = bookingDetailService.getBookingDetailByVetCancel(vetId);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok"," get booking successfully", bookingDetails)
-        );
-    }
-
     @PutMapping("/update/bookingDetail/{bookingDetailId}")
     ResponseEntity<ResponseObject> updateBookingDetail(@PathVariable int bookingDetailId, @RequestBody BookingDetailUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -285,10 +278,6 @@ public class BookingDetailController {
                 new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateVetCancel(bookingDetailId))
         );
     }
-
-
-
-
 
     @PutMapping("/status/{bookingId}")
     public ResponseEntity<?> updateBookingStatus(@PathVariable int bookingId, @RequestParam BookingDetailStatus status) {

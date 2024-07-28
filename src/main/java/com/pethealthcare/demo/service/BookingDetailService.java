@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -31,10 +30,6 @@ public class BookingDetailService {
 
     @Autowired
     private ServiceRepository serviceRepository;
-    @Autowired
-    private ServiceSlotService serviceSlotService;
-    @Autowired
-    private UserService userService;
 
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
@@ -42,7 +37,7 @@ public class BookingDetailService {
 
     public List<BookingDetail> getAllBookingDetailNeedCage() {
         List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
-        List<BookingDetail> bookingDetailsNeedCage = new ArrayList<BookingDetail>();
+        List<BookingDetail> bookingDetailsNeedCage = new ArrayList<>();
         for (BookingDetail bookingDetail : bookingDetails) {
             if (bookingDetail.isNeedCage()) {
                 bookingDetailsNeedCage.add(bookingDetail);
@@ -87,34 +82,13 @@ public class BookingDetailService {
     }
 
     public BookingDetail updateVetCancel(int bookingDetailId) {
-        Optional<BookingDetail> optionalBookingDetail = bookingDetailRepository.findById(bookingDetailId);
-        if (optionalBookingDetail.isPresent()) {
-            BookingDetail bookingDetail = optionalBookingDetail.get();
-            if (!bookingDetail.isNeedCage()) {
-                bookingDetail.setVetCancelled(false);
-                // Save updated user
-            } else {
-                bookingDetail.setNeedCage(true);
-            }
-            bookingDetailRepository.save(bookingDetail);
-            return bookingDetail;
-        } else {
-            return null;
-        }
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
+        bookingDetail.setVetCancelled(true);
+        return bookingDetailRepository.save(bookingDetail);
     }
 
-    public List<BookingDetail> getBookingDetailByVetCancel(int vetId) {
-        User user = userRepository.findUserByUserId(vetId);
-        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
-        List<BookingDetail> bookingDetailByVetCancel = new ArrayList<>();
-
-        for (BookingDetail bookingDetail : bookingDetails) {
-            if (bookingDetail.isVetCancelled()) {
-                bookingDetailByVetCancel.add(bookingDetail);
-            }
-        }
-
-        return bookingDetailByVetCancel;
+    public List<BookingDetail> getBookingDetailByVetCancel() {
+        return bookingDetailRepository.findBookingDetailByVetCancelled(true);
     }
 
     public List<BookingDetail> getBookingDetailStatusByVet(int vetId) {
