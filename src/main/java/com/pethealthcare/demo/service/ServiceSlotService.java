@@ -68,14 +68,14 @@ public class ServiceSlotService {
     }
 
 
-    public void bookedSlot(int userId, LocalDate date, int slotId) {
+    public void updateServiceSlotStatus(int userId, LocalDate date, int slotId, ServiceSlotStatus status) {
         User user = userRepository.findUserByUserId(userId);
         Slot slot = slotRepository.findSlotBySlotId(slotId);
         ServiceSlot serviceSlot = serviceSlotRepository.findServiceSlotByUserAndDateAndSlot(user, date, slot);
         if (serviceSlot == null) {
             throw new RuntimeException("Service Slot is not existed");
         }
-        serviceSlot.setStatus(ServiceSlotStatus.BOOKED);
+        serviceSlot.setStatus(status);
 
         serviceSlotRepository.save(serviceSlot);
     }
