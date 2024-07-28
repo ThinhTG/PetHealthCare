@@ -1,8 +1,11 @@
 package com.pethealthcare.demo.service;
 
+import com.pethealthcare.demo.dto.request.BookingDetailCreateRequest;
 import com.pethealthcare.demo.dto.request.BookingDetailUpdateRequest;
 import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.enums.BookingStatus;
+import com.pethealthcare.demo.enums.ServiceSlotStatus;
+import com.pethealthcare.demo.mapper.BookingDetailMapper;
 import com.pethealthcare.demo.model.*;
 import com.pethealthcare.demo.repository.*;
 import com.pethealthcare.demo.repository.UserRepository;
@@ -31,6 +34,15 @@ public class BookingDetailService {
     @Autowired
     private ServiceRepository serviceRepository;
 
+    @Autowired
+    private SlotRepository slotRepository;
+
+    @Autowired
+    private BookingDetailMapper bookingDetailMapper;
+
+    @Autowired
+    private ServiceSlotService serviceSlotService;
+
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
     }
@@ -45,6 +57,30 @@ public class BookingDetailService {
 
         }
         return bookingDetailsNeedCage;
+    }
+
+    public void createBookingDetail(BookingDetailCreateRequest request, Booking newBooking) {
+        BookingDetail bookingDetail = bookingDetailMapper.toBookingDetail(request);
+        bookingDetail.setDate(request.getDate());
+        bookingDetail.setStatus(BookingDetailStatus.WAITING);
+        bookingDetail.setVetCancelled(false);
+        bookingDetail.setBooking(newBooking);
+
+
+        User user = userRepository.findUserByUserId(request.getVeterinarianId());
+        bookingDetail.setUser(user);
+
+        Pet pet = petRepository.findPetByPetId(request.getPetId());
+        bookingDetail.setPet(pet);
+
+        Services services = serviceRepository.findByServiceId(request.getServiceId());
+        bookingDetail.setServices(services);
+
+        Slot slot = slotRepository.findSlotBySlotId(request.getSlotId());
+        bookingDetail.setSlot(slot);
+
+        serviceSlotService.updateServiceSlotStatus(request.getVeterinarianId(), request.getDate(), request.getSlotId(), ServiceSlotStatus.BOOKED);
+        bookingDetailRepository.save(bookingDetail);
     }
 
     public BookingDetail updateNeedCage(int bookingDetailId) {

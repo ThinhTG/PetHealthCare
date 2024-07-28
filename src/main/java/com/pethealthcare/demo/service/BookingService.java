@@ -6,7 +6,6 @@ import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.enums.BookingStatus;
 import com.pethealthcare.demo.enums.ServiceSlotStatus;
 import com.pethealthcare.demo.response.RevenueResponse;
-import com.pethealthcare.demo.mapper.BookingDetailMapper;
 import com.pethealthcare.demo.mapper.BookingMapper;
 import com.pethealthcare.demo.model.*;
 import com.pethealthcare.demo.repository.*;
@@ -31,24 +30,14 @@ public class BookingService {
     private BookingMapper bookingMapper;
 
     @Autowired
-    private BookingDetailMapper bookingDetailMapper;
-
-    @Autowired
     private ServiceSlotService serviceSlotService;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PetRepository petRepository;
-
-    @Autowired
-    private ServiceRepository serviceRepository;
-
-    @Autowired
-    private SlotRepository slotRepository;
-
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    @Autowired
+    private BookingDetailService bookingDetailService;
 
     public List<Booking> getAllBooking() {
         return bookingRepository.findAll();
@@ -56,6 +45,18 @@ public class BookingService {
     }
 
     public Booking createBooking(BookingCreateRequest request) {
+        if (request.getBookingDetails().isEmpty()) {
+            return null;
+        }
+        for (BookingDetailCreateRequest bookingDetail : request.getBookingDetails()) {
+            if (bookingDetailRepository.existsByServices_ServiceIdAndAndSlot_SlotIdAndDateAndUser_UserId(bookingDetail.getServiceId(),
+                    bookingDetail.getSlotId(),
+                    bookingDetail.getDate(),
+                    bookingDetail.getVeterinarianId())) {
+                return null;
+            }
+        }
+
         Booking newBooking = bookingMapper.toBooking(request);
         LocalDate localDate = LocalDate.now();
         newBooking.setDate(localDate);
@@ -66,27 +67,7 @@ public class BookingService {
         newBooking = bookingRepository.save(newBooking);
 
         for (BookingDetailCreateRequest request1 : request.getBookingDetails()) {
-            BookingDetail bookingDetail = bookingDetailMapper.toBookingDetail(request1);
-            bookingDetail.setDate(request1.getDate());
-            bookingDetail.setStatus(BookingDetailStatus.WAITING);
-            bookingDetail.setVetCancelled(false);
-            bookingDetail.setBooking(newBooking);
-
-
-            user = userRepository.findUserByUserId(request1.getVeterinarianId());
-            bookingDetail.setUser(user);
-
-            Pet pet = petRepository.findPetByPetId(request1.getPetId());
-            bookingDetail.setPet(pet);
-
-            Services services = serviceRepository.findByServiceId(request1.getServiceId());
-            bookingDetail.setServices(services);
-
-            Slot slot = slotRepository.findSlotBySlotId(request1.getSlotId());
-            bookingDetail.setSlot(slot);
-
-            serviceSlotService.updateServiceSlotStatus(request1.getVeterinarianId(), request1.getDate(), request1.getSlotId(), ServiceSlotStatus.BOOKED);
-            bookingDetailRepository.save(bookingDetail);
+            bookingDetailService.createBookingDetail(request1, newBooking);
         }
 
         scheduleBookingStatusCheck(newBooking.getBookingId());
