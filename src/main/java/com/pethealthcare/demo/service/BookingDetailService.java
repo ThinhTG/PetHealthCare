@@ -207,15 +207,14 @@ public class BookingDetailService {
     }
 
 
-
-
-    public BookingDetail updateBookingDetail(int id, BookingDetailUpdateRequest request) {
-        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(id);
-
+    public BookingDetail updateBookingDetail(BookingDetailUpdateRequest request) {
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(request.getBookingDetailId());
+        Slot slot = slotRepository.findSlotBySlotId(request.getSlotId());
+        User user = userRepository.findUserByUserId(request.getUserId());
         if (bookingDetail != null) {
-            bookingDetail.setDate(request.getServiceSlot().getDate());
-            bookingDetail.setSlot(request.getServiceSlot().getSlot());
-            bookingDetail.setUser(request.getServiceSlot().getUser());
+            bookingDetail.setDate(request.getDate());
+            bookingDetail.setSlot(slot);
+            bookingDetail.setUser(user);
             bookingDetailRepository.save(bookingDetail);
         }
 

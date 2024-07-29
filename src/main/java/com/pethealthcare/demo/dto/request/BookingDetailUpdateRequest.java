@@ -13,5 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingDetailUpdateRequest {
-    private ServiceSlot serviceSlot;
+    private int bookingDetailId;
+    private int userId;
+    private int slotId;
+    private LocalDate date;
 }
