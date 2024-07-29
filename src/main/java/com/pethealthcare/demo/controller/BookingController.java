@@ -20,7 +20,6 @@ import java.util.List;
 public class BookingController {
     @Autowired
     private BookingService bookingService;
-
     @Autowired
     private RefundService refundService;
     @Autowired
@@ -66,9 +65,6 @@ public class BookingController {
                 new ResponseObject("ok", "booking updated successfully", bookingService.updateStatusBooking(bookingId, request.getStatus()))
         );
     }
-
-
-
 
     @GetMapping("/revenue-yearly")
     public ResponseEntity<Double> getYearlyRevenue(@RequestParam int year) {

@@ -252,13 +252,12 @@ public class BookingDetailService {
         return bookingDetailRepository.save(bookingDetail);
     }
 
-    public List<BookingDetail> updateStatusBookingDetailVetCancel(LocalDate dateTime) {
+    public void updateStatusBookingDetailVetCancel(LocalDate dateTime) {
         List<BookingDetail> bookingDetail = bookingDetailRepository.findBookingDetailsFromLocalDate(dateTime);
         for (BookingDetail detail : bookingDetail) {
             detail.setVetCancelled(true);
             bookingDetailRepository.save(detail);
         }
-        return bookingDetail;
     }
 
 
@@ -318,5 +317,14 @@ public class BookingDetailService {
         return new MostUsedServiceResponse(maxCount, mostFrequentServices);
     }
 
-
+    public List<BookingDetail> getBookingDetailByPaidBooking() {
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
+        List<BookingDetail> paidBookingDetails = new ArrayList<>();
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (bookingDetail.getBooking().getStatus() == BookingStatus.PAID) {
+                paidBookingDetails.add(bookingDetail);
+            }
+        }
+        return paidBookingDetails;
+    }
 }

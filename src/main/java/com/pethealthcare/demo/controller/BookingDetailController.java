@@ -294,4 +294,9 @@ public class BookingDetailController {
     MostUsedServiceResponse getMostUsedServiceByMonthAndYear(@RequestParam int month, @RequestParam int year) {
         return bookingDetailService.mostUsedService(month, year);
     }
+
+    @GetMapping("/getBookingDetailByPaidBooking")
+    ResponseEntity<List<BookingDetail>> getBookingDetailByPaidBooking() {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByPaidBooking());
+    }
 }
