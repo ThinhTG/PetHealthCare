@@ -87,7 +87,7 @@ public class ServiceSlotService {
         if (serviceSlot == null) {
             throw new RuntimeException("Service Slot is not existed");
         }
-        serviceSlot.setStatus(ServiceSlotStatus.CANCELLED);
+        serviceSlot.setStatus(ServiceSlotStatus.AVAILABLE);
 
         serviceSlotRepository.save(serviceSlot);
     }

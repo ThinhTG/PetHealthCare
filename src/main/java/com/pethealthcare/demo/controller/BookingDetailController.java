@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/bookingDetail")
@@ -83,6 +85,11 @@ public class BookingDetailController {
     ResponseEntity<List<BookingDetail>> getBookingByBookingID(@PathVariable int BookingId) {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailByBookingId(BookingId));
     }
+
+//    @GetMapping("/getNameVetInBookingDetailByBookingId/{bookingId}")
+//    ResponseEntity<List<User>> getBookingDetailByBookingId(@PathVariable int bookingId) {
+//        return ResponseEntity.ok(bookingDetailService.getBookingDetailByBookingId(bookingId));
+//    }
 
     @GetMapping("/getByNeedCage")
     List<BookingDetail> getBookingDetailByNeedCage() {
@@ -160,6 +167,7 @@ public class BookingDetailController {
     ResponseEntity<List<BookingDetail>> getBookingDetailNonConfirmed() {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailNonConfirmed());
     }
+
 
     @GetMapping("/cancelBookingDetailByPet/")
     public ResponseEntity<ResponseObject> cancelBookingDetailByPet(@RequestParam int petId, @RequestParam int userId) {
