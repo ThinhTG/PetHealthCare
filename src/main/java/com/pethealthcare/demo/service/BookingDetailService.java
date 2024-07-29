@@ -232,6 +232,7 @@ public class BookingDetailService {
             bookingDetail.setDate(request.getDate());
             bookingDetail.setSlot(slot);
             bookingDetail.setUser(user);
+            bookingDetail.setVetCancelled(false);
             bookingDetailRepository.save(bookingDetail);
         }
 
