@@ -45,7 +45,6 @@ public class BookingDetail {
     private Pet pet;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "userId")
     private User user;
 
