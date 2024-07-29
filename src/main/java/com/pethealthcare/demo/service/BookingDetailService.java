@@ -133,7 +133,7 @@ public class BookingDetailService {
         List<BookingDetail> nonCancelledBookingDetails = new ArrayList<>();
 
         for (BookingDetail bookingDetail : bookingDetails) {
-            if ( bookingDetail.getStatus() != BookingDetailStatus.CANCELLED && bookingDetail.getStatus() != BookingDetailStatus.WAITING){
+            if ( bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED){
                 nonCancelledBookingDetails.add(bookingDetail);
             }
         }
