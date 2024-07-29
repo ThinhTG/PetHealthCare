@@ -155,11 +155,6 @@ public class BookingDetailService {
         return nonConfirmedBookingDetails;
     }
 
-
-
-
-
-
     public List<BookingDetail> getBookingDetailByCus(int cusId) {
         User user = userRepository.findUserByUserId(cusId);
         List<Booking> bookings = bookingRepository.getBookingByUser(user);
@@ -244,8 +239,6 @@ public class BookingDetailService {
         return bookingDetailRepository.getBookingDetailByStatus(status);
     }
 
-
-
     public BookingDetail updateStatusBookingDetail(int bookingDetailId, BookingDetailStatus status) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
         bookingDetail.setStatus(status);
@@ -259,8 +252,6 @@ public class BookingDetailService {
             bookingDetailRepository.save(detail);
         }
     }
-
-
 
     public List<BookingDetail> getBookingDetailByStayCage() {
 

@@ -7,7 +7,6 @@ import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.ServiceRepository;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,8 +76,9 @@ public class ServiceService {
 
     public String deleteService(int serviceId) {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
-        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByStatusAndServices_ServiceId(BookingDetailStatus.WAITING, serviceId);
-        if (bookingDetail != null) {
+        List<BookingDetail> bookingDetail = bookingDetailRepository.
+                findBookingDetailByStatusAndServices_ServiceId(BookingDetailStatus.WAITING, serviceId);
+        for (BookingDetail ignored : bookingDetail) {
             return "Service is being used";
         }
         service.setStatus(false);
