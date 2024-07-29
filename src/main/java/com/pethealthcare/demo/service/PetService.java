@@ -57,7 +57,7 @@ public class PetService {
         User user = userRepository.findUserByUserId(id);
 
         Pet pet = petRepository.findPetByUser_UserIdAndAndPetName(id, request.getPetName());
-        if (pet != null && pet.isDeleted()) {
+        if (pet != null && !pet.isDeleted()) {
             return null;
         }
         Pet newPet = petMapper.toPet(request);
