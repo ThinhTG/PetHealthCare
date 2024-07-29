@@ -141,6 +141,23 @@ public class BookingDetailService {
         return nonCancelledBookingDetails;
     }
 
+    public List<BookingDetail> getBookingDetailNonConfirmed() {
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findAll();
+        List<BookingDetail> nonConfirmedBookingDetails = new ArrayList<>();
+
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if ( bookingDetail.getStatus() == BookingDetailStatus.WAITING && bookingDetail.getBooking().getStatus() == BookingStatus.PENDING ||
+            bookingDetail.getStatus() == BookingDetailStatus.WAITING && bookingDetail.getBooking().getStatus() == BookingStatus.PAID){
+                nonConfirmedBookingDetails.add(bookingDetail);
+            }
+        }
+
+        return nonConfirmedBookingDetails;
+    }
+
+
+
+
 
 
     public List<BookingDetail> getBookingDetailByCus(int cusId) {

@@ -156,6 +156,11 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailByVetCancel());
     }
 
+    @GetMapping("/getAllBookingDetailNonConfirmed")
+    ResponseEntity<List<BookingDetail>> getBookingDetailNonConfirmed() {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailNonConfirmed());
+    }
+
     @GetMapping("/cancelBookingDetailByPet/")
     public ResponseEntity<ResponseObject> cancelBookingDetailByPet(@RequestParam int petId, @RequestParam int userId) {
         Pet pet = petRepository.findPetByPetId(petId);
