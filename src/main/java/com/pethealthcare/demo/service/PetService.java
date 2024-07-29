@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,13 +40,13 @@ public class PetService {
 
     public List<Pet> getAllActivePet(int userID) {
         User user = userRepository.findUserByUserId(userID);
-        List <Pet> pets = petRepository.findPetsByUser(user);
-        List <Pet> petss = new ArrayList<>();
+        List<Pet> pets = petRepository.findPetsByUser(user);
+        List<Pet> petss = new ArrayList<>();
         for (Pet pet : pets) {
 
-                if (!pet.isDeleted()){
-                    petss.add(pet);
-                }
+            if (!pet.isDeleted()) {
+                petss.add(pet);
+            }
 
         }
         return petss;
@@ -73,35 +72,37 @@ public class PetService {
         return petRepository.save(newPet);
     }
 
-    public Pet updatePet(int petid, PetUpdateRequest request, MultipartFile file) throws IOException {
-        // Find user by id
-        Optional<Pet> optionalPet = petRepository.findById(petid);
-        if (optionalPet.isPresent()) {
-            Pet pet = optionalPet.get();
+    public Pet updatePet(int petId, PetUpdateRequest request, MultipartFile file) throws IOException {
+        Pet deletePet = petRepository.findPetByPetId(petId);
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatus(petId, BookingDetailStatus.WAITING);
+        if (bookingDetail != null) {
+            throw new RuntimeException("Pet is existing in booking");
+        }
+        if (deletePet != null) {
 
             // Update fields
-            if (request.getPetName() != null && !request.getPetName().equals(pet.getPetName()) && !request.getPetName().isEmpty()) {
-                pet.setPetName(request.getPetName());
+            if (request.getPetName() != null && !request.getPetName().equals(deletePet.getPetName()) && !request.getPetName().isEmpty()) {
+                deletePet.setPetName(request.getPetName());
             }
-            if (request.getPetGender() != null && !request.getPetGender().equals(pet.getPetGender()) && !request.getPetGender().isEmpty()) {
-                pet.setPetGender(request.getPetGender());
+            if (request.getPetGender() != null && !request.getPetGender().equals(deletePet.getPetGender()) && !request.getPetGender().isEmpty()) {
+                deletePet.setPetGender(request.getPetGender());
             }
-            if (request.getPetAge() > 0 && request.getPetAge() != (pet.getPetAge())) {
-                pet.setPetAge(request.getPetAge());
+            if (request.getPetAge() > 0 && request.getPetAge() != (deletePet.getPetAge())) {
+                deletePet.setPetAge(request.getPetAge());
             }
-            if (request.getPetType() != null && !request.getPetType().equals(pet.getPetType()) && !request.getPetType().isEmpty()) {
-                pet.setPetType(request.getPetType());
+            if (request.getPetType() != null && !request.getPetType().equals(deletePet.getPetType()) && !request.getPetType().isEmpty()) {
+                deletePet.setPetType(request.getPetType());
             }
-            if(request.getVaccination() != null && !request.getVaccination().equals(pet.getVaccination()) && !request.getVaccination().isEmpty()) {
-                pet.setVaccination(request.getVaccination());
+            if (request.getVaccination() != null && !request.getVaccination().equals(deletePet.getVaccination()) && !request.getVaccination().isEmpty()) {
+                deletePet.setVaccination(request.getVaccination());
             }
             if (file != null && !file.isEmpty()) {
                 String fileName = firebaseStorageService.uploadFile(file);
-                pet.setImageUrl(fileName);
+                deletePet.setImageUrl(fileName);
             }
-            petRepository.save(pet);
-            return pet;
-    } else {
+            petRepository.save(deletePet);
+            return deletePet;
+        } else {
             return null;
         }
     }

@@ -5,7 +5,9 @@ import com.pethealthcare.demo.dto.request.AccCreateRequest;
 import com.pethealthcare.demo.dto.request.UserCreateRequest;
 import com.pethealthcare.demo.dto.request.UserUpdateRequest;
 import com.pethealthcare.demo.mapper.UserMapper;
+import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.User;
+import com.pethealthcare.demo.repository.BookingRepository;
 import com.pethealthcare.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +35,8 @@ public class UserService {
     private WalletService walletService;
     @Autowired
     private FirebaseStorageService firebaseStorageService;
+    @Autowired
+    private BookingRepository bookingRepository;
 
     public User createUser(UserCreateRequest request) {
         User exist = userRepository.findUserByEmail(request.getEmail());
@@ -74,13 +78,15 @@ public class UserService {
         return userRepository.findAllByStatus(true);
     }
 
-    public User updateUser(int userid, UserUpdateRequest request, MultipartFile file) throws IOException {
-        // Find user by id
-        Optional<User> optionalUser = userRepository.findById(userid);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-
-            // Update fields
+    public User updateUser(int userId, UserUpdateRequest request, MultipartFile file) throws IOException {
+        User user = userRepository.findUserByUserId(userId);
+        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, "PENDING");
+        if (booking == null) {
+            booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, "CONFIRMED");
+        }
+        if (booking != null) {
+            throw new RuntimeException("User is existing in booking");
+        }
             if (request.getName() != null && !request.getName().equals(user.getName()) && !request.getName().isEmpty()) {
                 user.setName(request.getName());
             }
@@ -106,9 +112,6 @@ public class UserService {
             // Save updated user
             userRepository.save(user);
             return user;
-        } else {
-            return null;
-        }
     }
 
     public String forgotPassword(String email) {
@@ -182,14 +185,16 @@ public class UserService {
 
 
     public boolean deleteUser(int userID) {
-        Optional<User> optionalUser = userRepository.findById(userID);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setStatus(false);
-            userRepository.save(user);
-            return true;
-        } else {
+        User user = userRepository.findUserByUserId(userID);
+        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(userID, "PENDING");
+        if (booking == null) {
+            booking = bookingRepository.findBookingByUser_UserIdAndStatus(userID, "CONFIRMED");
+        }
+        if (booking != null) {
             return false;
         }
+        user.setStatus(false);
+        userRepository.save(user);
+        return true;
     }
 }
