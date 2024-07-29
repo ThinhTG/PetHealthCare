@@ -28,8 +28,10 @@ public class RefundService {
 
     @Autowired
     private WalletRepository walletRepository;
+    @Autowired
+    private TransactionService transactionService;
 
-    public List<Refund> getReturn(){
+    public List<Refund> getReturn() {
         return refundRepository.findAll();
     }
 
@@ -42,7 +44,7 @@ public class RefundService {
         for (Booking booking : bookings) {
             bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
             for (BookingDetail bookingDetail : bookingDetailByBooking) {
-                    bookingDetails.add(bookingDetail);
+                bookingDetails.add(bookingDetail);
 
             }
             for (Refund refund : refundRepository.findAll()) {
@@ -74,12 +76,11 @@ public class RefundService {
         Refund refund = new Refund();
         refund.setBookingDetail(bookingDetail);
         double priceAfterCancel = bookingDetail.getServices().getPrice();
-           priceAfterCancel = priceAfterCancel * 1.5;
-            refund.setRefundPercent(150);
-            refund.setAmount((int) priceAfterCancel);
-            refund.setRefundDate(LocalDate.now());
-            wallet.setBalance(wallet.getBalance() + priceAfterCancel);
-        walletRepository.save(wallet);
+        priceAfterCancel *= 1;
+        refund.setRefundPercent(100);
+        refund.setAmount((int) priceAfterCancel);
+        refund.setRefundDate(LocalDate.now());
+        transactionService.refund(wallet.getWalletId(), bookingDetail.getBooking().getBookingId(), (int) priceAfterCancel);
 
         return refundRepository.save(refund);
     }
@@ -106,7 +107,7 @@ public class RefundService {
             refund.setRefundPercent(75);
             refund.setAmount((int) priceAfterCancel);
             refund.setRefundDate(LocalDate.now());
-            wallet.setBalance(wallet.getBalance() + priceAfterCancel);
+            transactionService.refund(wallet.getWalletId(), bookingDetail.getBooking().getBookingId(), (int) priceAfterCancel);
         } else if (LocalDate.now().isAfter(threeDaysAfterPayment)) {
             refund.setAmount(0);
             refund.setRefundDate(LocalDate.now());
@@ -115,9 +116,8 @@ public class RefundService {
             refund.setRefundDate(LocalDate.now());
             refund.setAmount(transaction.getAmount());
             refund.setRefundPercent(100);
-            wallet.setBalance(wallet.getBalance() + priceAfterCancel);
+            transactionService.refund(wallet.getWalletId(), bookingDetail.getBooking().getBookingId(), (int) priceAfterCancel);
         }
-        walletRepository.save(wallet);
         return refundRepository.save(refund);
     }
 }

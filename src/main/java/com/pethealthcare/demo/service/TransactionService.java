@@ -154,6 +154,22 @@ public class TransactionService {
         return "Payment success";
     }
 
+    public String refund(int walletId, int bookingId, int amount) {
+        Wallet wallet = walletRepository.findWalletByWalletId(walletId);
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setTransactionType(TransactionType.REFUND);
+        transaction.setTransactionDate(LocalDateTime.now());
+        wallet.setBalance(wallet.getBalance() + amount);
+        walletRepository.save(wallet);
+        transaction.setWallet(wallet);
+        Booking booking = bookingRepository.findBookingByBookingId(bookingId);
+        transaction.setBooking(booking);
+        transactionRepository.save(transaction);
+        return "Refund success";
+    }
+
     public List<Transaction> getTransactionsByWalletId(int walletId){
         return transactionRepository.findTransactionsByWallet_WalletId(walletId);
     }

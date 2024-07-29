@@ -15,4 +15,6 @@ public interface ServiceRepository extends JpaRepository<Services, Integer> {
     Services findByServiceId(int id);
 
     List<Services> findAllByStatus(boolean status);
+
+    List<Services> findAllByServiceId(int id);
 }
