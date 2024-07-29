@@ -7,6 +7,7 @@ import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.Services;
 import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.ServiceRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,9 +53,13 @@ public class ServiceService {
     }
 
     public Services updateService(int serviceId, ServiceCreateRequest request, MultipartFile file) throws IOException {
-        Optional<Services> updateService = serviceRepository.findById(serviceId);
-        if (updateService.isPresent()) {
-            Services service = updateService.get();
+        Services service = serviceRepository.findServicesByServiceId(serviceId);
+        List<BookingDetail> bookingDetail = bookingDetailRepository.
+                findBookingDetailByStatusAndServices_ServiceId(BookingDetailStatus.WAITING, serviceId);
+        for (BookingDetail ignored : bookingDetail) {
+            throw new EntityNotFoundException("Service is being used");
+        }
+        if (service != null) {
             if(!service.getName().equals(request.getName())) {
                 service.setName(request.getName());
             }
