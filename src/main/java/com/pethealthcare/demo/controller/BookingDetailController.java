@@ -60,7 +60,7 @@ public class BookingDetailController {
     }
 
     @PutMapping("/needCage/{bookingDetailId}")
-    ResponseEntity<ResponseObject> updateNeedcage(@PathVariable int bookingDetailId) {
+    ResponseEntity<ResponseObject> updateNeedCage(@PathVariable int bookingDetailId) {
         BookingDetail updateNeedCage = bookingDetailService.updateNeedCage(bookingDetailId);
         if (updateNeedCage != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -101,7 +101,7 @@ public class BookingDetailController {
     }
 
     @GetMapping("/getAllBookingDetail_ByCusId")
-    List<BookingDetail> getBookingDetailByCusid(@RequestParam int cusId) {
+    List<BookingDetail> getBookingDetailByCustomerId(@RequestParam int cusId) {
         return bookingDetailService.getBookingDetailByCus(cusId);
     }
 
@@ -218,7 +218,7 @@ public class BookingDetailController {
         if (bookingDetail.getStatus() == BookingDetailStatus.CANCELLED || bookingDetail.getStatus() == BookingDetailStatus.COMPLETED
                 && booking.getStatus() == BookingStatus.CANCELLED || booking.getStatus() == BookingStatus.COMPLETED) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("failed", "booking/bookingdetail is already cancelled or completed or pending", "")
+                    new ResponseObject("failed", "booking/bookingDetail is already cancelled or completed or pending", "")
             );
 
         } else if (booking.getStatus() == BookingStatus.PAID && bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING) {
@@ -265,10 +265,10 @@ public class BookingDetailController {
         }
     }
 
-    @PutMapping("/update/bookingDetail/{bookingDetailId}")
-    ResponseEntity<ResponseObject> updateBookingDetail(@PathVariable int bookingDetailId, @RequestBody BookingDetailUpdateRequest request) {
+    @PutMapping("/update/bookingDetail")
+    ResponseEntity<ResponseObject> updateBookingDetail(@RequestBody BookingDetailUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateBookingDetail(bookingDetailId, request))
+                new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateBookingDetail(request))
         );
     }
 
