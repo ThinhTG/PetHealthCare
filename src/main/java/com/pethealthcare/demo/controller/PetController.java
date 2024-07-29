@@ -28,10 +28,6 @@ public class PetController {
     PetService petService;
     @Autowired
     UserService userService;
-    @Autowired
-    private PetRepository petRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @GetMapping("/getAll")
     List<Pet> getAllPet() {
@@ -46,7 +42,6 @@ public class PetController {
 
         ObjectMapper objectMapper = new ObjectMapper();
         PetCreateRequest request = objectMapper.readValue(requestJson, PetCreateRequest.class);
-        System.out.println(file);
         Pet createdPet = petService.createPet(id, request, file);
         if (createdPet != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
