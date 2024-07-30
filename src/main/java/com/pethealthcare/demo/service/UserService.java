@@ -78,14 +78,14 @@ public class UserService {
         return userRepository.findAllByStatus(true);
     }
 
-    public User updateUser(int userId, UserUpdateRequest request, MultipartFile file) throws IOException {
-        User user = userRepository.findUserByUserId(userId);
-        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, "PENDING");
+    public String updateUser(UserUpdateRequest request, MultipartFile file) throws IOException {
+        User user = userRepository.findUserByUserId(request.getUserId());
+        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(request.getUserId(), "PENDING");
         if (booking == null) {
-            booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, "CONFIRMED");
+            booking = bookingRepository.findBookingByUser_UserIdAndStatus(request.getUserId(), "CONFIRMED");
         }
         if (booking != null) {
-            throw new RuntimeException("User is existing in booking");
+            return "User is existing in booking";
         }
             if (request.getName() != null && !request.getName().equals(user.getName()) && !request.getName().isEmpty()) {
                 user.setName(request.getName());
@@ -93,10 +93,16 @@ public class UserService {
             if (request.getEmail() != null && !request.getEmail().equals(user.getEmail()) && !request.getEmail().isEmpty()) {
                 user.setEmail(request.getEmail());
             }
-            if (request.getPassword() != null && !request.getPassword().equals(user.getPassword()) && !request.getPassword().isEmpty()) {
+        if (request.getOldPassword() != null && !request.getOldPassword().isEmpty()) {
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+            if (passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+                return "Old password is incorrect";
+            }
+        }
+        if (request.getNewPassword() != null && !request.getNewPassword().equals(user.getPassword()) && !request.getNewPassword().isEmpty()) {
                 // Encode password as JWT
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-                user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
             }
             if (request.getPhone() != null && !request.getPhone().equals(user.getPhone())) {
                 user.setPhone(request.getPhone());
@@ -111,7 +117,7 @@ public class UserService {
             }
             // Save updated user
             userRepository.save(user);
-            return user;
+        return "Update user successfully";
     }
 
     public String forgotPassword(String email) {
