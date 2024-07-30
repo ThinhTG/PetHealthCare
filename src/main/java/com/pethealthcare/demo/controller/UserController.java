@@ -61,6 +61,7 @@ public class UserController {
     ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         return new ResponseEntity<>(userService.forgotPassword(request.getEmail()), HttpStatus.OK);
     }
+
     @PutMapping("/verify-otp")
     ResponseEntity<String> verifyOtp(@RequestBody OtpRequest request) {
         return new ResponseEntity<>(userService.checkOtp(request.getEmail(), request.getOtp()), HttpStatus.OK);
@@ -70,41 +71,35 @@ public class UserController {
     ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
         return new ResponseEntity<>(userService.resetPassword(request.getEmail(), request.getPassword()), HttpStatus.OK);
     }
+
     @GetMapping("/getAll")
     List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/update/{id}")
-    ResponseEntity<ResponseObject> updateUser(@PathVariable int id,
-                                              @RequestParam("request") String requestJson,
+    @PutMapping("/update")
+    ResponseEntity<ResponseObject> updateUser(@RequestParam("request") String requestJson,
                                               @RequestParam(required = false) MultipartFile file) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         UserUpdateRequest request = objectMapper.readValue(requestJson, UserUpdateRequest.class);
-        User updateUser = userService.updateUser(id, request, file);
-        if (updateUser != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "User updated successfully", updateUser)
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "User not found", "")
-            );
-        }
+        String updateUser = userService.updateUser(request, file);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", updateUser, "")
+        );
     }
 
     @GetMapping("/getaccount/{id}")
     User getUser(@PathVariable int id) {
-    return userService.getAccountById(id);
+        return userService.getAccountById(id);
     }
 
     @GetMapping("/getVeterinarian")
-    List<User> getVeterinarians(){
+    List<User> getVeterinarians() {
         return userService.getAllVeterinarians();
     }
 
     @PutMapping("/manageRole/{userID}")
-    ResponseEntity<ResponseObject> updateUserRole(@PathVariable int userID,@RequestBody UserRoleUpdateRequest request) {
+    ResponseEntity<ResponseObject> updateUserRole(@PathVariable int userID, @RequestBody UserRoleUpdateRequest request) {
         User updateUser = userService.updateUserRole(userID, request.getNewrole());
         if (updateUser != null) {
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -130,7 +125,6 @@ public class UserController {
             );
         }
     }
-
 
 
 }
