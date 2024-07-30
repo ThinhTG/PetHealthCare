@@ -256,12 +256,8 @@ public class BookingDetailController {
         boolean updated = false;
 
         for (BookingDetail bookingDetail : bookingDetails) {
-            if (bookingDetail.getStatus() == BookingDetailStatus.CANCELLED || bookingDetail.getStatus() == BookingDetailStatus.COMPLETED) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                        new ResponseObject("failed", "One or more booking details are already cancelled or completed", "")
-                );
-            } else if (bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING) {
-                bookingDetailService.updateStatusBookingDetailVetCancel(dateTime);
+           if (bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING) {
+                bookingDetailService.updateStatusBookingDetailVetCancel(dateTime, vetId);
                 updated = true;
             }
         }
@@ -280,6 +276,7 @@ public class BookingDetailController {
     @PutMapping("/update/bookingDetail")
     ResponseEntity<ResponseObject> updateBookingDetail(@RequestBody BookingDetailUpdateRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
+
                 new ResponseObject("ok", "booking updated successfully", bookingDetailService.updateBookingDetail(request))
         );
     }

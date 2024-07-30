@@ -47,7 +47,6 @@ public class ServiceSlotController {
     @PutMapping("/vetCancelDate")
     List<ServiceSlot> serviceSlotCancelDate(@RequestParam LocalDate date, @RequestParam int vetId) {
         return serviceSlotService.cancelServiceSlot(date, vetId);
-
     }
 
     @GetMapping("/getByVet")
