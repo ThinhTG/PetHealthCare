@@ -33,6 +33,8 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
 
     List<BookingDetail> getBookingDetailByuser(User user);
 
+    List<BookingDetail> getBookingDetailByUser_UserIdAndVetCancelled(int userId, boolean vetCancelled);
+
     List<BookingDetail> getBookingDetailByStatus(String status);
 
     List<BookingDetail> getBookingDetailByPet(Pet pet);
