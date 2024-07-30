@@ -42,6 +42,8 @@ public class BookingDetailService {
 
     @Autowired
     private ServiceSlotService serviceSlotService;
+    @Autowired
+    private ServiceSlotRepository serviceSlotRepository;
 
     public List<BookingDetail> getAllBookingDetail() {
         return bookingDetailRepository.findAll();
@@ -223,12 +225,17 @@ public class BookingDetailService {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(request.getBookingDetailId());
         Slot slot = slotRepository.findSlotBySlotId(request.getSlotId());
         User user = userRepository.findUserByUserId(request.getUserId());
+        ServiceSlot serviceSlot = serviceSlotRepository.getServiceSlotByUser(user).stream()
+                .filter(slot1 -> slot1.getDate().equals(request.getDate()) && slot1.getSlot().getSlotId() == request.getSlotId())
+                .findFirst().orElse(null);
         if (bookingDetail != null) {
+            serviceSlot.setStatus(ServiceSlotStatus.BOOKED);
             bookingDetail.setDate(request.getDate());
             bookingDetail.setSlot(slot);
             bookingDetail.setUser(user);
             bookingDetail.setVetCancelled(false);
             bookingDetailRepository.save(bookingDetail);
+            serviceSlotRepository.save(serviceSlot);
         }
 
         return bookingDetail;
@@ -245,11 +252,28 @@ public class BookingDetailService {
         return bookingDetailRepository.save(bookingDetail);
     }
 
-    public void updateStatusBookingDetailVetCancel(LocalDate dateTime) {
-        List<BookingDetail> bookingDetail = bookingDetailRepository.findBookingDetailsFromLocalDate(dateTime);
-        for (BookingDetail detail : bookingDetail) {
-            detail.setVetCancelled(true);
-            bookingDetailRepository.save(detail);
+
+    public void updateStatusBookingDetailVetCancel(LocalDate date, int vetId) {
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsFromLocalDate(date);
+        User user = userRepository.findUserByUserId(vetId);
+        List<ServiceSlot> serviceSlotsByVet = serviceSlotRepository.getServiceSlotByUser(user);
+
+        // Update booking details
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (bookingDetail.getUser().getUserId() == vetId) {
+                bookingDetail.setVetCancelled(true);
+                bookingDetailRepository.save(bookingDetail);
+            }
+        }
+
+        // Update service slots
+        for (ServiceSlot serviceSlot : serviceSlotsByVet) {
+            if (serviceSlot.getDate().isEqual(date) &&
+                    (serviceSlot.getStatus().equals(ServiceSlotStatus.AVAILABLE) ||
+                            serviceSlot.getStatus().equals(ServiceSlotStatus.BOOKED))) {
+                serviceSlot.setStatus(ServiceSlotStatus.CANCELLED);
+                serviceSlotRepository.save(serviceSlot);
+            }
         }
     }
 
