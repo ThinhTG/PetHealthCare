@@ -78,45 +78,39 @@ public class UserService {
         return userRepository.findAllByStatus(true);
     }
 
-    public String updateUser(UserUpdateRequest request, MultipartFile file) throws IOException {
-        User user = userRepository.findUserByUserId(request.getUserId());
-        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(request.getUserId(), "PENDING");
+    public String updateUser(int userId, UserUpdateRequest request, MultipartFile file) throws IOException {
+        User user = userRepository.findUserByUserId(userId);
+        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, "PENDING");
         if (booking == null) {
-            booking = bookingRepository.findBookingByUser_UserIdAndStatus(request.getUserId(), "CONFIRMED");
+            booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, "CONFIRMED");
         }
         if (booking != null) {
             return "User is existing in booking";
         }
-            if (request.getName() != null && !request.getName().equals(user.getName()) && !request.getName().isEmpty()) {
-                user.setName(request.getName());
-            }
-            if (request.getEmail() != null && !request.getEmail().equals(user.getEmail()) && !request.getEmail().isEmpty()) {
-                user.setEmail(request.getEmail());
-            }
-        if (request.getOldPassword() != null && !request.getOldPassword().isEmpty()) {
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            if (passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-                return "Old password is incorrect";
-            }
+        if (request.getName() != null && !request.getName().equals(user.getName()) && !request.getName().isEmpty()) {
+            user.setName(request.getName());
         }
-        if (request.getNewPassword() != null && !request.getNewPassword().equals(user.getPassword()) && !request.getNewPassword().isEmpty()) {
-                // Encode password as JWT
-                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-            }
-            if (request.getPhone() != null && !request.getPhone().equals(user.getPhone())) {
-                user.setPhone(request.getPhone());
-            }
-            if (request.getAddress() != null && !request.getAddress().equals(user.getAddress())) {
-                user.setAddress(request.getAddress());
-            }
+        if (request.getEmail() != null && !request.getEmail().equals(user.getEmail()) && !request.getEmail().isEmpty()) {
+            user.setEmail(request.getEmail());
+        }
+        if (request.getPassword() != null && !request.getPassword().equals(user.getPassword()) && !request.getPassword().isEmpty()) {
+            // Encode password as JWT
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+        if (request.getPhone() != null && !request.getPhone().equals(user.getPhone())) {
+            user.setPhone(request.getPhone());
+        }
+        if (request.getAddress() != null && !request.getAddress().equals(user.getAddress())) {
+            user.setAddress(request.getAddress());
+        }
 
-            if (file != null && !file.isEmpty()) {
-                String fileName = firebaseStorageService.uploadFile(file);
-                user.setImageUrl(fileName);
-            }
-            // Save updated user
-            userRepository.save(user);
+        if (file != null && !file.isEmpty()) {
+            String fileName = firebaseStorageService.uploadFile(file);
+            user.setImageUrl(fileName);
+        }
+        // Save updated user
+        userRepository.save(user);
         return "Update user successfully";
     }
 
@@ -187,7 +181,6 @@ public class UserService {
             return null;
         }
     }
-
 
 
     public boolean deleteUser(int userID) {

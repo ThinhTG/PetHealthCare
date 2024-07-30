@@ -10,11 +10,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 public class UserUpdateRequest {
-    private int userId;
     private String name;
     private String email;
-    private String oldPassword;
-    private String newPassword;
+    private String password;
     private String phone;
     private String address;
 }

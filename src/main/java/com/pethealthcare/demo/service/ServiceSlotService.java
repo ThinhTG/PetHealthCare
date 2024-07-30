@@ -68,7 +68,6 @@ public class ServiceSlotService {
         return "Insert Service Slots Successfully";
     }
 
-
     public void updateServiceSlotStatus(int userId, LocalDate date, int slotId, ServiceSlotStatus status) {
         User user = userRepository.findUserByUserId(userId);
         Slot slot = slotRepository.findSlotBySlotId(slotId);
@@ -116,6 +115,8 @@ public class ServiceSlotService {
         return serviceSlots;
     }
 
-
+    public List<ServiceSlot> getSlotByDateAndVet(int vetId, LocalDate date) {
+        return serviceSlotRepository.findServiceSlotByDateAndUser_UserId(date, vetId);
+    }
 
 }
