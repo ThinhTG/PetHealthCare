@@ -133,7 +133,7 @@ public class BookingDetailService {
         List<BookingDetail> nonCancelledBookingDetails = new ArrayList<>();
 
         for (BookingDetail bookingDetail : bookingDetails) {
-            if ( bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED){
+            if ( bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING){
                 nonCancelledBookingDetails.add(bookingDetail);
             }
         }
@@ -317,5 +317,20 @@ public class BookingDetailService {
             }
         }
         return paidBookingDetails;
+    }
+
+    public List<BookingDetail> getBookingDetailByUserAndDate(LocalDate date, int userId) {
+        User user = userRepository.findUserByUserId(userId);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
+        List<BookingDetail> bookingDetailByDate = new ArrayList<>();
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (bookingDetail.getDate().equals(date)) {
+                bookingDetailByDate.add(bookingDetail);
+            }
+        }
+
+        return bookingDetailByDate;
+
+
     }
 }
