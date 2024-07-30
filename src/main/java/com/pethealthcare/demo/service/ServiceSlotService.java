@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -97,6 +98,22 @@ public class ServiceSlotService {
 
         return serviceSlotRepository.findByUserAndDate(user,
                 request.getDate());
+    }
+
+    public List<ServiceSlot> cancelServiceSlot(LocalDate date, int vetId) {
+        User user = userRepository.findUserByUserId(vetId);
+        List<ServiceSlot> serviceSlotsByVet = serviceSlotRepository.getServiceSlotByUser(user);
+        List<ServiceSlot> serviceSlots = new ArrayList<>();
+
+        for (ServiceSlot serviceSlot : serviceSlotsByVet) {
+            if (serviceSlot.getDate().isEqual(date) && serviceSlot.getStatus().equals(ServiceSlotStatus.AVAILABLE)) {
+
+                serviceSlot.setStatus(ServiceSlotStatus.CANCELLED);
+                serviceSlotRepository.save(serviceSlot);
+                serviceSlots.add(serviceSlot);
+            }
+        }
+        return serviceSlots;
     }
 
 

@@ -251,8 +251,7 @@ public class BookingDetailController {
 
     @GetMapping("/vetCancelBookingDetail/")
     public ResponseEntity<ResponseObject> vetCancelBookingDetail(@RequestParam LocalDate dateTime, @RequestParam int vetId) {
-        User user = userRepository.findUserByUserId(vetId);
-        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
+        List<BookingDetail> bookingDetails = bookingDetailService.getBookingDetailByUserAndDate(dateTime,vetId);
 
         boolean updated = false;
 
