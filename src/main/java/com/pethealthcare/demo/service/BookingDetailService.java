@@ -111,10 +111,7 @@ public class BookingDetailService {
     }
 
     public List<BookingDetail> getBookingDetailByUser(int userId) {
-        User user = userRepository.findUserByUserId(userId);
-        return bookingDetailRepository.getBookingDetailByuser(user);
-
-
+        return bookingDetailRepository.getBookingDetailByUser_UserIdAndVetCancelled(userId, false);
     }
 
     public BookingDetail updateVetCancel(int bookingDetailId) {

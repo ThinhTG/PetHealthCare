@@ -31,7 +31,7 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
 
     List<BookingDetail> getBookingDetailsByBookingAndDate(Booking booking, LocalDate date);
 
-    List<BookingDetail> getBookingDetailByuser(User user);
+    List<BookingDetail> getBookingDetailByUser_UserIdAndVetCancelled(int userId, boolean vetCancelled);
 
     List<BookingDetail> getBookingDetailByStatus(String status);
 
