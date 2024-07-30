@@ -50,7 +50,8 @@ public class ServiceSlotController {
 
     }
 
-
-
-
+    @GetMapping("/getByVet")
+    List<ServiceSlot> getByVet(@RequestParam int vetId, @RequestParam LocalDate date) {
+        return serviceSlotService.getSlotByDateAndVet(vetId, date);
+    }
 }

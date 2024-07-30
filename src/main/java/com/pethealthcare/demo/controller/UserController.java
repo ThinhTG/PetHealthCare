@@ -77,12 +77,13 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/update")
-    ResponseEntity<ResponseObject> updateUser(@RequestParam("request") String requestJson,
+    @PutMapping("/update/{userId}")
+    ResponseEntity<ResponseObject> updateUser(@PathVariable int userId,
+                                              @RequestParam("request") String requestJson,
                                               @RequestParam(required = false) MultipartFile file) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         UserUpdateRequest request = objectMapper.readValue(requestJson, UserUpdateRequest.class);
-        String updateUser = userService.updateUser(request, file);
+        String updateUser = userService.updateUser(userId, request, file);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", updateUser, "")
         );
