@@ -76,7 +76,7 @@ public class PetService {
     public Pet updatePet(int petId, PetUpdateRequest request, MultipartFile file) throws IOException {
         Pet deletePet = petRepository.findPetByPetId(petId);
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatusIn(petId,
-                Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED));
+                Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED, BookingDetailStatus.EXAMINING));
         if (bookingDetail != null) {
             return null;
         }
@@ -126,7 +126,7 @@ public class PetService {
     public String deletePetByID(int id) {
         Pet deletePet = petRepository.findPetByPetId(id);
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatusIn(id,
-                Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED));
+                Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED, BookingDetailStatus.EXAMINING));
         if (bookingDetail != null) {
             return "Pet is existing in booking";
         }
