@@ -81,15 +81,18 @@ public class ServiceService {
 
     public String deleteService(int serviceId) {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
-        List<BookingDetail> bookingDetail = bookingDetailRepository.
+        List<BookingDetail> bookingDetails = bookingDetailRepository.
                 findBookingDetailByStatusAndServices_ServiceId(BookingDetailStatus.WAITING, serviceId);
-        for (BookingDetail ignored : bookingDetail) {
-            return "Service is being used";
+
+        if (!bookingDetails.isEmpty()) {
+            return "Service cannot be deleted as it is being used";
         }
         service.setStatus(false);
         serviceRepository.save(service);
-        return "Delete service Successfully";
+        return "Service deleted successfully";
     }
+
+
 
     public Services getServiceById(int  serviceID) {
 
