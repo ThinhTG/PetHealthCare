@@ -38,23 +38,18 @@ public class RefundService {
     public List<Refund> getReturnByCusId(int userId) {
         User user = userRepository.findUserByUserId(userId);
         List<Booking> bookings = bookingRepository.getBookingByUser(user);
-        List<BookingDetail> bookingDetails = new ArrayList<>();
-        List<BookingDetail> bookingDetailByBooking;
         List<Refund> refunds = new ArrayList<>();
-        for (Booking booking : bookings) {
-            bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
-            for (BookingDetail bookingDetail : bookingDetailByBooking) {
-                bookingDetails.add(bookingDetail);
 
-            }
-            for (Refund refund : refundRepository.findAll()) {
-                for (BookingDetail bookingDetail : bookingDetails) {
-                    if (refund.getBookingDetail().getBookingDetailId() == bookingDetail.getBookingDetailId()) {
-                        refunds.add(refund);
-                    }
+        for (Booking booking : bookings) {
+            List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailByBooking(booking);
+            for (BookingDetail bookingDetail : bookingDetails) {
+                Refund refund = refundRepository.findRefundByBookingDetail_BookingDetailId(bookingDetail.getBookingDetailId());
+                if (refund != null) {
+                    refunds.add(refund);
                 }
             }
         }
+
         return refunds;
     }
 
