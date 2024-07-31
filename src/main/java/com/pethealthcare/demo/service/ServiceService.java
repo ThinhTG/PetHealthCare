@@ -57,7 +57,7 @@ public class ServiceService {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
         List<BookingDetail> bookingDetail = bookingDetailRepository.
                 findBookingDetailByServices_ServiceIdAndStatusIn(serviceId,
-                        Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED));
+                        Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED, BookingDetailStatus.EXAMINING));
         if (!bookingDetail.isEmpty()) {
             return null;
         }
