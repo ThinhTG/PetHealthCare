@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,9 +56,10 @@ public class ServiceService {
     public Services updateService(int serviceId, ServiceCreateRequest request, MultipartFile file) throws IOException {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
         List<BookingDetail> bookingDetail = bookingDetailRepository.
-                findBookingDetailByStatusAndServices_ServiceId(BookingDetailStatus.WAITING, serviceId);
-        for (BookingDetail ignored : bookingDetail) {
-            throw new EntityNotFoundException("Service is being used");
+                findBookingDetailByServices_ServiceIdAndStatusIn(serviceId,
+                        Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED));
+        if (!bookingDetail.isEmpty()) {
+            return null;
         }
         if (service != null) {
             if(!service.getName().equals(request.getName())) {
@@ -79,16 +81,17 @@ public class ServiceService {
         return null;
     }
 
-    public String deleteService(int serviceId) {
+    public boolean deleteService(int serviceId) {
         Services service = serviceRepository.findServicesByServiceId(serviceId);
         List<BookingDetail> bookingDetail = bookingDetailRepository.
-                findBookingDetailByStatusAndServices_ServiceId(BookingDetailStatus.WAITING, serviceId);
-        for (BookingDetail ignored : bookingDetail) {
-            return "Service is being used";
+                findBookingDetailByServices_ServiceIdAndStatusIn(serviceId,
+                        Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED));
+        if (!bookingDetail.isEmpty()) {
+            return false;
         }
         service.setStatus(false);
         serviceRepository.save(service);
-        return "Delete service Successfully";
+        return true;
     }
 
     public Services getServiceById(int  serviceID) {

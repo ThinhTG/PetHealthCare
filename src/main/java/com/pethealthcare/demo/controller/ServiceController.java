@@ -69,9 +69,15 @@ public class ServiceController {
 
     @DeleteMapping("/delete/{serviceID}")
     ResponseEntity<ResponseObject> deleteService(@PathVariable int serviceID) {
-        String message = serviceService.deleteService(serviceID);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", message, "")
-        );
+        boolean deleted = serviceService.deleteService(serviceID);
+        if (deleted) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Service deleted successfully", "")
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Service is being used", "")
+            );
+        }
     }
 }

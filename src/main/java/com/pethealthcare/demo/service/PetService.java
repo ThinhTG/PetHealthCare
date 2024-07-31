@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,9 +75,10 @@ public class PetService {
 
     public Pet updatePet(int petId, PetUpdateRequest request, MultipartFile file) throws IOException {
         Pet deletePet = petRepository.findPetByPetId(petId);
-        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatus(petId, BookingDetailStatus.WAITING);
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatusIn(petId,
+                Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED));
         if (bookingDetail != null) {
-            throw new RuntimeException("Pet is existing in booking");
+            return null;
         }
         if (deletePet != null) {
 
@@ -123,7 +125,8 @@ public class PetService {
 
     public String deletePetByID(int id) {
         Pet deletePet = petRepository.findPetByPetId(id);
-        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatus(id, BookingDetailStatus.WAITING);
+        BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByPet_PetIdAndStatusIn(id,
+                Arrays.asList(BookingDetailStatus.WAITING, BookingDetailStatus.CONFIRMED));
         if (bookingDetail != null) {
             return "Pet is existing in booking";
         }

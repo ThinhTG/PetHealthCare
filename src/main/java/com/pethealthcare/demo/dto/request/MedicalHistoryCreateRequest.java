@@ -17,7 +17,6 @@ public class MedicalHistoryCreateRequest {
 
     private String veterinaryName;
 
-    @JsonFormat(pattern = "MM/dd/yyyy")
     private LocalDate dateMedicalHistory;
 
     private String diseaseName;
