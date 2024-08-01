@@ -201,7 +201,7 @@ public class UserService {
         List<Booking> bookings = bookingRepository.
                 findBookingByUser_UserIdAndStatusIn(userID,
                         Arrays.asList(BookingStatus.PENDING, BookingStatus.PAID));
-        if (bookings != null) {
+        if (bookings != null && !bookings.isEmpty()) {
             return false;
         }
 
