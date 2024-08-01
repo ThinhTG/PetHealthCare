@@ -155,20 +155,9 @@ public class BookingDetailService {
         return nonConfirmedBookingDetails;
     }
 
-    public List<BookingDetail> getBookingDetailByCus(int cusId) {
-        User user = userRepository.findUserByUserId(cusId);
-        List<Booking> bookings = bookingRepository.getBookingByUser(user);
-        List<BookingDetail> bookingDetails = new ArrayList<>();
-        List<BookingDetail> bookingDetailByBooking;
-        for (Booking booking : bookings) {
-            bookingDetailByBooking = bookingDetailRepository.findBookingDetailByBooking(booking);
-            for (BookingDetail bookingDetail : bookingDetailByBooking) {
-                if (bookingDetail.getStatus() == BookingDetailStatus.COMPLETED) {
-                    bookingDetails.add(bookingDetail);
-                }
-            }
-        }
-        return bookingDetails;
+    public List<BookingDetail> getBookingDetailByUserAndStatus(int userId) {
+        return bookingDetailRepository
+                .findBookingDetailByBooking_User_UserIdAndStatus(userId, BookingDetailStatus.COMPLETED);
     }
 
     public List<BookingDetail> getBookingDetailByPhone(String phone, LocalDate date) {
