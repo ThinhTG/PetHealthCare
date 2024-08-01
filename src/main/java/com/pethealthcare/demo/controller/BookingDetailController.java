@@ -198,7 +198,7 @@ public class BookingDetailController {
                     new ResponseObject("ok", "Bookings deleted successfully", refunds)
             );
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "No booking found with valid status for cancellation", "")
             );
         }
@@ -210,7 +210,7 @@ public class BookingDetailController {
         Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
         if (bookingDetail.getStatus() == BookingDetailStatus.CANCELLED || bookingDetail.getStatus() == BookingDetailStatus.COMPLETED
                 && booking.getStatus() == BookingStatus.CANCELLED || booking.getStatus() == BookingStatus.COMPLETED) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "booking is already cancelled or completed", "")
             );
 
@@ -224,7 +224,7 @@ public class BookingDetailController {
                     new ResponseObject("ok", "booking deleted successfully", refund)
             );
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+        return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("failed", "booking status is not valid for cancellation", "")
         );
     }
@@ -235,7 +235,7 @@ public class BookingDetailController {
         Booking booking = bookingRepository.findBookingByBookingId(bookingDetail.getBooking().getBookingId());
         if (bookingDetail.getStatus() == BookingDetailStatus.CANCELLED || bookingDetail.getStatus() == BookingDetailStatus.COMPLETED
                 && booking.getStatus() == BookingStatus.CANCELLED || booking.getStatus() == BookingStatus.COMPLETED) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "booking/bookingDetail is already cancelled or completed or pending", "")
             );
 
@@ -249,7 +249,7 @@ public class BookingDetailController {
                     new ResponseObject("ok", "booking deleted successfully", refund)
             );
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+        return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("failed", "booking status is not valid for cancellation", "")
         );
     }
@@ -272,7 +272,7 @@ public class BookingDetailController {
                     new ResponseObject("ok", "Booking details updated successfully", "")
             );
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "No booking details were updated", "")
             );
         }

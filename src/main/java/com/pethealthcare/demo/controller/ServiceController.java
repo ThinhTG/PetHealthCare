@@ -61,7 +61,7 @@ public class ServiceController {
                     new ResponseObject("ok", "Service updated successfully", updateService)
             );
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "Service not found", "")
             );
         }

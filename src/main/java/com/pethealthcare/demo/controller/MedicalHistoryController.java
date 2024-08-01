@@ -52,7 +52,7 @@ public class MedicalHistoryController {
                     new ResponseObject("ok", "User updated successfully", updateMedicalHistory)
             );
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "User not found", "")
             );
         }
@@ -79,11 +79,11 @@ public class MedicalHistoryController {
                         new ResponseObject("ok", "Delete pet Successfully", "")
                 );
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "Pet not found", "")
             );
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+        return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("failed", "User not found", "")
         );
     }
