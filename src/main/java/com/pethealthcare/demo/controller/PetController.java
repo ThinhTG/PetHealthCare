@@ -75,7 +75,7 @@ public class PetController {
                     new ResponseObject("ok", "User updated successfully", updatePet)
             );
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "User not found", "")
             );
         }
