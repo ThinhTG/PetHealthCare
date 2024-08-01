@@ -320,7 +320,7 @@ public class BookingDetailService {
         }
 
         if (mostFrequentServices.isEmpty()) {
-            throw new RuntimeException("No services found");
+            return new MostUsedServiceResponse(0, Collections.singletonList(serviceRepository.findServicesByServiceId(5)));
         }
 
         return new MostUsedServiceResponse(maxCount, mostFrequentServices);
