@@ -105,12 +105,9 @@ public class ServiceSlotService {
         List<ServiceSlot> serviceSlots = new ArrayList<>();
 
         for (ServiceSlot serviceSlot : serviceSlotsByVet) {
-            if (serviceSlot.getDate().isEqual(date) && serviceSlot.getStatus().equals(ServiceSlotStatus.AVAILABLE)) {
-
-                serviceSlot.setStatus(ServiceSlotStatus.CANCELLED);
-                serviceSlotRepository.save(serviceSlot);
-                serviceSlots.add(serviceSlot);
-            }
+            serviceSlot.setStatus(ServiceSlotStatus.CANCELLED);
+            serviceSlotRepository.save(serviceSlot);
+            serviceSlots.add(serviceSlot);
         }
         return serviceSlots;
     }
