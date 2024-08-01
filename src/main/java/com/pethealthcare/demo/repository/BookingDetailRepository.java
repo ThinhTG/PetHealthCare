@@ -58,4 +58,6 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     List<BookingDetail> findBookingDetailByBookingAndStatus(Booking booking, BookingDetailStatus status);
 
     List<BookingDetail> findBookingDetailByBooking_User_UserIdAndStatus(int userId, BookingDetailStatus bookingDetailStatus);
+
+    List<BookingDetail> findBookingDetailByUser_UserIdAndDate(int vetId, LocalDate date);
 }
