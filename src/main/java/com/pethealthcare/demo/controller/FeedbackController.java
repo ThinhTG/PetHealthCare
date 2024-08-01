@@ -30,6 +30,18 @@ public class FeedbackController {
         }
     }
 
-
+    @GetMapping("/get/{id}")
+    ResponseEntity<ResponseObject> getFeedbackByBookingDetailId(@PathVariable int id) {
+        Feedback feedback = feedbackService.getFeedbackByBookingDetailId(id);
+        if (feedback != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Feedback found", feedback)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Feedback not found", "")
+            );
+        }
+    }
 
 }

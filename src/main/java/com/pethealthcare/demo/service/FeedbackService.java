@@ -27,4 +27,7 @@ public class FeedbackService {
         return feedbackRepository.save(feedback);
     }
 
+    public Feedback getFeedbackByBookingDetailId(int id) {
+        return feedbackRepository.findFeedbackByBookingDetailId(id);
+    }
 }
