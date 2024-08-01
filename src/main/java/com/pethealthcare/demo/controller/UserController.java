@@ -122,7 +122,7 @@ public class UserController {
             );
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("failed", "User not found", "")
+                    new ResponseObject("failed", "User not found or booked", "")
             );
         }
     }

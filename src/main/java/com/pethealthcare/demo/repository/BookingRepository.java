@@ -1,5 +1,6 @@
 package com.pethealthcare.demo.repository;
 
+import com.pethealthcare.demo.enums.BookingStatus;
 import com.pethealthcare.demo.response.RevenueResponse;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.User;
@@ -32,5 +33,5 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> findBookingByUser_Phone(String phone);
 
-    Booking findBookingByUser_UserIdAndStatus(int userId, String status);
+    Booking findBookingByUser_UserIdAndStatus(int userId, BookingStatus status);
 }
