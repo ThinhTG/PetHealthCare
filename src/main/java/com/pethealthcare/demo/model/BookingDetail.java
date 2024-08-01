@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -64,4 +65,8 @@ public class BookingDetail {
     @JsonIgnore
     @OneToOne(mappedBy = "bookingDetail", cascade = CascadeType.ALL)
     private Refund refund;
+
+    @ManyToOne
+    @JoinColumn(name = "medicalHistoryId")
+    private MedicalHistory medicalHistory;
 }

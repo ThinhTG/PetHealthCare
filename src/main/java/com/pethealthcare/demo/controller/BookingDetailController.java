@@ -168,6 +168,11 @@ public class BookingDetailController {
         return ResponseEntity.ok(bookingDetailService.getBookingDetailNonConfirmed());
     }
 
+    @GetMapping("/getBookingDetailsForCurrentWeek/{vetId}")
+    ResponseEntity<List<BookingDetail>> getBookingDetailsForCurrentWeek(@PathVariable int vetId , @RequestParam int i) {
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailsForSurroundingWeeks(vetId, i));
+    }
+
 
     @GetMapping("/cancelBookingDetailByPet/")
     public ResponseEntity<ResponseObject> cancelBookingDetailByPet(@RequestParam int petId, @RequestParam int userId) {
