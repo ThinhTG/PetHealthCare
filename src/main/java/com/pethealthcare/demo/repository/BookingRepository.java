@@ -33,7 +33,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> findBookingByUser_Phone(String phone);
 
-    Booking findBookingByUser_UserIdAndStatusIn(int userId, List<BookingStatus> status);
+    List<Booking> findBookingByUser_UserIdAndStatusIn(int userId, List<BookingStatus> status);
 
     List<Booking> findBookingByUser(User user);
 }
