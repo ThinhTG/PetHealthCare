@@ -4,9 +4,12 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.request.AccCreateRequest;
 import com.pethealthcare.demo.dto.request.UserCreateRequest;
 import com.pethealthcare.demo.dto.request.UserUpdateRequest;
+import com.pethealthcare.demo.enums.BookingStatus;
 import com.pethealthcare.demo.mapper.UserMapper;
 import com.pethealthcare.demo.model.Booking;
+import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.User;
+import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.BookingRepository;
 import com.pethealthcare.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +40,8 @@ public class UserService {
     private FirebaseStorageService firebaseStorageService;
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private BookingDetailRepository bookingDetailRepository;
 
     public User createUser(UserCreateRequest request) {
         User exist = userRepository.findUserByEmail(request.getEmail());
@@ -80,9 +85,9 @@ public class UserService {
 
     public String updateUser(int userId, UserUpdateRequest request, MultipartFile file) throws IOException {
         User user = userRepository.findUserByUserId(userId);
-        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, "PENDING");
+        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, BookingStatus.PENDING);
         if (booking == null) {
-            booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, "CONFIRMED");
+            booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, BookingStatus.PAID);
         }
         if (booking != null) {
             return "User is existing in booking";
@@ -185,13 +190,18 @@ public class UserService {
 
     public boolean deleteUser(int userID) {
         User user = userRepository.findUserByUserId(userID);
-        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(userID, "PENDING");
-        if (booking == null) {
-            booking = bookingRepository.findBookingByUser_UserIdAndStatus(userID, "CONFIRMED");
-        }
-        if (booking != null) {
+        if (user == null) {
             return false;
         }
+
+        Booking pendingBooking = bookingRepository.findBookingByUser_UserIdAndStatus(userID, BookingStatus.PENDING);
+        Booking paidBooking = bookingRepository.findBookingByUser_UserIdAndStatus(userID, BookingStatus.PAID);
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
+
+        if (pendingBooking != null || paidBooking != null || !bookingDetails.isEmpty()) {
+            return false;
+        }
+
         user.setStatus(false);
         userRepository.save(user);
         return true;
