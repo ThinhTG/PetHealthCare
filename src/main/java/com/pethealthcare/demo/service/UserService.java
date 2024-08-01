@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,11 +90,10 @@ public class UserService {
 
     public String updateUser(int userId, UserUpdateRequest request, MultipartFile file) throws IOException {
         User user = userRepository.findUserByUserId(userId);
-        Booking booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, BookingStatus.PENDING);
-        if (booking == null) {
-            booking = bookingRepository.findBookingByUser_UserIdAndStatus(userId, BookingStatus.PAID);
-        }
-        if (booking != null) {
+        Booking bookings = bookingRepository.
+                findBookingByUser_UserIdAndStatusIn(userId,
+                        Arrays.asList(BookingStatus.PENDING, BookingStatus.PAID));
+        if (bookings != null) {
             return "User is existing in booking";
         }
         if (request.getName() != null && !request.getName().equals(user.getName()) && !request.getName().isEmpty()) {
@@ -198,11 +198,10 @@ public class UserService {
             return false;
         }
 
-        Booking pendingBooking = bookingRepository.findBookingByUser_UserIdAndStatus(userID, BookingStatus.PENDING);
-        Booking paidBooking = bookingRepository.findBookingByUser_UserIdAndStatus(userID, BookingStatus.PAID);
-        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
-
-        if (pendingBooking != null || paidBooking != null || !bookingDetails.isEmpty()) {
+        Booking bookings = bookingRepository.
+                findBookingByUser_UserIdAndStatusIn(userID,
+                        Arrays.asList(BookingStatus.PENDING, BookingStatus.PAID));
+        if (bookings != null) {
             return false;
         }
 
