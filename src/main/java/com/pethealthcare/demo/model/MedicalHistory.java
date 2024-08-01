@@ -19,13 +19,13 @@ public class MedicalHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int medicalHistoryId;
 
-    @Column
+    @Column(columnDefinition = "nvarchar(50)")
     private String veterinaryName;
 
     @Column
     private LocalDate dateMedicalHistory;
 
-    @Column
+    @Column(columnDefinition = "nvarchar(50)")
     private String diseaseName;
 
     @Column
