@@ -3,8 +3,10 @@ package com.pethealthcare.demo.service;
 import com.pethealthcare.demo.dto.request.MedicalHistoryCreateRequest;
 import com.pethealthcare.demo.dto.request.MedicalHistoryUpdateRequest;
 import com.pethealthcare.demo.mapper.MedicalHistoryMapper;
+import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.MedicalHistory;
 import com.pethealthcare.demo.model.Pet;
+import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.MedicalHistoryRepository;
 import com.pethealthcare.demo.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,24 +27,23 @@ public class MedicalHistoryService  {
 
     @Autowired
     private MedicalHistoryMapper medicalHistoryMapper;
-
     @Autowired
-    private PetService petService;
+    private BookingDetailRepository bookingDetailRepository;
 
     public List<MedicalHistory> medicalHistories() {
         return medicalHistoryRepository.findAll();
     }
 
-    public MedicalHistory createMedicalHistory(int id, MedicalHistoryCreateRequest request) {
-        Pet pet = petRepository.findPetByPetId(id);
+    public MedicalHistory createMedicalHistory(MedicalHistoryCreateRequest request) {
+        Pet pet = petRepository.findPetByPetId(request.getPetId());
+        BookingDetail bookingDetail = bookingDetailRepository
+                .findBookingDetailByBookingDetailId(request.getBookingDetailId());
 
         MedicalHistory newMedicalHistory = medicalHistoryMapper.toMedicalHistory(request);
 
         newMedicalHistory.setPet(pet);
+        newMedicalHistory.setBookingDetail(bookingDetail);
 
-        if (request.getVaccine() != null && !request.getVaccine().isEmpty()) {
-            petService.updateVaccination(id, request.getVaccine());
-        }
 
         return medicalHistoryRepository.save(newMedicalHistory);
 
@@ -106,6 +107,9 @@ public class MedicalHistoryService  {
         return medicalHistoryRepository.existsByMedicalHistoryId(id);
     }
 
+    public MedicalHistory findMedicalHistoryByBookingDetailId(int bookingDetailId) {
+        return medicalHistoryRepository.findMedicalHistoryByBookingDetail_BookingDetailId(bookingDetailId);
+    }
 //    public void updateStatus (int medicalHistoryId, String status){
 //        MedicalHistory newMedHis = medicalHistoryRepository.findMedicalHistoryByMedicalHistoryId(medicalHistoryId);
 //        if (status.equalsIgnoreCase("in")){

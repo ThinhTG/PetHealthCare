@@ -29,10 +29,9 @@ public class MedicalHistoryController {
         return medicalHistoryService.medicalHistories();
     }
 
-    @PostMapping("/create/{id}")
-    public ResponseEntity<ResponseObject> createMedicalHistory(@PathVariable int id, @RequestBody MedicalHistoryCreateRequest request) {
-        System.out.println("Received request: " + request);
-        MedicalHistory medicalHistory = medicalHistoryService.createMedicalHistory(id, request);
+    @PostMapping("/create")
+    public ResponseEntity<ResponseObject> createMedicalHistory(@RequestBody MedicalHistoryCreateRequest request) {
+        MedicalHistory medicalHistory = medicalHistoryService.createMedicalHistory(request);
         if (medicalHistory != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("ok", "Medical history created successfully", medicalHistory)
@@ -88,6 +87,21 @@ public class MedicalHistoryController {
                 new ResponseObject("failed", "User not found", "")
         );
     }
+
+    @GetMapping("/getMedicalHistoryByBookingDetailId/{bookingDetailId}")
+    ResponseEntity<ResponseObject> getMedicalHistoryByBookingDetailId(@PathVariable int bookingDetailId) {
+        MedicalHistory medicalHistory = medicalHistoryService.findMedicalHistoryByBookingDetailId(bookingDetailId);
+        if (medicalHistory != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Medical history found", medicalHistory)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "Medical history not found", "")
+            );
+        }
+    }
+
 
 //    @PutMapping("/updateStatus")
 //    ResponseEntity<String> updateStatus(@RequestParam int id, @RequestParam String status){
