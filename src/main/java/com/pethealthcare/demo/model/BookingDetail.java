@@ -66,7 +66,8 @@ public class BookingDetail {
     @OneToOne(mappedBy = "bookingDetail", cascade = CascadeType.ALL)
     private Refund refund;
 
-    @ManyToOne
-    @JoinColumn(name = "medicalHistoryId")
+    @JsonIgnore
+    @OneToOne(mappedBy = "bookingDetail", cascade = CascadeType.ALL)
     private MedicalHistory medicalHistory;
+
 }

@@ -37,11 +37,12 @@ public class MedicalHistory {
     @Column
     private String reminders;
 
-    @Column
-    private String vaccine;
-
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "petId")
     private Pet pet;
+
+    @OneToOne
+    @JoinColumn(name = "bookingDetailId")
+    private BookingDetail bookingDetail;
 }

@@ -10,8 +10,10 @@ import java.util.List;
 @Repository
 public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, Integer> {
     List<MedicalHistory> findMedicalHistoriesByPet(Pet medicalHistory);
-    boolean existsByMedicalHistoryId(int medicalHisoryId);
-    void deleteMedicalHistoryByMedicalHistoryId(int medicalHistoryId);
-    MedicalHistory findMedicalHistoryByMedicalHistoryId(int medicalHistoryId);
 
+    boolean existsByMedicalHistoryId(int medicalHistoryId);
+
+    void deleteMedicalHistoryByMedicalHistoryId(int medicalHistoryId);
+
+    MedicalHistory findMedicalHistoryByBookingDetail_BookingDetailId(int bookingDetailId);
 }

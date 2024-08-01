@@ -14,6 +14,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedicalHistoryCreateRequest {
+    private int petId;
+
+    private int bookingDetailId;
 
     private String veterinaryName;
 
@@ -26,7 +29,5 @@ public class MedicalHistoryCreateRequest {
     private String note;
 
     private String reminders;
-
-    private String vaccine;
 
 }
