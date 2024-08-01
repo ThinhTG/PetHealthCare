@@ -247,6 +247,13 @@ public class BookingDetailService {
     public BookingDetail updateStatusBookingDetail(int bookingDetailId, BookingDetailStatus status) {
         BookingDetail bookingDetail = bookingDetailRepository.findBookingDetailByBookingDetailId(bookingDetailId);
         bookingDetail.setStatus(status);
+        Booking booking = bookingDetail.getBooking();
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailsByBooking(booking);
+        boolean allCompleted = bookingDetails.stream().allMatch(detail -> detail.getStatus() == BookingDetailStatus.COMPLETED);
+        if (allCompleted) {
+            booking.setStatus(BookingStatus.COMPLETED);
+            bookingRepository.save(booking);
+        }
         return bookingDetailRepository.save(bookingDetail);
     }
 
