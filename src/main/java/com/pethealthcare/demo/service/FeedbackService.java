@@ -28,6 +28,6 @@ public class FeedbackService {
     }
 
     public Feedback getFeedbackByBookingDetailId(int id) {
-        return feedbackRepository.findFeedbackByBookingDetailId(id);
+        return feedbackRepository.findFeedbackByBookingDetail_BookingDetailId(id);
     }
 }

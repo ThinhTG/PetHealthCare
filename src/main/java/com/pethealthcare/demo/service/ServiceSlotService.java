@@ -5,9 +5,11 @@ import com.pethealthcare.demo.dto.request.GetVetAvailableRequest;
 import com.pethealthcare.demo.dto.request.ServiceSlotCreateRequest;
 import com.pethealthcare.demo.enums.ServiceSlotStatus;
 import com.pethealthcare.demo.mapper.ServiceSlotMapper;
+import com.pethealthcare.demo.model.BookingDetail;
 import com.pethealthcare.demo.model.ServiceSlot;
 import com.pethealthcare.demo.model.Slot;
 import com.pethealthcare.demo.model.User;
+import com.pethealthcare.demo.repository.BookingDetailRepository;
 import com.pethealthcare.demo.repository.ServiceSlotRepository;
 import com.pethealthcare.demo.repository.SlotRepository;
 import com.pethealthcare.demo.repository.UserRepository;
@@ -31,6 +33,8 @@ public class ServiceSlotService {
 
     @Autowired
     private SlotRepository slotRepository;
+    @Autowired
+    private BookingDetailRepository bookingDetailRepository;
 
     public List<ServiceSlot> getSlotAvailable(GetSlotAvailableRequest request) {
         User user = userRepository.findUserByUserId(request.getUserId());
@@ -103,6 +107,11 @@ public class ServiceSlotService {
         User user = userRepository.findUserByUserId(vetId);
         List<ServiceSlot> serviceSlotsByVet = serviceSlotRepository.getServiceSlotByUserAndDate(user, date);
         List<ServiceSlot> serviceSlots = new ArrayList<>();
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailByUser_UserIdAndDate(vetId, date);
+        for (BookingDetail bookingDetail : bookingDetails) {
+            bookingDetail.setVetCancelled(true);
+            bookingDetailRepository.save(bookingDetail);
+        }
 
         for (ServiceSlot serviceSlot : serviceSlotsByVet) {
             serviceSlot.setStatus(ServiceSlotStatus.CANCELLED);
