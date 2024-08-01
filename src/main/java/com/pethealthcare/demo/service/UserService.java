@@ -43,6 +43,10 @@ public class UserService {
     @Autowired
     private BookingDetailRepository bookingDetailRepository;
 
+    public List<User> getAll(){
+        return userRepository.findAll();
+    }
+
     public User createUser(UserCreateRequest request) {
         User exist = userRepository.findUserByEmail(request.getEmail());
         if (exist != null && exist.isStatus()) {
@@ -206,4 +210,16 @@ public class UserService {
         userRepository.save(user);
         return true;
     }
+
+
+    public User cancelDeleteUser(int userID) {
+        User user = userRepository.findUserByUserId(userID);
+        if (user == null) {
+            return null;
+        }
+        user.setStatus(true);
+        userRepository.save(user);
+        return user;
+    }
+
 }

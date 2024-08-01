@@ -33,6 +33,24 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getAll")
+    List<User> getAll() {
+        return userService.getAll();
+    }
+
+    @GetMapping("/cancelDeleteUser/{id}")
+    ResponseEntity<ResponseObject> cancelDeleteUser(@PathVariable int id) {
+        User deleted = userService.cancelDeleteUser(id);
+        if (deleted != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "User deleted successfully", "")
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("failed", "User not found", "")
+            );
+        }
+    }
 
     @PostMapping("/createmultirole")
     ResponseEntity<ResponseObject> createAcc(@RequestParam("request") String requestJson,
@@ -72,7 +90,7 @@ public class UserController {
         return new ResponseEntity<>(userService.resetPassword(request.getEmail(), request.getPassword()), HttpStatus.OK);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/getAllActive")
     List<User> getAllUsers() {
         return userService.getAllUsers();
     }
