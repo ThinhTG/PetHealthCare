@@ -36,7 +36,7 @@ public class AuthenticationService {
             User user = userRepository.findByEmail(request.getEmail());
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             boolean match = passwordEncoder.matches(request.getPassword(), user.getPassword());
-            if (match) {
+            if (match && user.isStatus()) {
                 var token = generateToken(request.getEmail());
                 return token;
             }
