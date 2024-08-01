@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Service
@@ -354,4 +355,30 @@ public class BookingDetailService {
 
 
     }
+
+
+    public List<BookingDetail> getBookingDetailsForSurroundingWeeks(int userId, int i) {
+        User user = userRepository.findUserByUserId(userId);
+        if (user == null) {
+            return new ArrayList<>();
+        }
+
+        List<BookingDetail> bookingDetails = bookingDetailRepository.getBookingDetailByuser(user);
+        List<BookingDetail> bookingDetailsForSurroundingWeeks = new ArrayList<>();
+
+        LocalDate today = LocalDate.now();
+        LocalDate startOfPreviousWeek = today.plusWeeks(i).with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY));
+        LocalDate endOfNextWeek = today.plusWeeks(i).with(TemporalAdjusters.nextOrSame(java.time.DayOfWeek.SUNDAY));
+
+        for (BookingDetail bookingDetail : bookingDetails) {
+            LocalDate bookingDate = bookingDetail.getDate();
+            if ((bookingDate.isEqual(startOfPreviousWeek) || bookingDate.isAfter(startOfPreviousWeek)) &&
+                    (bookingDate.isEqual(endOfNextWeek) || bookingDate.isBefore(endOfNextWeek))) {
+                bookingDetailsForSurroundingWeeks.add(bookingDetail);
+            }
+        }
+
+        return bookingDetailsForSurroundingWeeks;
+    }
+
 }
