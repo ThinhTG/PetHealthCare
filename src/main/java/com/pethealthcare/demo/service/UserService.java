@@ -90,7 +90,7 @@ public class UserService {
 
     public String updateUser(int userId, UserUpdateRequest request, MultipartFile file) throws IOException {
         User user = userRepository.findUserByUserId(userId);
-        Booking bookings = bookingRepository.
+        List<Booking> bookings = bookingRepository.
                 findBookingByUser_UserIdAndStatusIn(userId,
                         Arrays.asList(BookingStatus.PENDING, BookingStatus.PAID));
         if (bookings != null) {
@@ -198,7 +198,7 @@ public class UserService {
             return false;
         }
 
-        Booking bookings = bookingRepository.
+        List<Booking> bookings = bookingRepository.
                 findBookingByUser_UserIdAndStatusIn(userID,
                         Arrays.asList(BookingStatus.PENDING, BookingStatus.PAID));
         if (bookings != null) {
