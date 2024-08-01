@@ -139,7 +139,7 @@ public class UserController {
                     new ResponseObject("ok", "User deleted successfully", "")
             );
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "User not found or booked", "")
             );
         }

@@ -75,7 +75,7 @@ public class ServiceController {
                     new ResponseObject("ok", "Service deleted successfully", "")
             );
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("failed", "Service is being used", "")
             );
         }
