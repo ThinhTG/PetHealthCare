@@ -33,7 +33,7 @@ public class Pet {
     @Column(name = "Type",columnDefinition = "nvarchar(50)")
     private String petType;
 
-    @Column(name = "Vaccination",columnDefinition = "nvarchar(50)")
+    @Column(name = "Vaccination", columnDefinition = "nvarchar(255)")
     private String vaccination;
 
     @Column
