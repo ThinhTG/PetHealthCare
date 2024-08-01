@@ -19,14 +19,21 @@ public class AuthenticationController {
     @PostMapping("/login")
     ResponseEntity<ResponseObject> login(@RequestBody AuthenticationRequest request) {
         String auth = authenticationService.authenticate(request);
-        if (auth != null) {
+        if (auth == null) {
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Login successfully", auth)
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     new ResponseObject("400", "Email or Password is incorrect")
             );
         }
+
+        if (auth.equals("This account has been locked. Please contact the administrator to unlock it.")) {
+            System.out.println("This account has been locked. Please contact the administrator to unlock it.");
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("failed", auth)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Login successfully", auth)
+        );
+
     }
 }

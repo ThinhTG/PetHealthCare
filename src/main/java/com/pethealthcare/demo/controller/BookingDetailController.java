@@ -214,7 +214,7 @@ public class BookingDetailController {
                     new ResponseObject("failed", "booking is already cancelled or completed", "")
             );
 
-        } else if (booking.getStatus() == BookingStatus.PAID && bookingDetail.getStatus() == BookingDetailStatus.CONFIRMED || bookingDetail.getStatus() == BookingDetailStatus.WAITING) {
+        } else if (booking.getStatus() == BookingStatus.PAID && bookingDetail.getStatus() == BookingDetailStatus.WAITING) {
 
             bookingDetailService.deleteBookingDetail(bookingDetailID);
             serviceSlotService.cancelSlot(bookingDetail.getUser().getUserId(), bookingDetail.getDate(), bookingDetail.getSlot().getSlotId());

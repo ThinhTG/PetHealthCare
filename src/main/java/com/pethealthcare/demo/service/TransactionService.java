@@ -11,6 +11,7 @@ import com.pethealthcare.demo.model.Wallet;
 import com.pethealthcare.demo.repository.BookingRepository;
 import com.pethealthcare.demo.repository.TransactionRepository;
 import com.pethealthcare.demo.repository.WalletRepository;
+import com.pethealthcare.demo.response.RevenueResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -172,6 +173,10 @@ public class TransactionService {
 
     public List<Transaction> getTransactionsByWalletId(int walletId){
         return transactionRepository.findTransactionsByWallet_WalletId(walletId);
+    }
+
+    public List<RevenueResponse> getMonthlyRevenue(int year) {
+        return transactionRepository.calculateMonthlyRevenue(year);
     }
 }
 

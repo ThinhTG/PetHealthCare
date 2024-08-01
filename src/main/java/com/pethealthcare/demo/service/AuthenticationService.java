@@ -32,16 +32,20 @@ public class AuthenticationService {
 
     public String authenticate(AuthenticationRequest request) {
         boolean exists = userRepository.existsByEmail(request.getEmail());
-        if (exists) {
-            User user = userRepository.findByEmail(request.getEmail());
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            boolean match = passwordEncoder.matches(request.getPassword(), user.getPassword());
-            if (match && user.isStatus()) {
-                var token = generateToken(request.getEmail());
-                return token;
-            }
+        if (!exists) {
+            return null;
         }
-        return null;
+        User user = userRepository.findByEmail(request.getEmail());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        boolean match = passwordEncoder.matches(request.getPassword(), user.getPassword());
+        if (!match) {
+            return null;
+        }
+        if (user.isStatus()) {
+            var token = generateToken(request.getEmail());
+            return token;
+        }
+        return "This account has been locked. Please contact the administrator to unlock it.";
     }
 
     private String generateToken(String email) {

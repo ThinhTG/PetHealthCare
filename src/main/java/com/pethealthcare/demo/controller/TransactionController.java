@@ -3,12 +3,15 @@ package com.pethealthcare.demo.controller;
 import com.pethealthcare.demo.dto.request.TransactionCreateRequest;
 import com.pethealthcare.demo.model.Transaction;
 import com.pethealthcare.demo.response.ResponseObject;
+import com.pethealthcare.demo.response.RevenueResponse;
 import com.pethealthcare.demo.service.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -46,5 +49,10 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "Success", transactionService.getTransactionsByWalletId(walletId))
         );
+    }
+
+    @GetMapping("/getRevenueByMonth/{year}")
+    public List<RevenueResponse> getMonthlyRevenue(@PathVariable int year) {
+        return transactionService.getMonthlyRevenue(year);
     }
 }
