@@ -109,7 +109,7 @@ public class BookingDetailController {
 
     @GetMapping("/getAllBookingDetail_ByCusId")
     List<BookingDetail> getBookingDetailByCustomerId(@RequestParam int cusId) {
-        return bookingDetailService.getBookingDetailByCus(cusId);
+        return bookingDetailService.getBookingDetailByUserAndStatus(cusId);
     }
 
     @GetMapping("/getAllBookingDetail_ByPhoneNumberAndDate")
@@ -140,7 +140,7 @@ public class BookingDetailController {
 
     @GetMapping("/getBookingDetailByCusIdStatus/{cusId}")
     ResponseEntity<List<BookingDetail>> getBookingDetailByCusIdStatus(@PathVariable int cusId) {
-        return ResponseEntity.ok(bookingDetailService.getBookingDetailByCus(cusId));
+        return ResponseEntity.ok(bookingDetailService.getBookingDetailByUserAndStatus(cusId));
     }
 
     @GetMapping("/getBookingDetailByStayCage/")

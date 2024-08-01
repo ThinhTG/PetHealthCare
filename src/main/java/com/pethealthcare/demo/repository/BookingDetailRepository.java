@@ -1,6 +1,5 @@
 package com.pethealthcare.demo.repository;
 
-import com.google.api.client.util.DateTime;
 import com.pethealthcare.demo.enums.BookingDetailStatus;
 import com.pethealthcare.demo.model.Booking;
 import com.pethealthcare.demo.model.BookingDetail;
@@ -55,4 +54,8 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, In
     boolean existsByServices_ServiceIdAndAndSlot_SlotIdAndDateAndUser_UserId(int serviceId, int slotId, LocalDate date, int userId);
 
     List<BookingDetail> findBookingDetailByServices_ServiceIdAndStatusIn(int serviceId, List<BookingDetailStatus> list);
+
+    List<BookingDetail> findBookingDetailByBookingAndStatus(Booking booking, BookingDetailStatus status);
+
+    List<BookingDetail> findBookingDetailByBooking_User_UserIdAndStatus(int userId, BookingDetailStatus bookingDetailStatus);
 }

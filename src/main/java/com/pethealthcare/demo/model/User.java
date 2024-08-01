@@ -36,7 +36,7 @@ public class User {
     @Column(columnDefinition = "nvarchar(50)", nullable = false)
     private String role;
 
-    @Column(columnDefinition = "nvarchar(50)", nullable = false)
+    @Column
     private boolean status;
 
     @Column(columnDefinition = "nvarchar(MAX)")

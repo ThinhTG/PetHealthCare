@@ -101,7 +101,7 @@ public class ServiceSlotService {
 
     public List<ServiceSlot> cancelServiceSlot(LocalDate date, int vetId) {
         User user = userRepository.findUserByUserId(vetId);
-        List<ServiceSlot> serviceSlotsByVet = serviceSlotRepository.getServiceSlotByUser(user);
+        List<ServiceSlot> serviceSlotsByVet = serviceSlotRepository.getServiceSlotByUserAndDate(user, date);
         List<ServiceSlot> serviceSlots = new ArrayList<>();
 
         for (ServiceSlot serviceSlot : serviceSlotsByVet) {

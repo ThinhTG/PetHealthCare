@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -16,7 +17,7 @@ public interface ServiceSlotRepository extends JpaRepository<ServiceSlot, Intege
 
     boolean existsByUserAndSlotAndDate(User user, Slot slot, LocalDate date);
 
-    List<ServiceSlot> getServiceSlotByUser(User user);
+    List<ServiceSlot> getServiceSlotByUserAndDate(User user, LocalDate date);
 
     ServiceSlot findServiceSlotByUserAndDateAndSlot (User user, LocalDate date, Slot slot);
 
@@ -26,4 +27,5 @@ public interface ServiceSlotRepository extends JpaRepository<ServiceSlot, Intege
 
     List<ServiceSlot> findServiceSlotByDateAndUser_UserId(LocalDate date, int vetId);
 
+    List<ServiceSlot> getServiceSlotByUser(User user);
 }
